@@ -1,0 +1,176 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #ba100a;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #ffdad5;
+  --color-on-primary-container: #410000;
+  --color-secondary: #775652;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #ffdad5;
+  --color-on-secondary-container: #2c1512;
+  --color-tertiary: #705c2e;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #fbdfa6;
+  --color-on-tertiary-container: #251a00;
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #410002;
+  --color-surface: #fffbff;
+  --color-on-surface: #201a19;
+  --color-surface-variant: #f5ddda;
+  --color-on-surface-variant: #534341;
+  --color-outline: #857371;
+  --color-outline-variant: #d8c2bf;
+  --color-inverse-surface: #362f2e;
+  --color-inverse-on-surface: #fbeeec;
+  --color-inverse-primary: #ffb4ab;
+  --color-surface-dim: #e4d7d5;
+  --color-surface-bright: #fff8f7;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #fef1ef;
+  --color-surface-container: #f8ebe9;
+  --color-surface-container-high: #f2e5e3;
+  --color-surface-container-highest: #ece0de;
+  --color-success: #2e7d32;
+  --color-warning: #f57c00;
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #e5e2e1; border-radius: 10px; }
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.pulse-dot {
+  box-shadow: 0 0 0 0 rgba(186, 16, 10, 0.4);
+  animation: pulse-ring 2s infinite;
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(186, 16, 10, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(186, 16, 10, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(186, 16, 10, 0); }
+}
+
+/* Premium stat card with hover lift */
+.stat-card {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* Gradient hero background */
+.gradient-hero {
+  background: linear-gradient(135deg, #ba100a 0%, #8a0a07 40%, #410000 80%, #1a0000 100%);
+}
+
+/* Animated progress bar fill */
+.progress-bar-fill {
+  animation: progressFill 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  transform-origin: left;
+}
+@keyframes progressFill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* Subtle shine/shimmer effect on hover */
+.card-shine {
+  position: relative;
+  overflow: hidden;
+}
+.card-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+.card-shine:hover::after {
+  left: 120%;
+}
+
+/* Refined glass card */
+.glass-card-premium {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px) saturate(1.6);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Smooth transitions */
+.transition-lift {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.transition-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Gradient text utility */
+.text-gradient-primary {
+  background: linear-gradient(135deg, #ba100a, #ff6b6b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Pipeline connector line */
+.pipeline-connector {
+  position: relative;
+}
+.pipeline-connector::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -1rem;
+  width: 2rem;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-container));
+}
+
+/* Sidebar gradient background */
+.sidebar-gradient {
+  background: linear-gradient(180deg, var(--color-surface-container-low) 0%, #f5e8e6 50%, var(--color-surface-container) 100%);
+}
+
+/* Number counter animation feel */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-count {
+  animation: countUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}

@@ -1,0 +1,42 @@
+name: Preview Deploy (PR)
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  preview:
+    name: 🔍 Deploy Preview
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install & Build
+        run: npm ci && npm run build
+
+      - name: Deploy Preview to Vercel
+        uses: amondnet/vercel-action@v25
+        id: vercel-deploy
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Comment PR with preview URL
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🔥 **Brigada Camarão Preview**\n\n🔗 ${process.env.PREVIEW_URL}\n\nDeploy automático a partir do commit \`${context.sha.substring(0, 7)}\``
+            })
+        env:
+          PREVIEW_URL: ${{ steps.vercel-deploy.outputs.preview-url }}

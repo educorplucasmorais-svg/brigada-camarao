@@ -1,0 +1,123 @@
+name: CI — Build & Test
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ──────────────────────────────────────────────
+  # FRONTEND — TypeScript + Vite build
+  # ──────────────────────────────────────────────
+  frontend:
+    name: 🎨 Frontend Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript check
+        run: npx tsc --noEmit
+
+      - name: Build production
+        run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: dist/
+          retention-days: 7
+
+  # ──────────────────────────────────────────────
+  # BACKEND — Express + Prisma
+  # ──────────────────────────────────────────────
+  backend:
+    name: 🔥 Backend Build & Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    env:
+      DATABASE_URL: "file:./test.db"
+      JWT_SECRET: "ci-test-secret-key"
+      PORT: "3333"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Push database schema
+        run: npx prisma db push --skip-generate
+
+      - name: Seed database
+        run: npx tsx src/seed.ts
+
+      - name: Start server & health check
+        run: |
+          npx tsx src/index.ts &
+          sleep 3
+          curl -f http://localhost:3333/api/health || exit 1
+          echo "✅ API health check passed"
+
+      - name: Test auth flow
+        run: |
+          # Login
+          RESPONSE=$(curl -s -X POST http://localhost:3333/api/auth/login \
+            -H "Content-Type: application/json" \
+            -d '{"email":"admin@brigadacamarao.com","password":"123456"}')
+          echo "$RESPONSE" | grep -q '"token"' || (echo "❌ Login failed" && exit 1)
+          echo "✅ Login OK"
+          
+          # Extract token
+          TOKEN=$(echo "$RESPONSE" | grep -o '"token":"[^"]*"' | cut -d'"' -f4)
+          
+          # Get events
+          curl -sf http://localhost:3333/api/events \
+            -H "Authorization: Bearer $TOKEN" | grep -q "Festival" || (echo "❌ Events failed" && exit 1)
+          echo "✅ Events API OK"
+          
+          # Get stats
+          curl -sf http://localhost:3333/api/stats \
+            -H "Authorization: Bearer $TOKEN" | grep -q "totalEvents" || (echo "❌ Stats failed" && exit 1)
+          echo "✅ Stats API OK"
+
+  # ──────────────────────────────────────────────
+  # DEPLOY — Vercel (only on main push)
+  # ──────────────────────────────────────────────
+  deploy-frontend:
+    name: 🚀 Deploy Frontend (Vercel)
+    needs: [frontend, backend]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: --prod
+          working-directory: ./
