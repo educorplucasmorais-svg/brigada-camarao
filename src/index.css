@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700;800;900&family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -36,7 +36,10 @@
   --color-success: #2e7d32;
   --color-warning: #f57c00;
   --font-sans: 'Inter', system-ui, sans-serif;
+  --font-headline: 'Manrope', system-ui, sans-serif;
 }
+
+/* ─── Base Reset ─────────────────────────────────────────────────── */
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -48,15 +51,146 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #e5e2e1; border-radius: 10px; }
+::selection { background: rgba(186,16,10,0.15); color: #201a19; }
+:focus-visible { outline: 2px solid #ba100a; outline-offset: 2px; }
+
+/* ─── Scrollbar ──────────────────────────────────────────────────── */
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #fef1ef; }
+::-webkit-scrollbar-thumb { background: #d8c2bf; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #857371; }
+
+/* ─── Glassmorphism ──────────────────────────────────────────────── */
+
+.glass {
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(186,16,10,0.08);
+}
+.glass-strong {
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(186,16,10,0.1);
+}
+.glass-dark {
+  background: rgba(65,0,0,0.55);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.07);
+}
 
 .glass-card {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
+
+.glass-card-premium {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px) saturate(1.6);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* ─── Chameleon Gradient ─────────────────────────────────────────── */
+
+@keyframes chameleon {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.chameleon-gradient {
+  background: linear-gradient(135deg, #ba100a 0%, #8a0a07 40%, #5c0705 100%);
+  background-size: 200% 200%;
+  animation: chameleon 8s ease infinite;
+}
+.chameleon-text {
+  background: linear-gradient(135deg, #ba100a 0%, #ff6b6b 40%, #ba100a 100%);
+  background-size: 200% 200%;
+  animation: chameleon 8s ease infinite;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ─── Glow Effects ───────────────────────────────────────────────── */
+
+.glow-primary { box-shadow: 0 4px 24px -6px rgba(186,16,10,0.22), 0 1px 4px rgba(186,16,10,0.08); }
+.glow-accent { box-shadow: 0 4px 24px -6px rgba(119,86,82,0.22), 0 1px 4px rgba(119,86,82,0.08); }
+
+/* ─── Card Hover with Bottom Accent ──────────────────────────────── */
+
+.card-hover {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-bottom-color 0.25s ease;
+  border-bottom: 3px solid transparent;
+}
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 40px -12px rgba(186,16,10,0.12), 0 4px 12px -4px rgba(0,0,0,0.06);
+  border-bottom-color: #ba100a;
+}
+
+/* ─── Section Eyebrow ────────────────────────────────────────────── */
+
+.section-eyebrow {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #ba100a;
+  display: inline-block;
+  margin-bottom: 1rem;
+  padding: 0.3rem 0.9rem;
+  background: rgba(186,16,10,0.08);
+  border-radius: 9999px;
+}
+
+/* ─── Logo Glow Animation ────────────────────────────────────────── */
+
+@keyframes logo-glow {
+  0%, 100% { filter: drop-shadow(0 0 12px rgba(186,16,10,0.3)); }
+  50% { filter: drop-shadow(0 0 24px rgba(186,16,10,0.45)); }
+}
+.logo-pulse { animation: logo-glow 4s ease-in-out infinite; }
+
+/* ─── Gradient Buttons ───────────────────────────────────────────── */
+
+.btn-gradient {
+  background: linear-gradient(135deg, #ba100a, #8a0a07 50%, #5c0705);
+  background-size: 200% 200%;
+  animation: chameleon 8s ease infinite;
+  color: white;
+  border: 0;
+  transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.btn-gradient:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px -6px rgba(186,16,10,0.4);
+}
+
+/* ─── Progress Bar Gradient ──────────────────────────────────────── */
+
+.progress-gradient {
+  background: linear-gradient(90deg, #ba100a, #ff6b6b);
+  transition: width 0.5s ease-out;
+}
+
+/* ─── Scroll Progress Bar ────────────────────────────────────────── */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ba100a, #ff6b6b);
+  z-index: 100;
+  transition: width 0.1s linear;
+}
+
+/* ─── Pulse Dot ──────────────────────────────────────────────────── */
 
 .pulse-dot {
   box-shadow: 0 0 0 0 rgba(186, 16, 10, 0.4);
@@ -69,21 +203,24 @@ body {
   100% { box-shadow: 0 0 0 0 rgba(186, 16, 10, 0); }
 }
 
-/* Premium stat card with hover lift */
+/* ─── Premium Stat Card ──────────────────────────────────────────── */
+
 .stat-card {
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .stat-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 20px 40px -12px rgba(186,16,10,0.12), 0 4px 12px -4px rgba(0,0,0,0.06);
 }
 
-/* Gradient hero background */
+/* ─── Gradient Hero ──────────────────────────────────────────────── */
+
 .gradient-hero {
   background: linear-gradient(135deg, #ba100a 0%, #8a0a07 40%, #410000 80%, #1a0000 100%);
 }
 
-/* Animated progress bar fill */
+/* ─── Progress Bar Fill ──────────────────────────────────────────── */
+
 .progress-bar-fill {
   animation: progressFill 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   transform-origin: left;
@@ -93,7 +230,8 @@ body {
   to { transform: scaleX(1); }
 }
 
-/* Subtle shine/shimmer effect on hover */
+/* ─── Card Shine ─────────────────────────────────────────────────── */
+
 .card-shine {
   position: relative;
   overflow: hidden;
@@ -113,15 +251,8 @@ body {
   left: 120%;
 }
 
-/* Refined glass card */
-.glass-card-premium {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20px) saturate(1.6);
-  -webkit-backdrop-filter: blur(20px) saturate(1.6);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
+/* ─── Transition Lift ────────────────────────────────────────────── */
 
-/* Smooth transitions */
 .transition-lift {
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
@@ -130,7 +261,8 @@ body {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
-/* Gradient text utility */
+/* ─── Gradient Text ──────────────────────────────────────────────── */
+
 .text-gradient-primary {
   background: linear-gradient(135deg, #ba100a, #ff6b6b);
   -webkit-background-clip: text;
@@ -138,7 +270,8 @@ body {
   background-clip: text;
 }
 
-/* Pipeline connector line */
+/* ─── Pipeline Connector ─────────────────────────────────────────── */
+
 .pipeline-connector {
   position: relative;
 }
@@ -152,12 +285,14 @@ body {
   background: linear-gradient(90deg, var(--color-primary), var(--color-primary-container));
 }
 
-/* Sidebar gradient background */
+/* ─── Sidebar Gradient ───────────────────────────────────────────── */
+
 .sidebar-gradient {
   background: linear-gradient(180deg, var(--color-surface-container-low) 0%, #f5e8e6 50%, var(--color-surface-container) 100%);
 }
 
-/* Number counter animation feel */
+/* ─── Counter Animation ──────────────────────────────────────────── */
+
 @keyframes countUp {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
@@ -166,11 +301,25 @@ body {
   animation: countUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-/* Fade in animation */
+/* ─── Fade In ────────────────────────────────────────────────────── */
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
 .animate-fade-in {
   animation: fadeIn 0.5s ease forwards;
+}
+
+/* ─── Floating Animation ─────────────────────────────────────────── */
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+.animate-float-delayed {
+  animation: float 6s ease-in-out 2s infinite;
 }

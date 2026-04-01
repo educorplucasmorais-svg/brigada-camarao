@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Flame, ArrowRight, MessageCircle, HelpCircle, Eye, EyeOff, Shield, Users, Star } from 'lucide-react';
+import { Flame, ArrowRight, MessageCircle, HelpCircle, Eye, EyeOff, Shield, Users, Star, CheckCircle, Zap } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
 export function LoginPage() {
@@ -27,26 +27,40 @@ export function LoginPage() {
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
-      {/* LEFT — Gradient Hero */}
-      <div className="gradient-hero relative lg:w-[55%] flex flex-col justify-center items-center p-8 lg:p-16 text-white overflow-hidden">
+      {/* LEFT — Chameleon Gradient Hero */}
+      <div className="chameleon-gradient relative lg:w-[55%] flex flex-col justify-center items-center p-8 lg:p-16 text-white overflow-hidden">
         {/* Decorative grid pattern */}
         <div className="absolute inset-0 opacity-[0.04]" style={{
           backgroundImage: 'linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)',
           backgroundSize: '40px 40px',
         }} />
-        {/* Decorative circles */}
-        <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full border border-white/10" />
-        <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full border border-white/5" />
-        <div className="absolute top-1/2 right-0 w-48 h-48 rounded-full bg-white/5 blur-3xl" />
+        {/* Ambient glow circles */}
+        <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-white/5 blur-3xl animate-float" />
+        <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-white/5 blur-3xl animate-float-delayed" />
+        <div className="absolute top-1/2 right-0 w-48 h-48 rounded-full bg-white/8 blur-3xl" />
+
+        {/* Floating glass cards */}
+        <div className="absolute top-16 right-8 glass-dark rounded-2xl p-4 animate-float hidden lg:block">
+          <div className="flex items-center gap-2">
+            <CheckCircle className="w-4 h-4 text-green-400" />
+            <span className="text-xs font-semibold text-white/90">Evento concluído</span>
+          </div>
+        </div>
+        <div className="absolute bottom-20 left-8 glass-dark rounded-2xl p-4 animate-float-delayed hidden lg:block">
+          <div className="flex items-center gap-2">
+            <Zap className="w-4 h-4 text-yellow-400" />
+            <span className="text-xs font-semibold text-white/90">+12 brigadistas</span>
+          </div>
+        </div>
 
         <div className="relative z-10 text-center lg:text-left max-w-lg">
           <div className="flex items-center gap-3 mb-6 justify-center lg:justify-start">
-            <div className="w-14 h-14 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center border border-white/20">
+            <div className="w-14 h-14 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center border border-white/20 logo-pulse">
               <Flame className="w-8 h-8 text-white" />
             </div>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-none mb-4">
+          <h1 className="font-headline text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-none mb-4">
             Brigada<br />Camarão
           </h1>
 
@@ -63,7 +77,7 @@ export function LoginPage() {
             <div className="flex items-center gap-2">
               <Shield className="w-5 h-5 text-white/50" />
               <div>
-                <p className="text-2xl font-black">156</p>
+                <p className="text-2xl font-black font-headline">156</p>
                 <p className="text-[10px] uppercase tracking-widest text-white/50">Bombeiros</p>
               </div>
             </div>
@@ -71,7 +85,7 @@ export function LoginPage() {
             <div className="flex items-center gap-2">
               <Users className="w-5 h-5 text-white/50" />
               <div>
-                <p className="text-2xl font-black">47</p>
+                <p className="text-2xl font-black font-headline">47</p>
                 <p className="text-[10px] uppercase tracking-widest text-white/50">Eventos</p>
               </div>
             </div>
@@ -79,9 +93,19 @@ export function LoginPage() {
             <div className="flex items-center gap-2">
               <Star className="w-5 h-5 text-white/50" />
               <div>
-                <p className="text-2xl font-black">96%</p>
+                <p className="text-2xl font-black font-headline">96%</p>
                 <p className="text-[10px] uppercase tracking-widest text-white/50">Satisfação</p>
               </div>
+            </div>
+          </div>
+
+          {/* Trust signals */}
+          <div className="hidden lg:flex items-center gap-6 mt-6 pt-6 border-t border-white/5">
+            <div className="flex items-center gap-1.5 text-white/40 text-[10px] uppercase tracking-widest font-bold">
+              <Shield className="w-3.5 h-3.5" /> Dados Criptografados
+            </div>
+            <div className="flex items-center gap-1.5 text-white/40 text-[10px] uppercase tracking-widest font-bold">
+              <CheckCircle className="w-3.5 h-3.5" /> LGPD Compliant
             </div>
           </div>
         </div>
@@ -92,12 +116,12 @@ export function LoginPage() {
         <main className="w-full max-w-md">
           {/* Flame icon */}
           <div className="flex justify-center mb-8">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-on-primary-container flex items-center justify-center shadow-xl shadow-primary/20">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-on-primary-container flex items-center justify-center shadow-xl shadow-primary/20 logo-pulse">
               <Flame className="w-8 h-8 text-on-primary" />
             </div>
           </div>
 
-          <h2 className="text-2xl md:text-3xl font-black tracking-tight text-on-surface text-center mb-1">
+          <h2 className="font-headline text-2xl md:text-3xl font-black tracking-tight text-on-surface text-center mb-1">
             Acesso ao Sistema
           </h2>
           <p className="text-sm text-on-surface-variant text-center mb-8">
@@ -121,7 +145,7 @@ export function LoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3.5 bg-surface-container-low border-none rounded-2xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm outline-none"
+                className="w-full px-4 py-3.5 glass border border-transparent rounded-2xl focus:ring-2 focus:ring-primary/20 focus:border-primary/30 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm outline-none"
                 placeholder="seu@email.com"
                 required
               />
@@ -136,7 +160,7 @@ export function LoginPage() {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3.5 pr-12 bg-surface-container-low border-none rounded-2xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm outline-none"
+                  className="w-full px-4 py-3.5 pr-12 glass border border-transparent rounded-2xl focus:ring-2 focus:ring-primary/20 focus:border-primary/30 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm outline-none"
                   placeholder="••••••••"
                   required
                 />
@@ -154,7 +178,7 @@ export function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 bg-primary text-on-primary font-black text-base rounded-2xl shadow-xl shadow-primary/30 hover:shadow-primary/50 transition-all active:scale-[0.98] flex items-center justify-center gap-2 uppercase tracking-tight disabled:opacity-50"
+                className="w-full py-4 btn-gradient font-black text-base rounded-2xl shadow-xl shadow-primary/30 hover:shadow-primary/50 transition-all active:scale-[0.98] flex items-center justify-center gap-2 uppercase tracking-tight disabled:opacity-50"
               >
                 {loading ? 'Entrando...' : 'Entrar'}
                 <ArrowRight className="w-5 h-5" />
@@ -163,7 +187,7 @@ export function LoginPage() {
           </form>
 
           {/* Info box */}
-          <div className="mt-8 p-4 bg-surface-container-low rounded-2xl">
+          <div className="mt-8 p-4 glass rounded-2xl">
             <p className="text-[11px] font-black text-primary uppercase tracking-wider mb-2">
               Por que pedimos isso?
             </p>

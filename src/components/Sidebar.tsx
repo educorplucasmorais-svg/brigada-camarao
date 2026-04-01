@@ -38,11 +38,11 @@ export function Sidebar() {
       {/* Brand Block */}
       <div className="px-6 pt-6 pb-4">
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-11 h-11 rounded-full bg-gradient-to-br from-primary to-on-primary-container flex items-center justify-center shadow-lg shadow-primary/30">
+          <div className="w-11 h-11 rounded-full bg-gradient-to-br from-primary to-on-primary-container flex items-center justify-center shadow-lg shadow-primary/30 logo-pulse">
             <Flame className="w-6 h-6 text-on-primary" />
           </div>
           <div>
-            <h1 className="text-sm font-black text-on-surface uppercase tracking-tight leading-tight">
+            <h1 className="text-sm font-black text-on-surface uppercase tracking-tight leading-tight font-headline">
               Brigada Camarão
             </h1>
             <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.15em] mt-0.5">
@@ -64,8 +64,8 @@ export function Sidebar() {
                 onClick={() => setMobileOpen(false)}
                 className={({ isActive }) =>
                   isActive
-                    ? 'flex items-center gap-4 bg-white text-primary font-bold rounded-l-full ml-4 pl-4 py-3 border-r-4 border-primary transition-all shadow-sm'
-                    : 'flex items-center gap-4 text-on-surface-variant px-8 py-3 hover:bg-surface-container-high/60 hover:text-on-surface rounded-lg mx-3 transition-all'
+                    ? 'flex items-center gap-4 bg-white text-primary font-bold rounded-l-full ml-4 pl-4 py-3 border-r-4 border-primary transition-all shadow-sm glow-primary'
+                    : 'flex items-center gap-4 text-on-surface-variant px-8 py-3 hover:bg-surface-container-high/60 hover:text-on-surface rounded-lg mx-3 transition-all card-hover'
                 }
               >
                 <item.icon className="w-5 h-5" />
@@ -118,7 +118,7 @@ export function Sidebar() {
       )}
 
       <aside
-        className={`lg:hidden fixed top-0 left-0 h-full w-72 sidebar-gradient z-40 transform transition-transform duration-300 shadow-2xl ${
+        className={`lg:hidden fixed top-0 left-0 h-full w-72 glass-strong z-40 transform transition-transform duration-300 shadow-2xl ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >

@@ -35,15 +35,15 @@ export function COODashboardPage() {
   return (
     <div className="space-y-6">
       {/* Hero */}
-      <div className="gradient-hero rounded-2xl p-6 lg:p-8 text-white relative overflow-hidden">
+      <div className="chameleon-gradient rounded-2xl p-6 lg:p-8 text-white relative overflow-hidden">
         <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-white/5 blur-2xl" />
         <div className="relative z-10 flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-white/15 flex items-center justify-center border border-white/20">
+          <div className="w-12 h-12 rounded-full bg-white/15 flex items-center justify-center border border-white/20 logo-pulse">
             <Shield className="w-6 h-6 text-white" />
           </div>
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/60">Sentinel Response</p>
-            <h1 className="text-2xl lg:text-3xl font-extrabold tracking-tight">Painel Executivo</h1>
+            <h1 className="text-2xl lg:text-3xl font-extrabold tracking-tight font-headline">Painel Executivo</h1>
           </div>
         </div>
       </div>
@@ -89,7 +89,7 @@ export function COODashboardPage() {
       {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Revenue Trend */}
-        <div className="bg-surface-container-lowest rounded-2xl shadow-sm p-6">
+        <div className="bg-surface-container-lowest rounded-2xl shadow-sm p-6 card-hover">
           <div className="flex items-center justify-between mb-5">
             <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest">
               Tendência de Receita
@@ -124,7 +124,7 @@ export function COODashboardPage() {
         </div>
 
         {/* Occupancy by Type */}
-        <div className="bg-surface-container-lowest rounded-2xl shadow-sm p-6">
+        <div className="bg-surface-container-lowest rounded-2xl shadow-sm p-6 card-hover">
           <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest mb-5">
             Ocupação por Tipo de Evento
           </h3>
@@ -152,7 +152,7 @@ export function COODashboardPage() {
       </div>
 
       {/* Financial Summary Table */}
-      <div className="bg-surface-container-lowest rounded-2xl shadow-sm p-6">
+      <div className="bg-surface-container-lowest rounded-2xl shadow-sm p-6 card-hover">
         <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest mb-5">
           Resumo Financeiro — Orçamentos
         </h3>

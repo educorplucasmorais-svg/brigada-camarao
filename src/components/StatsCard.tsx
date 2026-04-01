@@ -26,7 +26,7 @@ export function StatsCard({
   const trendColor = trend === 'up' ? 'text-success' : trend === 'down' ? 'text-error' : '';
 
   return (
-    <div className="stat-card card-shine bg-surface-container-lowest rounded-2xl shadow-sm overflow-hidden">
+    <div className="stat-card card-shine card-hover bg-surface-container-lowest rounded-2xl shadow-sm overflow-hidden">
       {/* Gradient accent strip */}
       <div className={`h-1 w-full ${accentColor}`} />
 
@@ -41,7 +41,7 @@ export function StatsCard({
         </div>
 
         <div className="animate-count">
-          <div className="text-4xl lg:text-5xl font-black tracking-tighter text-on-surface">
+          <div className="text-4xl lg:text-5xl font-black tracking-tighter text-on-surface font-headline">
             {value}
           </div>
         </div>
@@ -65,7 +65,7 @@ export function StatsCard({
           <div className="mt-1">
             <div className="w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden">
               <div
-                className={`h-full rounded-full progress-bar-fill ${accentColor}`}
+                className="h-full rounded-full progress-bar-fill progress-gradient"
                 style={{ width: `${Math.min(progress, 100)}%` }}
               />
             </div>
