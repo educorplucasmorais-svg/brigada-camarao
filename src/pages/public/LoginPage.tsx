@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { Flame, ArrowRight, Eye, EyeOff, Shield, Users, Star, Lock } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
+// Fotos da Brigada Camarão — substitua por fotos reais do Instagram (@brigadacamarao)
+// Basta trocar os arquivos em /public/images/hero/
 const heroPhotos = [
-  'https://images.unsplash.com/photo-1582139329536-e7284fece509?w=1200&q=80',
-  'https://images.unsplash.com/photo-1504502350688-00f5d59bbdeb?w=1200&q=80',
-  'https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=1200&q=80',
-  'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1200&q=80',
-  'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&q=80',
+  '/images/hero/hero-1.jpg', // Brigadistas em ação
+  '/images/hero/hero-2.jpg', // Treinamento de resgate
+  '/images/hero/hero-3.jpg', // Evento — estrutura
+  '/images/hero/hero-4.jpg', // Grande evento
+  '/images/hero/hero-5.jpg', // Primeiros socorros
 ];
 
 export function LoginPage() {
