@@ -1,139 +1,137 @@
-<p align="center">
-  <img src="public/images/logo-brigada.png" alt="Brigada Camarão" width="120" />
-</p>
-
-<h1 align="center">🦐 Brigada Camarão — Sentinel Command</h1>
+# 🦐 Brigada Camarão — Sentinel Command
 
 <p align="center">
-  <strong>Plataforma de gestão inteligente para a maior brigada de incêndio do Brasil</strong><br/>
-  Recrutamento · Eventos · Orçamentos · Dashboard 3 Níveis · Mobile-First
-</p>
-
-<p align="center">
-  <a href="https://brigada-camarao.vercel.app">🌐 Live Demo</a> ·
-  <a href="https://www.instagram.com/brigadacamarao/">📸 Instagram</a> ·
-  <a href="https://docs.google.com/spreadsheets/d/1Ab02MPDSN9-VfNj9p_HhxI32VdJuhDsZb4yOvRUSlKA/edit">📊 Planilha Backup</a>
+  <strong>Plataforma completa de gestão inteligente para brigada civil</strong><br/>
+  React · Vite · Express · Prisma · Claude AI (Cookbooks) · Google Sheets Backup
 </p>
 
 ---
 
 ## 🔐 Credenciais de Acesso
 
-| Usuário | Email | Senha | Role | Acesso |
-|---------|-------|-------|------|--------|
-| **Admin** | `admin@brigadacamarao.com` | qualquer senha | `admin` | Dashboard completo + 3 visões |
-| **COO** | `coo@brigadacamarao.com` | qualquer senha | `coo` | Painel Executivo COO |
-| **Staff** | `staff@brigadacamarao.com` | qualquer senha | `staff` | Visão operacional |
+| Usuário | Email | Senha | Role |
+|---------|-------|-------|------|
+| **Admin** | `admin@brigadacamarao.com` | `admin123` | `admin` |
+| **COO** | `coo@brigadacamarao.com` | `coo123` | `coo` |
+| **Staff** | `staff@brigadacamarao.com` | `staff123` | `staff` |
 
-> ⚠️ Em modo offline (backend desligado), o login aceita **qualquer senha** via mock fallback.  
-> Com o backend rodando (`:3333`), a autenticação é via JWT + bcrypt.
+> Em modo offline (sem backend), o app funciona com banco de dados local no navegador (window.storage / localStorage).
 
 ---
 
 ## 🏗️ Arquitetura
 
 ```
-brigada-camarao/
-├── public/
-│   └── images/
-│       ├── logo-brigada.png          # Logo oficial BG-55
-│       └── hero/                     # Slideshow de fotos (login)
-│           ├── hero-1.jpg ... hero-5.jpg
-│           └── instagram-extractor.js
+brigada-camarao-app/
 ├── src/
-│   ├── components/                   # UI Components (Sidebar, StatsCard, StatusBadge)
-│   ├── contexts/                     # AuthContext (JWT + Mock fallback)
-│   ├── data/                         # Mock data (offline mode)
-│   ├── layouts/                      # AdminLayout (sidebar + content)
-│   ├── lib/                          # API client
-│   ├── pages/
-│   │   ├── public/                   # LoginPage (slideshow hero)
-│   │   └── admin/                    # DashboardPage, COODashboardPage
-│   ├── types/                        # TypeScript interfaces
-│   └── index.css                     # Design System (MD3 + Glassmorphism)
+│   ├── App.jsx              # App completo (Login + Employee + Admin)
+│   ├── main.jsx             # Entry point React
+│   └── index.css            # Global styles
 ├── server/
-│   ├── prisma/schema.prisma          # 8 modelos (User, Event, Vacancy, Quote...)
 │   ├── src/
-│   │   ├── routes/                   # auth, events, vacancies, quotes, team, registrations, export
-│   │   ├── lib/prisma.ts             # Prisma client
-│   │   ├── seed.ts                   # Dados iniciais
-│   │   └── index.ts                  # Express server (:3333)
-│   └── package.json
+│   │   ├── index.ts         # Express API (JWT + Prisma)
+│   │   └── seed.ts          # Dados iniciais
+│   └── prisma/
+│       └── schema.prisma    # 8 modelos de dados
 ├── google-sheets-sync/
-│   ├── Code.gs                       # Apps Script — backup para Google Sheets
-│   └── README.md                     # Instruções de instalação
-├── .github/workflows/ci.yml          # CI/CD — GitHub Actions → Vercel
-├── vercel.json                       # SPA routing + security headers
-├── ESTRATEGIA_MARKETING.md           # Plano de marketing completo
-└── package.json
+│   └── Code.gs              # Apps Script — backup Google Sheets
+├── .github/workflows/
+│   └── ci.yml               # CI/CD → Vercel + Railway
+├── .env.example             # Variáveis de ambiente
+├── vercel.json              # Config deploy frontend
+└── README.md
 ```
 
 ---
 
-## 🎨 Design System
+## 🤖 Integração Claude AI — Cookbooks Pattern
 
-| Propriedade | Valor |
-|-------------|-------|
-| **Primary** | `#ba100a` (vermelho Brigada) |
-| **Surface** | `#fffbff` (branco quente) |
-| **Fonte Headlines** | Manrope (font-headline) |
-| **Fonte Body** | Inter (font-sans) |
-| **Glassmorphism** | `.glass` (75% white, blur 16px) |
-| **Animação** | `.chameleon-gradient` (8s infinite) |
-| **Hover** | `.card-hover` (translateY -3px, desabilitado no mobile) |
-| **Logo Pulse** | `.logo-pulse` (glow animation) |
+O **Sentinel AI** usa o padrão **Agentic Loop with Tool Use** dos Claude Cookbooks:
+
+```javascript
+// 1. Definição de ferramentas (Tool Use)
+const AI_TOOLS = [
+  { name: 'get_stats',      description: 'Estatísticas em tempo real' },
+  { name: 'filter_events',  description: 'Filtrar eventos por status/tipo' },
+  { name: 'analyze_revenue', description: 'Análise financeira' },
+  { name: 'team_summary',   description: 'Resumo da equipe' },
+]
+
+// 2. Agentic Loop — Claude Cookbooks pattern
+// Continua chamando a API enquanto stop_reason === 'tool_use'
+while (data.stop_reason === 'tool_use') {
+  const results = uses.map(u => runTool(u.name, u.input, db))
+  data = await callAPI([...msgs, assistantMsg, toolResults])
+}
+```
+
+O assistente consulta o banco de dados em tempo real e responde em português.
 
 ---
 
-## 📊 Dashboard — 3 Visões
+## 🗄️ Banco de Dados — Prisma Schema
 
-### 🔭 Estratégico (C-Level)
-- OKRs com RadialBarChart (progresso visual)
-- Receita anual vs. meta (AreaChart)
-- Market share e metas corporativas
-
-### 🎯 Tático (Gerência)
-- KPIs operacionais (StatsCards)
-- Pipeline de vendas (BarChart)
-- Receita mensal (AreaChart)
-- Eventos em andamento
-
-### ⚙️ Operacional (Campo)
-- Agenda de eventos do dia
-- Timeline de check-ins
-- Resumo financeiro
-- Checklist de equipamentos
+| Modelo | Campos principais |
+|--------|-------------------|
+| `User` | name, email, passwordHash, cpf, pix, cred, role |
+| `Event` | title, type, date, time, location, pay, total, filled, status |
+| `Vacancy` | title, type, pay, slots, req, status |
+| `Quote` | client, type, totalValue, status, validUntil, contact |
+| `QuoteItem` | description, quantity, unitPrice |
+| `TeamMember` | name, role, cred, cpf, pix, status, eventsCount |
+| `Registration` | userId, eventId, status, dataHash (SHA-256) |
+| `AuditLog` | action, entity, userId, ipAddress |
 
 ---
 
 ## 🚀 Início Rápido
 
-### Frontend (React + Vite)
-
+### 1. Frontend (React + Vite)
 ```bash
-cd brigada-camarao
 npm install
 npm run dev
 # → http://localhost:5173
 ```
 
-### Backend (Express + Prisma + SQLite)
-
+### 2. Backend (Express + Prisma + SQLite)
 ```bash
 cd server
 npm install
+cp ../.env.example .env      # configure DATABASE_URL e JWT_SECRET
 npx prisma db push
-npx tsx src/seed.ts
+npx tsx src/seed.ts           # popula dados iniciais
 npm run dev
 # → http://localhost:3333
 ```
 
-### Google Sheets Sync
-
-1. Abra a [planilha](https://docs.google.com/spreadsheets/d/1Ab02MPDSN9-VfNj9p_HhxI32VdJuhDsZb4yOvRUSlKA/edit)
+### 3. Google Sheets Backup
+1. Abra a [Planilha Brigada Camarão](https://docs.google.com/spreadsheets/d/1Ab02MPDSN9-VfNj9p_HhxI32VdJuhDsZb4yOvRUSlKA/edit)
 2. **Extensões → Apps Script**
 3. Cole o conteúdo de `google-sheets-sync/Code.gs`
-4. Execute `setup()` → autorize → pronto!
+4. Troque `API_BASE` pela URL do seu backend
+5. Execute `setup()` → autorize → sync automático a cada 6h
+
+---
+
+## 🌐 Deploy Gratuito
+
+### Frontend → Vercel
+```bash
+npm i -g vercel
+vercel --prod
+```
+Configure as variáveis no Dashboard do Vercel:
+- `VITE_API_URL` → URL do Railway
+- `VITE_ANTHROPIC_KEY` → Sua chave Anthropic
+
+### Backend → Railway
+1. Crie projeto em [railway.app](https://railway.app)
+2. Conecte o repositório, selecione a pasta `server/`
+3. Adicione PostgreSQL (plugin Railway)
+4. Configure:
+   - `DATABASE_URL` (Railway gera automaticamente)
+   - `JWT_SECRET` (gere um seguro)
+   - `FRONTEND_URL` (URL do Vercel)
 
 ---
 
@@ -142,82 +140,45 @@ npm run dev
 | Método | Rota | Descrição | Auth |
 |--------|------|-----------|------|
 | `GET` | `/api/health` | Health check | — |
-| `POST` | `/api/auth/login` | Login (retorna JWT) | — |
-| `POST` | `/api/auth/register` | Registro | — |
-| `GET` | `/api/events` | Listar eventos | Bearer |
-| `GET` | `/api/vacancies` | Listar vagas | Bearer |
-| `GET` | `/api/quotes` | Listar orçamentos | Bearer |
-| `GET` | `/api/team` | Listar equipe | Bearer |
-| `GET` | `/api/registrations` | Listar inscrições | Bearer |
-| `GET` | `/api/stats` | KPIs do dashboard | Bearer |
-| `GET` | `/api/export/all` | Export completo (Sheets sync) | x-api-key |
-| `GET` | `/api/export/table/:name` | Export tabela específica | x-api-key |
+| `POST` | `/api/auth/login` | Login JWT | — |
+| `POST` | `/api/auth/register` | Cadastro | — |
+| `GET/POST/PUT/DELETE` | `/api/events` | CRUD Eventos | Bearer |
+| `GET/POST/PUT/DELETE` | `/api/vacancies` | CRUD Vagas | Bearer |
+| `GET/POST/PUT/DELETE` | `/api/quotes` | CRUD Orçamentos | Bearer |
+| `GET/POST/PUT/DELETE` | `/api/team` | CRUD Equipe | Bearer |
+| `GET` | `/api/stats` | KPIs dashboard | Bearer |
+| `GET` | `/api/export/all` | Export Sheets | x-api-key |
 
-**API Key para Sheets:** `brigada-sync-2026`
-
----
-
-## 🗄️ Banco de Dados (Prisma Schema)
-
-| Modelo | Campos Principais |
-|--------|-------------------|
-| `User` | name, email, role (admin/coo/staff), cpf, pix, status |
-| `Event` | title, date, location, capacity, budget, status |
-| `Vacancy` | title, quantity, compensation, requirements |
-| `Quote` | client, type, totalValue, status, validUntil |
-| `QuoteItem` | description, quantity, unitPrice |
-| `TeamMember` | name, role, certifications, status |
-| `Registration` | userId, eventId, status, dataHash (verificação SHA-256) |
-| `AuditLog` | action, entity, userId, ipAddress |
-
----
-
-## 📱 Mobile-First
-
-Otimizado para bombeiros usando celular durante eventos:
-
-- **Touch targets**: mínimo 48px em todos os botões
-- **Charts responsivos**: `h-48 → h-64 → h-72` (mobile → tablet → desktop)
-- **Sidebar drawer**: 280px com active:scale feedback
-- **Animações**: desabilitadas em `prefers-reduced-motion`
-- **Scrollbar**: 4px no mobile
-- **Tabs**: labels abreviados (`ESTR.`, `TÁT.`, `OPER.`)
-
----
-
-## 🚢 Deploy
-
-| Serviço | URL | Branch |
-|---------|-----|--------|
-| **Frontend** | [brigada-camarao.vercel.app](https://brigada-camarao.vercel.app) | `main` (auto-deploy) |
-| **GitHub** | [educorplucasmorais-svg/brigada-camarao](https://github.com/educorplucasmorais-svg/brigada-camarao) | `main` |
-| **Sheets Backup** | [Planilha](https://docs.google.com/spreadsheets/d/1Ab02MPDSN9-VfNj9p_HhxI32VdJuhDsZb4yOvRUSlKA/edit) | Auto-sync 6h |
-
----
-
-## 📈 Marketing
-
-Consulte o plano completo em [`ESTRATEGIA_MARKETING.md`](./ESTRATEGIA_MARKETING.md):
-- Análise SWOT
-- Estratégia Instagram (calendário editorial)
-- SEO e posicionamento
-- Roadmap de expansão
+**API Key Sheets:** `brigada-sync-2026`
 
 ---
 
 ## 🛡️ Segurança
 
-- **JWT** com expiração de 24h
-- **bcrypt** para hash de senhas
-- **SHA-256** para verificação de integridade de registros
-- **LGPD**: senhas nunca exportadas na API de export
-- **Headers**: X-Frame-Options DENY, X-Content-Type-Options nosniff
-- **CORS**: whitelist de origens permitidas
+- **JWT** com expiração 24h
+- **bcrypt** para hash de senhas (salt 12)
+- **SHA-256** para integridade de registros
+- **LGPD**: CPF nunca exportado para Sheets
+- **CORS**: whitelist de origens
+- **Headers**: X-Frame-Options DENY, nosniff
+
+---
+
+## 📱 Admin — Funcionalidades
+
+- ✅ Dashboard 3 visões (Estratégico / Tático / Operacional)
+- ✅ CRUD completo: Eventos, Vagas, Orçamentos, Equipe
+- ✅ Filtros + busca em tempo real por entidade
+- ✅ Exportar CSV → Google Sheets (backup direto)
+- ✅ Sentinel AI (Claude) para análises em linguagem natural
+- ✅ Banco de dados persistente (window.storage / SQLite / PostgreSQL)
+- ✅ Modais de edição com validação
+- ✅ Toast notifications + confirmação de exclusão
+- ✅ Pipeline de orçamentos + métricas financeiras
 
 ---
 
 <p align="center">
   <strong>🦐 Brigada Camarão — Prevenir · Combater · Salvar</strong><br/>
-  <em>Desde 2009 · BH/MG · 13K+ seguidores</em><br/><br/>
-  <code>Sempre perto de você</code>
+  <em>Desde 2009 · BH/MG · 13K+ seguidores</em>
 </p>

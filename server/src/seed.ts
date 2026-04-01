@@ -1,80 +1,74 @@
-import bcrypt from 'bcryptjs';
-import prisma from './lib/prisma.js';
+import { PrismaClient } from '@prisma/client'
+import bcrypt from 'bcrypt'
+
+const prisma = new PrismaClient()
 
 async function main() {
-  console.log('🌱 Seeding database...');
+  console.log('🌱 Seeding Brigada Camarão database...')
 
-  const hash = await bcrypt.hash('123456', 12);
-
-  // Users (upsert to handle re-runs)
-  for (const user of [
-    { name: 'Iago Camarão', email: 'admin@brigadacamarao.com', passwordHash: hash, role: 'admin', phone: '(31) 99999-0001' },
-    { name: 'Carlos Oliveira', email: 'coo@brigadacamarao.com', passwordHash: hash, role: 'coo', phone: '(31) 99999-0002' },
-    { name: 'Maria Silva', email: 'staff@brigadacamarao.com', passwordHash: hash, role: 'staff', phone: '(31) 99999-0003' },
-  ]) {
+  // ── Users ──────────────────────────────────────────────────
+  const users = [
+    { name: 'Lucas Morais', email: 'admin@brigadacamarao.com', password: 'admin123', role: 'admin', cred: 'BC-ADM-01' },
+    { name: 'Ana COO', email: 'coo@brigadacamarao.com', password: 'coo123', role: 'coo', cred: 'BC-COO-01' },
+    { name: 'Carlos Staff', email: 'staff@brigadacamarao.com', password: 'staff123', role: 'staff', cred: 'BC-001' },
+  ]
+  for (const u of users) {
+    const hash = await bcrypt.hash(u.password, 12)
     await prisma.user.upsert({
-      where: { email: user.email },
+      where: { email: u.email },
       update: {},
-      create: user,
-    });
+      create: { name: u.name, email: u.email, passwordHash: hash, role: u.role, cred: u.cred }
+    })
   }
 
-  // Events
+  // ── Events ─────────────────────────────────────────────────
   const events = [
-    { title: 'Festival Gastronômico BH', date: '2026-04-15', location: 'Belo Horizonte, MG', status: 'upcoming', type: 'Festival', vacancies: 25, filledVacancies: 18, budget: 45000, description: 'Festival gastronômico com 50+ barracas', uniform: 'Camiseta preta + colete refletivo' },
-    { title: 'Show Sertanejo Arena', date: '2026-04-20', location: 'Uberlândia, MG', status: 'active', type: 'Show', vacancies: 40, filledVacancies: 40, budget: 72000, description: 'Show com público estimado de 15.000 pessoas', uniform: 'Uniforme completo brigada' },
-    { title: 'Feira Industrial FIEMG', date: '2026-04-25', location: 'Contagem, MG', status: 'upcoming', type: 'Feira', vacancies: 15, filledVacancies: 8, budget: 28000, description: 'Feira industrial com foco em segurança do trabalho' },
-    { title: 'Casamento Villa Real', date: '2026-05-02', location: 'Nova Lima, MG', status: 'upcoming', type: 'Evento Privado', vacancies: 6, filledVacancies: 6, budget: 8500 },
-    { title: 'Carnaval Ouro Preto', date: '2026-02-14', location: 'Ouro Preto, MG', status: 'completed', type: 'Carnaval', vacancies: 60, filledVacancies: 60, budget: 120000, description: 'Cobertura completa do carnaval' },
-    { title: 'Corrida de Rua 10K', date: '2026-05-10', location: 'Betim, MG', status: 'upcoming', type: 'Esportivo', vacancies: 12, filledVacancies: 5, budget: 15000 },
-    { title: 'Rock in BH Festival', date: '2026-03-28', location: 'Belo Horizonte, MG', status: 'completed', type: 'Show', vacancies: 50, filledVacancies: 50, budget: 95000 },
-    { title: 'Expo Construção 2026', date: '2026-04-18', location: 'Belo Horizonte, MG', status: 'active', type: 'Feira', vacancies: 20, filledVacancies: 16, budget: 35000 },
-  ];
-  for (const event of events) {
-    await prisma.event.create({ data: event });
+    { id: 'ev-sjoa-01', title: 'Plantão Hospital Santa Joana', type: 'Hospitalar', date: new Date('2026-10-15'), time: '08:00-20:00', location: 'Bela Vista, SP', pay: 220, total: 5, filled: 2, status: 'Ativo', whatsapp: 'https://wa.me/5511999999999' },
+    { id: 'ev-praca-01', title: 'Show na Praça da Sé', type: 'Evento Especial', date: new Date('2026-10-18'), time: '16:00-04:00', location: 'Centro Histórico, SP', pay: 280, total: 15, filled: 7, status: 'Ativo', whatsapp: 'https://wa.me/5511988888888' },
+    { id: 'ev-ibira-01', title: 'Shopping Ibirapuera Segurança', type: 'Corporativo', date: new Date('2026-10-16'), time: '09:00-18:00', location: 'Ibirapuera, SP', pay: 185, total: 15, filled: 15, status: 'Encerrado', whatsapp: '' },
+    { id: 'ev-berri-01', title: 'Plantão Noturno Berrini', type: 'Hospitalar', date: new Date('2026-04-01'), time: '20:00-08:00', location: 'Berrini, SP', pay: 240, total: 30, filled: 27, status: 'Ativo', whatsapp: 'https://wa.me/5511977777777' },
+    { id: 'ev-carn-01', title: 'Carnaval Cultural SP', type: 'Evento Especial', date: new Date('2026-04-25'), time: '14:00-02:00', location: 'Centro, SP', pay: 310, total: 40, filled: 0, status: 'Aberto', whatsapp: '' },
+  ]
+  for (const ev of events) {
+    await prisma.event.upsert({ where: { id: ev.id }, update: {}, create: ev })
   }
 
-  // Team members
-  const members = [
-    { name: 'João Pedro Santos', role: 'Brigadista Líder', phone: '(31) 99876-5432', email: 'joao@brigada.com', status: 'on_mission', certifications: '["NR-23","APH","NR-35"]', eventsCompleted: 89 },
-    { name: 'Ana Carolina Lima', role: 'Socorrista', phone: '(31) 99765-4321', email: 'ana@brigada.com', status: 'active', certifications: '["APH","Resgate","PHTLS"]', eventsCompleted: 67 },
-    { name: 'Roberto Ferreira', role: 'Técnico Segurança', phone: '(31) 99654-3210', email: 'roberto@brigada.com', status: 'active', certifications: '["TST","NR-35","NR-33"]', eventsCompleted: 45 },
-    { name: 'Fernanda Oliveira', role: 'Brigadista', phone: '(31) 99543-2109', email: 'fernanda@brigada.com', status: 'on_mission', certifications: '["NR-23","Primeiros Socorros"]', eventsCompleted: 34 },
-    { name: 'Lucas Mendes', role: 'Brigadista', phone: '(31) 99432-1098', email: 'lucas@brigada.com', status: 'active', certifications: '["NR-23","APH"]', eventsCompleted: 52 },
-  ];
-  for (const member of members) {
-    await prisma.teamMember.upsert({
-      where: { email: member.email },
-      update: {},
-      create: member,
-    });
+  // ── Vacancies ──────────────────────────────────────────────
+  const vacancies = [
+    { title: 'Bombeiro Civil – Plantão', type: 'Hospitalar', pay: 220, slots: 15, req: 'NR-23, Primeiros Socorros', status: 'Aberto' },
+    { title: 'Coordenador de Segurança', type: 'Eventos', pay: 380, slots: 5, req: 'Liderança, 3+ anos experiência', status: 'Aberto' },
+    { title: 'Brigadista Industrial', type: 'Industrial', pay: 260, slots: 8, req: 'NR-23, NR-35, CIPA', status: 'Aberto' },
+  ]
+  for (const v of vacancies) {
+    await prisma.vacancy.create({ data: v }).catch(() => {})
   }
 
-  // Quotes with items
-  await prisma.quote.create({
-    data: {
-      clientName: 'Prefeitura de BH', eventType: 'Festival', date: '2026-04-10', value: 85000, status: 'approved',
-      items: { create: [
-        { description: 'Brigadistas (20 un x 12h)', quantity: 20, unitPrice: 540 },
-        { description: 'Socorristas (5 un x 12h)', quantity: 5, unitPrice: 660 },
-        { description: 'Equipamentos', quantity: 1, unitPrice: 8500 },
-      ]},
-    },
-  });
+  // ── Quotes ─────────────────────────────────────────────────
+  const quotes = [
+    { client: 'Hospital A. Einstein', type: 'Hospitalar', totalValue: 85000, status: 'Aprovado', validUntil: new Date('2026-04-30'), contact: 'compras@einstein.br', items: [{ description: 'Plantão 12h x 30 dias', quantity: 30, unitPrice: 2833 }] },
+    { client: 'Rock in Rio SP', type: 'Mega Evento', totalValue: 220000, status: 'Em Análise', validUntil: new Date('2026-04-15'), contact: 'eventos@rockinrio.com', items: [{ description: 'Cobertura total 3 dias', quantity: 3, unitPrice: 73333 }] },
+    { client: 'Petrobras Refinaria', type: 'Industrial', totalValue: 45000, status: 'Aprovado', validUntil: new Date('2026-05-20'), contact: 'seg@petrobras.com', items: [{ description: 'Serviço mensal contínuo', quantity: 1, unitPrice: 45000 }] },
+    { client: 'Shopping Morumbi', type: 'Corporativo', totalValue: 32000, status: 'Negociação', validUntil: new Date('2026-04-10'), contact: 'ops@morumbi.com', items: [{ description: 'Cobertura mensal plantão', quantity: 1, unitPrice: 32000 }] },
+    { client: 'Anhembi Eventos', type: 'Evento Grande', totalValue: 98000, status: 'Em Análise', validUntil: new Date('2026-05-05'), contact: 'eventos@anhembi.com', items: [{ description: 'Evento 5 dias completo', quantity: 5, unitPrice: 19600 }] },
+  ]
+  for (const { items, ...q } of quotes) {
+    await prisma.quote.create({ data: { ...q, items: { create: items } } }).catch(() => {})
+  }
 
-  await prisma.quote.create({
-    data: {
-      clientName: 'Arena Shows MG', eventType: 'Show', date: '2026-04-12', value: 72000, status: 'pending',
-      items: { create: [
-        { description: 'Equipe Completa (40 profissionais)', quantity: 40, unitPrice: 1500 },
-        { description: 'Ambulância UTI', quantity: 2, unitPrice: 6000 },
-      ]},
-    },
-  });
+  // ── Team Members ───────────────────────────────────────────
+  const team = [
+    { name: 'Carlos Silva', role: 'Bombeiro Civil', cred: 'BC-001', cpf: '111.222.333-01', pix: 'carlos@brigade.com', status: 'Ativo', eventsCount: 45 },
+    { name: 'Ana Beatriz Costa', role: 'Coordenadora', cred: 'BC-002', cpf: '111.222.333-02', pix: 'ana@brigade.com', status: 'Ativo', eventsCount: 62 },
+    { name: 'Ricardo Santos', role: 'Bombeiro Civil', cred: 'BC-003', cpf: '111.222.333-03', pix: 'ricardo@brigade.com', status: 'Disponível', eventsCount: 28 },
+    { name: 'Fernanda Lima', role: 'Bombeiro Sênior', cred: 'BC-004', cpf: '111.222.333-04', pix: 'fernanda@brigade.com', status: 'Em Missão', eventsCount: 89 },
+    { name: 'Pedro Oliveira', role: 'Bombeiro Civil', cred: 'BC-005', cpf: '111.222.333-05', pix: 'pedro@brigade.com', status: 'Ativo', eventsCount: 34 },
+    { name: 'Juliana Mendes', role: 'Coordenadora', cred: 'BC-006', cpf: '111.222.333-06', pix: 'juliana@brigade.com', status: 'Disponível', eventsCount: 51 },
+  ]
+  for (const m of team) {
+    await prisma.teamMember.upsert({ where: { cred: m.cred }, update: {}, create: m })
+  }
 
-  console.log('✅ Database seeded successfully!');
+  console.log('✅ Seed concluído! Brigada Camarão está pronta.')
 }
 
-main()
-  .catch(console.error)
-  .finally(() => prisma.$disconnect());
+main().catch(e => { console.error(e); process.exit(1) }).finally(() => prisma.$disconnect())

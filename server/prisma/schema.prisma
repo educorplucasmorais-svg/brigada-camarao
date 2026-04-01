@@ -1,127 +1,115 @@
+// Brigada Camarão — Prisma Schema
+// Suporte: SQLite (dev) | PostgreSQL (prod via PlanetScale / Supabase)
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id            String   @id @default(uuid())
+  id            String         @id @default(cuid())
   name          String
-  email         String   @unique
+  email         String         @unique
   passwordHash  String
-  role          String   @default("staff")
-  phone         String?
-  cpf           String?  @unique
-  pixKey        String?
-  avatar        String?
-  status        String   @default("active")
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
+  cpf           String?
+  pix           String?
+  cred          String?
+  role          String         @default("staff") // admin | coo | staff
+  status        String         @default("Ativo")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
   registrations Registration[]
   auditLogs     AuditLog[]
 }
 
 model Event {
-  id              String   @id @default(uuid())
-  title           String
-  date            String
-  location        String
-  status          String   @default("upcoming")
-  type            String
-  vacancies       Int
-  filledVacancies Int      @default(0)
-  budget          Float    @default(0)
-  description     String?
-  uniform         String?
-  whatsappGroup   String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  vacancyList     Vacancy[]
-  registrations   Registration[]
+  id            String         @id @default(cuid())
+  title         String
+  type          String         @default("Hospitalar")
+  date          DateTime
+  time          String         @default("")
+  location      String         @default("")
+  pay           Float          @default(0)
+  total         Int            @default(10)
+  filled        Int            @default(0)
+  status        String         @default("Ativo") // Ativo | Aberto | Encerrado
+  whatsapp      String         @default("")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  registrations Registration[]
 }
 
 model Vacancy {
-  id            String   @id @default(uuid())
-  eventId       String
-  role          String
-  quantity      Int
-  filled        Int      @default(0)
-  status        String   @default("open")
-  requirements  String
-  hourlyRate    Float
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  event         Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  id        String   @id @default(cuid())
+  title     String
+  type      String   @default("Hospitalar")
+  pay       Float    @default(0)
+  slots     Int      @default(1)
+  req       String   @default("")
+  status    String   @default("Aberto") // Aberto | Fechado
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Quote {
-  id          String      @id @default(uuid())
-  clientName  String
-  eventType   String
-  date        String
-  value       Float
-  status      String      @default("pending")
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-
-  items       QuoteItem[]
+  id         String      @id @default(cuid())
+  client     String
+  type       String      @default("Hospitalar")
+  totalValue Float       @default(0)
+  status     String      @default("Em Análise") // Em Análise | Aprovado | Negociação | Recusado
+  validUntil DateTime?
+  contact    String      @default("")
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  items      QuoteItem[]
 }
 
 model QuoteItem {
-  id          String @id @default(uuid())
-  quoteId     String
+  id          String @id @default(cuid())
   description String
-  quantity    Int
-  unitPrice   Float
-
-  quote       Quote  @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  quantity    Int    @default(1)
+  unitPrice   Float  @default(0)
+  quote       Quote  @relation(fields: [quoteId], references: [id])
+  quoteId     String
 }
 
 model TeamMember {
-  id              String   @id @default(uuid())
-  name            String
-  role            String
-  phone           String
-  email           String   @unique
-  status          String   @default("active")
-  certifications  String
-  avatar          String?
-  eventsCompleted Int      @default(0)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id          String   @id @default(cuid())
+  name        String
+  role        String   @default("Bombeiro Civil")
+  cred        String   @unique
+  cpf         String?
+  pix         String?
+  status      String   @default("Ativo") // Ativo | Disponível | Em Missão | Inativo
+  eventsCount Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Registration {
-  id               String    @id @default(uuid())
-  userId           String
-  eventId          String
-  status           String    @default("pending")
-  contractAccepted Boolean   @default(false)
-  verifiedAt       DateTime?
-  verificationHash String?
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-
-  user             User      @relation(fields: [userId], references: [id])
-  event            Event     @relation(fields: [eventId], references: [id])
+  id        String   @id @default(cuid())
+  userId    String
+  eventId   String
+  status    String   @default("pending") // pending | confirmed | cancelled
+  dataHash  String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  event     Event    @relation(fields: [eventId], references: [id])
 
   @@unique([userId, eventId])
 }
 
 model AuditLog {
-  id          String   @id @default(uuid())
-  userId      String?
-  action      String
-  entity      String
-  entityId    String?
-  details     String?
-  ipAddress   String?
-  createdAt   DateTime @default(now())
-
-  user        User?    @relation(fields: [userId], references: [id])
+  id        String   @id @default(cuid())
+  action    String
+  entity    String
+  entityId  String?
+  userId    String?
+  ipAddress String?
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id])
 }
