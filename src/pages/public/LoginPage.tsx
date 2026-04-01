@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Flame, ArrowRight, Eye, EyeOff, Shield, Users, Star, Lock } from 'lucide-react';
+import { ArrowRight, Eye, EyeOff, Shield, Users, Star, Lock } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
 // Fotos da Brigada Camarão — substitua por fotos reais do Instagram (@brigadacamarao)
@@ -72,9 +72,11 @@ export function LoginPage() {
         <div className="relative z-20 text-center lg:text-left px-6 sm:px-8 lg:px-16 max-w-lg">
           {/* Logo */}
           <div className="flex items-center gap-3 mb-4 sm:mb-8 justify-center lg:justify-start">
-            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 logo-pulse">
-              <Flame className="w-7 h-7 sm:w-9 sm:h-9 text-white" />
-            </div>
+            <img
+              src="/images/logo-brigada.png"
+              alt="Brigada Camarão"
+              className="w-14 h-14 sm:w-20 sm:h-20 rounded-full object-cover border-2 border-white/30 shadow-2xl logo-pulse"
+            />
           </div>
 
           <h1 className="font-headline text-3xl sm:text-5xl lg:text-7xl font-extrabold uppercase tracking-tight leading-[0.9] text-white mb-4 drop-shadow-2xl">

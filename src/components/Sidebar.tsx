@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Calendar, Users, Briefcase, FileText,
-  Shield, Menu, X, Flame, LogOut
+  Shield, Menu, X, LogOut
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -38,9 +38,11 @@ export function Sidebar() {
       {/* Brand Block */}
       <div className="px-6 pt-6 pb-4">
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-11 h-11 rounded-full bg-gradient-to-br from-primary to-on-primary-container flex items-center justify-center shadow-lg shadow-primary/30 logo-pulse">
-            <Flame className="w-6 h-6 text-on-primary" />
-          </div>
+          <img
+            src="/images/logo-brigada.png"
+            alt="Brigada Camarão"
+            className="w-11 h-11 rounded-full object-cover shadow-lg shadow-primary/30 logo-pulse"
+          />
           <div>
             <h1 className="text-sm font-black text-on-surface uppercase tracking-tight leading-tight font-headline">
               Brigada Camarão

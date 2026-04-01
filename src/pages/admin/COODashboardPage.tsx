@@ -1,4 +1,4 @@
-import { TrendingUp, DollarSign, Users, Activity, Shield } from 'lucide-react';
+import { TrendingUp, DollarSign, Users, Activity } from 'lucide-react';
 import {
   AreaChart, Area, BarChart, Bar, XAxis, YAxis,
   CartesianGrid, Tooltip, ResponsiveContainer
@@ -38,9 +38,11 @@ export function COODashboardPage() {
       <div className="chameleon-gradient rounded-2xl p-5 sm:p-6 lg:p-8 text-white relative overflow-hidden">
         <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-white/5 blur-2xl hidden sm:block" />
         <div className="relative z-10 flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-white/15 flex items-center justify-center border border-white/20 logo-pulse">
-            <Shield className="w-6 h-6 text-white" />
-          </div>
+          <img
+            src="/images/logo-brigada.png"
+            alt="Brigada Camarão"
+            className="w-12 h-12 rounded-full object-cover border border-white/20 shadow-lg logo-pulse"
+          />
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/60">Sentinel Response</p>
             <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight font-headline">Painel Executivo</h1>
