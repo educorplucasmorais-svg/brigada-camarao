@@ -120,6 +120,10 @@ npm run dev
 npm i -g vercel
 vercel --prod
 ```
+
+**Status:** ✅ Deployed — [brigada-camarao.vercel.app](https://brigada-camarao.vercel.app)
+**Última atualização:** 01/04/2026 (sincronização Drive + design final)
+
 Configure as variáveis no Dashboard do Vercel:
 - `VITE_API_URL` → URL do Railway
 - `VITE_ANTHROPIC_KEY` → Sua chave Anthropic
@@ -175,6 +179,18 @@ Configure as variáveis no Dashboard do Vercel:
 - ✅ Modais de edição com validação
 - ✅ Toast notifications + confirmação de exclusão
 - ✅ Pipeline de orçamentos + métricas financeiras
+
+---
+
+---
+
+## 📋 Histórico de Atualizações
+
+| Data | Versão | Status | Mudanças |
+|------|--------|--------|----------|
+| **01/04/2026** | 1.0.0 | ✅ Live | Sincronização Drive — Design + Consistência finalizados; Deploy Vercel atualizado |
+| 15/03/2026 | 0.9.0 | ✅ Beta | Integração Claude AI (Cookbooks); Google Sheets Sync |
+| 01/03/2026 | 0.8.0 | ✅ MVP | Dashboard 3 visões; CRUD completo |
 
 ---
 
