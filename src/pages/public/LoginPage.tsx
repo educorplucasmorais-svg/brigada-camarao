@@ -256,7 +256,7 @@ export function LoginPage() {
               </div>
             </div>
             <button onClick={goBack}
-              className="w-full py-4 bg-primary text-on-primary font-black text-base rounded-2xl shadow-xl shadow-primary/30 hover:bg-primary-container transition-all active:scale-[0.98] uppercase tracking-tight">
+              className="w-full py-3 bg-primary text-on-primary font-black text-sm rounded-xl shadow-lg shadow-primary/30 hover:bg-primary-container transition-all active:scale-[0.98] uppercase tracking-tight">
               Voltar ao Início
             </button>
           </div>
@@ -269,25 +269,25 @@ export function LoginPage() {
   // ═══ PARCEIRO / REGISTER — Stitch MD3 Form (pixel-perfect) ═══
   if (mode === 'register' || mode === 'parceiro') {
     return (
-      <div className="bg-surface text-on-surface flex flex-col items-center justify-center min-h-screen">
-        <main className="relative w-full max-w-md p-6 md:p-10 bg-white shadow-2xl rounded-3xl my-8 mx-auto">
+      <div className="bg-surface text-on-surface flex flex-col items-center justify-start min-h-screen py-4 px-3 overflow-y-auto">
+        <main className="relative w-full max-w-sm px-5 py-6 bg-white shadow-2xl rounded-2xl my-4 mx-auto">
           {/* Back button */}
-          <button onClick={goBack} className="absolute top-4 left-4 text-on-surface-variant hover:text-primary transition-colors">
-            <Icon name="arrow_back" className="text-2xl" />
+          <button onClick={goBack} className="absolute top-3 left-3 text-on-surface-variant hover:text-primary transition-colors">
+            <Icon name="arrow_back" className="text-xl" />
           </button>
 
           {/* Header */}
-          <div className="flex flex-col items-center text-center mb-10">
-            <div className="mb-6">
-              <img alt="Brigada Camarão Logo" className="h-32 w-32 object-contain" src="/images/logo-brigada.png" />
+          <div className="flex flex-col items-center text-center mb-6 pt-2">
+            <div className="mb-3">
+              <img alt="Brigada Camarão Logo" className="h-16 w-16 object-contain" src="/images/logo-brigada.png" />
             </div>
-            <h2 className="text-3xl font-black tracking-tight text-primary leading-tight mb-2 uppercase">
+            <h2 className="text-lg font-black tracking-tight text-primary leading-tight mb-1 uppercase">
               Bem-vindo à Brigada Camarão
             </h2>
-            <p className="text-xs font-bold text-on-surface-variant uppercase tracking-[0.2em] mb-4">
+            <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.2em] mb-2">
               Recrutamento de Bombeiro Civil
             </p>
-            <p className="text-on-surface-variant text-sm font-medium">
+            <p className="text-on-surface-variant text-xs font-medium">
               Informe seus dados para prosseguir com a inscrição.
             </p>
           </div>
@@ -301,7 +301,7 @@ export function LoginPage() {
           )}
 
           {/* Form */}
-          <form onSubmit={handleParceiroSubmit} className="space-y-5">
+          <form onSubmit={handleParceiroSubmit} className="space-y-3.5">
             {/* Nome Completo */}
             <div className="space-y-1.5">
               <label className="block text-[11px] font-black text-on-surface-variant uppercase tracking-widest px-1">
@@ -314,7 +314,7 @@ export function LoginPage() {
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Como no seu RG/CNH"
                   required
-                  className="w-full px-4 py-3.5 bg-surface-container-low border-none rounded-2xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm"
+                  className="w-full px-3.5 py-2.5 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm"
                 />
               </div>
             </div>
@@ -332,7 +332,7 @@ export function LoginPage() {
                   placeholder="000.000.000-00"
                   maxLength={14}
                   required
-                  className="w-full px-4 py-3.5 bg-surface-container-low border-none rounded-2xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm"
+                  className="w-full px-3.5 py-2.5 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm"
                 />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline/30 text-lg text-primary">
                   badge
@@ -351,7 +351,7 @@ export function LoginPage() {
                   value={pixKey}
                   onChange={(e) => setPixKey(e.target.value)}
                   placeholder="E-mail, CPF ou Celular"
-                  className="w-full px-4 py-3.5 bg-surface-container-low border-none rounded-2xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm"
+                  className="w-full px-3.5 py-2.5 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm"
                 />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline/30 text-lg">
                   account_balance_wallet
@@ -370,7 +370,7 @@ export function LoginPage() {
                   value={credentialNumber}
                   onChange={(e) => setCredentialNumber(e.target.value)}
                   placeholder="Ex: BC-12345"
-                  className="w-full px-4 py-3.5 bg-surface-container-low border-none rounded-2xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm"
+                  className="w-full px-3.5 py-2.5 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm"
                 />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline/30 text-lg">
                   admin_panel_settings
@@ -379,7 +379,7 @@ export function LoginPage() {
             </div>
 
             {/* Information Box */}
-            <div className="p-4 rounded-2xl bg-surface-container border-l-[6px] border-secondary shadow-sm">
+            <div className="p-3 rounded-xl bg-surface-container border-l-[4px] border-secondary shadow-sm">
               <div className="flex gap-3">
                 <Icon name="info" filled className="text-secondary text-xl shrink-0" />
                 <div className="space-y-1">
@@ -392,11 +392,11 @@ export function LoginPage() {
             </div>
 
             {/* Action Button */}
-            <div className="pt-4 space-y-4">
+            <div className="pt-2 space-y-3">
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 bg-primary text-on-primary font-black text-base rounded-2xl shadow-xl shadow-primary/30 hover:bg-primary-container transition-all active:scale-[0.98] flex items-center justify-center gap-2 uppercase tracking-tight disabled:opacity-50"
+                className="w-full py-3 bg-primary text-on-primary font-black text-sm rounded-xl shadow-lg shadow-primary/30 hover:bg-primary-container transition-all active:scale-[0.98] flex items-center justify-center gap-2 uppercase tracking-tight disabled:opacity-50"
               >
                 {loading ? 'Processando...' : 'Cadastrar / Entrar'}
                 {!loading && <Icon name="arrow_forward" className="text-xl" />}
@@ -409,7 +409,7 @@ export function LoginPage() {
           </form>
 
           {/* Support Footer */}
-          <div className="mt-8 pt-6 border-t border-surface-container-high">
+          <div className="mt-4 pt-4 border-t border-surface-container-high">
             <div className="flex items-center justify-center gap-2 text-on-surface-variant text-[11px] font-bold uppercase tracking-wider mb-4">
               <Icon name="support_agent" filled className="text-lg" />
               Precisa de ajuda com o acesso?
