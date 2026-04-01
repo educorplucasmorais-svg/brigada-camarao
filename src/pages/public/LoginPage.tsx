@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Eye, EyeOff, Lock, Shield, Briefcase, Users, UserPlus, CheckCircle } from 'lucide-react';
+import { ArrowRight, Eye, EyeOff, Shield, Briefcase, Users, UserPlus, CheckCircle } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
 type LoginMode = 'select' | 'admin' | 'ct' | 'parceiro' | 'register';
