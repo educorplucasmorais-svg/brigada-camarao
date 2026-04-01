@@ -3,6 +3,7 @@ export interface User {
   name: string;
   email: string;
   role: 'admin' | 'coo' | 'staff';
+  phone?: string;
   avatar?: string;
 }
 

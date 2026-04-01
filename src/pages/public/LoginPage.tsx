@@ -1,7 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Flame, ArrowRight, MessageCircle, HelpCircle, Eye, EyeOff, Shield, Users, Star, CheckCircle, Zap } from 'lucide-react';
+import { Flame, ArrowRight, Eye, EyeOff, Shield, Users, Star, Lock } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+
+const heroPhotos = [
+  'https://images.unsplash.com/photo-1582139329536-e7284fece509?w=1200&q=80',
+  'https://images.unsplash.com/photo-1504502350688-00f5d59bbdeb?w=1200&q=80',
+  'https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=1200&q=80',
+  'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1200&q=80',
+  'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&q=80',
+];
 
 export function LoginPage() {
   const [email, setEmail] = useState('');
@@ -9,8 +17,16 @@ export function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [currentPhoto, setCurrentPhoto] = useState(0);
   const { login } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentPhoto((prev) => (prev + 1) % heroPhotos.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,138 +37,129 @@ export function LoginPage() {
     if (success) {
       navigate('/admin');
     } else {
-      setError('Credenciais inválidas. Tente novamente.');
+      setError('Credenciais inválidas. Verifique e-mail e senha.');
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
-      {/* LEFT — Chameleon Gradient Hero */}
-      <div className="chameleon-gradient relative lg:w-[55%] flex flex-col justify-center items-center p-8 lg:p-16 text-white overflow-hidden">
-        {/* Decorative grid pattern */}
-        <div className="absolute inset-0 opacity-[0.04]" style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-        }} />
-        {/* Ambient glow circles */}
-        <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-white/5 blur-3xl animate-float" />
-        <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-white/5 blur-3xl animate-float-delayed" />
-        <div className="absolute top-1/2 right-0 w-48 h-48 rounded-full bg-white/8 blur-3xl" />
-
-        {/* Floating glass cards */}
-        <div className="absolute top-16 right-8 glass-dark rounded-2xl p-4 animate-float hidden lg:block">
-          <div className="flex items-center gap-2">
-            <CheckCircle className="w-4 h-4 text-green-400" />
-            <span className="text-xs font-semibold text-white/90">Evento concluído</span>
+      {/* ═══ LEFT — Photo Slideshow Hero ═══ */}
+      <div className="relative lg:w-[55%] min-h-[40vh] lg:min-h-screen flex flex-col justify-center items-center overflow-hidden">
+        {/* Photo layers */}
+        {heroPhotos.map((photo, i) => (
+          <div
+            key={i}
+            className={`absolute inset-0 transition-opacity duration-[2000ms] ease-in-out ${
+              i === currentPhoto ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <img
+              src={photo}
+              alt=""
+              className="w-full h-full object-cover slideshow-photo"
+              style={{ filter: 'blur(2px)' }}
+              key={`${i}-${currentPhoto === i ? 'active' : 'idle'}`}
+            />
           </div>
-        </div>
-        <div className="absolute bottom-20 left-8 glass-dark rounded-2xl p-4 animate-float-delayed hidden lg:block">
-          <div className="flex items-center gap-2">
-            <Zap className="w-4 h-4 text-yellow-400" />
-            <span className="text-xs font-semibold text-white/90">+12 brigadistas</span>
-          </div>
-        </div>
+        ))}
 
-        <div className="relative z-10 text-center lg:text-left max-w-lg">
-          <div className="flex items-center gap-3 mb-6 justify-center lg:justify-start">
-            <div className="w-14 h-14 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center border border-white/20 logo-pulse">
-              <Flame className="w-8 h-8 text-white" />
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-primary/40 to-black/70 z-10" />
+
+        {/* Content */}
+        <div className="relative z-20 text-center lg:text-left px-8 lg:px-16 max-w-lg">
+          {/* Logo */}
+          <div className="flex items-center gap-3 mb-8 justify-center lg:justify-start">
+            <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 logo-pulse">
+              <Flame className="w-9 h-9 text-white" />
             </div>
           </div>
 
-          <h1 className="font-headline text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-none mb-4">
+          <h1 className="font-headline text-5xl sm:text-6xl lg:text-7xl font-extrabold uppercase tracking-tight leading-[0.9] text-white mb-4 drop-shadow-2xl">
             Brigada<br />Camarão
           </h1>
 
-          <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-white/70 mb-3">
+          <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
             Recrutamento de Bombeiro Civil
           </p>
 
-          <p className="text-lg lg:text-xl text-white/60 font-medium italic mb-10">
-            &ldquo;Sempre perto de você&rdquo;
+          <p className="text-lg text-white/50 font-medium italic mb-10">
+            "Sempre perto de você"
           </p>
 
-          {/* Stats preview */}
-          <div className="hidden lg:flex items-center gap-8 pt-8 border-t border-white/10">
-            <div className="flex items-center gap-2">
-              <Shield className="w-5 h-5 text-white/50" />
-              <div>
-                <p className="text-2xl font-black font-headline">156</p>
-                <p className="text-[10px] uppercase tracking-widest text-white/50">Bombeiros</p>
+          {/* Stats row */}
+          <div className="hidden lg:flex items-center gap-6 py-6 border-t border-white/10">
+            {[
+              { icon: Shield, value: '156', label: 'Bombeiros' },
+              { icon: Users, value: '47', label: 'Eventos' },
+              { icon: Star, value: '96%', label: 'Satisfação' },
+            ].map((stat, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <stat.icon className="w-5 h-5 text-white/40" />
+                <div>
+                  <p className="text-2xl font-extrabold font-headline text-white">{stat.value}</p>
+                  <p className="text-[9px] uppercase tracking-[0.2em] text-white/40 font-bold">{stat.label}</p>
+                </div>
+                {i < 2 && <div className="w-px h-8 bg-white/10 ml-4" />}
               </div>
-            </div>
-            <div className="w-px h-10 bg-white/10" />
-            <div className="flex items-center gap-2">
-              <Users className="w-5 h-5 text-white/50" />
-              <div>
-                <p className="text-2xl font-black font-headline">47</p>
-                <p className="text-[10px] uppercase tracking-widest text-white/50">Eventos</p>
-              </div>
-            </div>
-            <div className="w-px h-10 bg-white/10" />
-            <div className="flex items-center gap-2">
-              <Star className="w-5 h-5 text-white/50" />
-              <div>
-                <p className="text-2xl font-black font-headline">96%</p>
-                <p className="text-[10px] uppercase tracking-widest text-white/50">Satisfação</p>
-              </div>
-            </div>
+            ))}
           </div>
 
-          {/* Trust signals */}
-          <div className="hidden lg:flex items-center gap-6 mt-6 pt-6 border-t border-white/5">
-            <div className="flex items-center gap-1.5 text-white/40 text-[10px] uppercase tracking-widest font-bold">
-              <Shield className="w-3.5 h-3.5" /> Dados Criptografados
-            </div>
-            <div className="flex items-center gap-1.5 text-white/40 text-[10px] uppercase tracking-widest font-bold">
-              <CheckCircle className="w-3.5 h-3.5" /> LGPD Compliant
-            </div>
+          {/* Photo indicator dots */}
+          <div className="hidden lg:flex items-center gap-1.5 mt-8">
+            {heroPhotos.map((_, i) => (
+              <div
+                key={i}
+                className={`photo-dot ${i === currentPhoto ? 'active' : ''}`}
+              />
+            ))}
           </div>
         </div>
       </div>
 
-      {/* RIGHT — Login Form */}
-      <div className="flex-1 flex items-center justify-center p-6 lg:p-12 bg-surface">
-        <main className="w-full max-w-md">
-          {/* Flame icon */}
-          <div className="flex justify-center mb-8">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-on-primary-container flex items-center justify-center shadow-xl shadow-primary/20 logo-pulse">
-              <Flame className="w-8 h-8 text-on-primary" />
+      {/* ═══ RIGHT — Login Form ═══ */}
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-10 lg:p-16 bg-surface-container-lowest">
+        <main className="w-full max-w-[420px]">
+          {/* Header */}
+          <div className="mb-10">
+            <div className="flex items-center gap-2 mb-4">
+              <Lock className="w-4 h-4 text-primary" />
+              <span className="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Acesso Seguro</span>
             </div>
+            <h2 className="font-headline text-3xl lg:text-4xl font-extrabold tracking-tight text-on-surface leading-tight">
+              Entre na sua<br />conta
+            </h2>
+            <p className="text-sm text-on-surface-variant mt-3 leading-relaxed">
+              Gerencie eventos, equipes e escalas em tempo real.
+            </p>
           </div>
-
-          <h2 className="font-headline text-2xl md:text-3xl font-black tracking-tight text-on-surface text-center mb-1">
-            Acesso ao Sistema
-          </h2>
-          <p className="text-sm text-on-surface-variant text-center mb-8">
-            Informe seus dados para prosseguir
-          </p>
 
           {/* Error */}
           {error && (
-            <div className="bg-error-container text-on-error-container text-sm p-3 rounded-2xl mb-4 font-medium">
+            <div className="bg-red-50 border border-red-200 text-red-700 text-sm p-4 rounded-xl mb-6 font-medium flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0" />
               {error}
             </div>
           )}
 
           {/* Form */}
           <form className="space-y-5" onSubmit={handleSubmit}>
-            <div className="space-y-1.5">
-              <label className="block text-[11px] font-black text-on-surface-variant uppercase tracking-widest px-1">
+            <div className="space-y-2">
+              <label className="block text-[11px] font-bold text-on-surface-variant uppercase tracking-widest pl-1">
                 E-mail
               </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3.5 glass border border-transparent rounded-2xl focus:ring-2 focus:ring-primary/20 focus:border-primary/30 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm outline-none"
+                className="w-full px-4 py-4 bg-surface-container-low border border-outline-variant/30 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/10 text-on-surface font-medium placeholder:text-outline/40 transition-all text-[15px] outline-none"
                 placeholder="seu@email.com"
                 required
               />
             </div>
 
-            <div className="space-y-1.5">
-              <label className="block text-[11px] font-black text-on-surface-variant uppercase tracking-widest px-1">
+            <div className="space-y-2">
+              <label className="block text-[11px] font-bold text-on-surface-variant uppercase tracking-widest pl-1">
                 Senha
               </label>
               <div className="relative">
@@ -160,25 +167,25 @@ export function LoginPage() {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3.5 pr-12 glass border border-transparent rounded-2xl focus:ring-2 focus:ring-primary/20 focus:border-primary/30 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm outline-none"
+                  className="w-full px-4 py-4 pr-12 bg-surface-container-low border border-outline-variant/30 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/10 text-on-surface font-medium placeholder:text-outline/40 transition-all text-[15px] outline-none"
                   placeholder="••••••••"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-outline/60 hover:text-on-surface transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
             </div>
 
-            <div className="pt-4">
+            <div className="pt-2">
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 btn-gradient font-black text-base rounded-2xl shadow-xl shadow-primary/30 hover:shadow-primary/50 transition-all active:scale-[0.98] flex items-center justify-center gap-2 uppercase tracking-tight disabled:opacity-50"
+                className="w-full py-4 btn-gradient font-headline font-bold text-[15px] rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 uppercase tracking-wider disabled:opacity-50"
               >
                 {loading ? 'Entrando...' : 'Entrar'}
                 <ArrowRight className="w-5 h-5" />
@@ -186,31 +193,21 @@ export function LoginPage() {
             </div>
           </form>
 
-          {/* Info box */}
-          <div className="mt-8 p-4 glass rounded-2xl">
-            <p className="text-[11px] font-black text-primary uppercase tracking-wider mb-2">
-              Por que pedimos isso?
-            </p>
-            <p className="text-xs text-on-surface-variant leading-relaxed">
-              Os dados são necessários para a escala de eventos. Ao clicar em &ldquo;Entrar&rdquo;,
-              você garante o recebimento legal dos seus honorários após a conclusão do evento.
-            </p>
+          {/* Divider */}
+          <div className="border-t border-outline-variant/20 mt-8 pt-6">
+            <div className="bg-surface-container-low border border-outline-variant/15 rounded-xl p-5">
+              <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1.5">
+                Acesso Demo
+              </p>
+              <p className="text-[13px] text-on-surface-variant leading-relaxed">
+                <span className="font-semibold text-on-surface">admin@brigadacamarao.com</span> — qualquer senha
+              </p>
+            </div>
           </div>
 
-          {/* Bottom links */}
-          <div className="mt-6 flex items-center justify-center gap-6">
-            <a href="#" className="flex items-center gap-1.5 text-xs font-bold text-primary uppercase tracking-wider hover:underline">
-              <MessageCircle className="w-4 h-4" />
-              WhatsApp
-            </a>
-            <a href="#" className="flex items-center gap-1.5 text-xs font-bold text-on-surface-variant uppercase tracking-wider hover:text-primary transition-colors">
-              <HelpCircle className="w-4 h-4" />
-              FAQ
-            </a>
-          </div>
-
-          <p className="text-center text-[10px] text-outline mt-4">
-            Demo: admin@brigadacamarao.com / qualquer senha
+          {/* Footer */}
+          <p className="text-center text-[10px] text-outline/50 mt-6">
+            © 2026 Brigada Camarão · LGPD Compliant
           </p>
         </main>
       </div>
