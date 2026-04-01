@@ -9,7 +9,7 @@ export function RegistrationConfirmPage() {
   if (confirmed) {
     return (
       <div className="min-h-screen bg-surface flex items-center justify-center p-4">
-        <div className="bg-white rounded-3xl p-8 shadow-2xl text-center max-w-md">
+        <div className="bg-surface-container-lowest rounded-3xl p-8 shadow-2xl text-center max-w-md">
           <div className="w-20 h-20 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-10 h-10 text-success" />
           </div>
@@ -31,7 +31,7 @@ export function RegistrationConfirmPage() {
   return (
     <div className="min-h-screen bg-surface">
       {/* Header */}
-      <div className="bg-white border-b border-outline-variant/20 px-4 py-4 flex items-center gap-3 sticky top-0 z-30">
+      <div className="bg-surface-container-lowest border-b border-outline-variant/20 px-4 py-4 flex items-center gap-3 sticky top-0 z-30">
         <Link to="/eventos" className="text-on-surface-variant">
           <ArrowLeft className="w-5 h-5" />
         </Link>
@@ -48,7 +48,7 @@ export function RegistrationConfirmPage() {
         <div className="space-y-5">
           <div>
             <label className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest block mb-1.5">Nome Completo</label>
-            <div className="flex items-center gap-3 bg-white rounded-2xl p-4 shadow-sm">
+            <div className="flex items-center gap-3 bg-surface-container-lowest rounded-2xl p-4 shadow-sm">
               <User className="w-5 h-5 text-primary" />
               <span className="text-sm font-bold text-on-surface">Ricardo Augusto Camarão</span>
             </div>
@@ -56,7 +56,7 @@ export function RegistrationConfirmPage() {
 
           <div>
             <label className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest block mb-1.5">CPF de Registro</label>
-            <div className="flex items-center gap-3 bg-white rounded-2xl p-4 shadow-sm">
+            <div className="flex items-center gap-3 bg-surface-container-lowest rounded-2xl p-4 shadow-sm">
               <CreditCard className="w-5 h-5 text-primary" />
               <span className="text-sm font-bold text-on-surface">•••.452.189-••</span>
             </div>
@@ -67,7 +67,7 @@ export function RegistrationConfirmPage() {
               Chave PIX para Reembolso
               <span className="text-success text-[10px]">CONFIRMADA</span>
             </label>
-            <div className="flex items-center gap-3 bg-white rounded-2xl p-4 shadow-sm">
+            <div className="flex items-center gap-3 bg-surface-container-lowest rounded-2xl p-4 shadow-sm">
               <Mail className="w-5 h-5 text-primary" />
               <span className="text-sm font-bold text-on-surface flex-1">ricardo.brigada@email.com</span>
               <button className="text-primary">
@@ -82,7 +82,7 @@ export function RegistrationConfirmPage() {
           <p className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest mb-3">
             Termos e Condições do Evento
           </p>
-          <div className="bg-white rounded-2xl p-4 shadow-sm max-h-40 overflow-y-auto mb-4">
+          <div className="bg-surface-container-lowest rounded-2xl p-4 shadow-sm max-h-40 overflow-y-auto mb-4">
             <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-2">Contrato de Prestação de Serviços de Brigadista</p>
             <p className="text-xs text-on-surface-variant leading-relaxed">
               BRIGADA CAMARÃO LTDA, pessoa jurídica de direito privado, inscrita no CNPJ nº 71.769.886/0001-81, 

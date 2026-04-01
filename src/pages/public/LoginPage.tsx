@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Eye, EyeOff, Shield, Briefcase, Users, UserPlus, CheckCircle, Flame } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
 type LoginMode = 'select' | 'admin' | 'ct' | 'parceiro' | 'register';
@@ -12,10 +11,8 @@ const roleCards = [
     subtitle: 'Dashboard Estratégico',
     desc: 'Gestão completa do sistema, relatórios e controle financeiro.',
     tag: '@brigadacamarao.com',
-    icon: Shield,
-    gradient: 'from-[#ba100a] to-[#8b0000]',
-    glow: 'shadow-[0_0_30px_rgba(186,16,10,0.2)]',
-    ring: 'ring-[#ba100a]/30',
+    icon: 'admin_panel_settings',
+    borderColor: 'border-primary-container',
   },
   {
     id: 'ct' as const,
@@ -23,10 +20,8 @@ const roleCards = [
     subtitle: 'Gestão Tática',
     desc: 'Coordenação de equipes, escalas e operações em campo.',
     tag: 'Login + Senha',
-    icon: Briefcase,
-    gradient: 'from-[#2563eb] to-[#1d4ed8]',
-    glow: 'shadow-[0_0_30px_rgba(37,99,235,0.2)]',
-    ring: 'ring-[#2563eb]/30',
+    icon: 'shield_person',
+    borderColor: 'border-secondary-container',
   },
   {
     id: 'parceiro' as const,
@@ -34,12 +29,19 @@ const roleCards = [
     subtitle: 'Acesso Rápido',
     desc: 'Bombeiro Civil — visualize eventos e candidate-se rapidamente.',
     tag: 'Nome + CPF',
-    icon: Users,
-    gradient: 'from-[#16a34a] to-[#15803d]',
-    glow: 'shadow-[0_0_30px_rgba(22,163,74,0.2)]',
-    ring: 'ring-[#16a34a]/30',
+    icon: 'local_fire_department',
+    borderColor: 'border-success',
   },
 ] as const;
+
+const Icon = ({ name, filled = false, className = '' }: { name: string; filled?: boolean; className?: string }) => (
+  <span
+    className={`material-symbols-outlined ${className}`}
+    style={filled ? { fontVariationSettings: "'FILL' 1" } : {}}
+  >
+    {name}
+  </span>
+);
 
 export function LoginPage() {
   const [mode, setMode] = useState<LoginMode>('select');
@@ -117,73 +119,75 @@ export function LoginPage() {
   };
   const goBack = () => { resetForm(); setMode('select'); };
 
-  // ═══ Shared Styles ═══
-  const inputCls = 'w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white font-medium placeholder:text-white/30 focus:border-white/30 focus:ring-2 focus:ring-white/10 transition-all text-[15px] outline-none backdrop-blur-sm';
-  const labelCls = 'block text-[10px] font-bold text-white/40 uppercase tracking-[0.15em] mb-1.5 pl-0.5';
+  const inputCls = 'w-full px-4 py-3.5 bg-surface-container-low border-none rounded-2xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm outline-none';
+  const labelCls = 'block text-[11px] font-black text-on-surface-variant uppercase tracking-widest px-1 mb-1.5';
 
   // ═══ ROLE SELECTION ═══
   if (mode === 'select') {
     return (
-      <div className="min-h-screen bg-[#0f0f13] flex flex-col items-center justify-center px-4 py-8 sm:py-12 relative overflow-hidden">
-        {/* Ambient glow */}
-        <div className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[#ba100a]/5 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[40vw] h-[40vw] bg-[#2563eb]/5 rounded-full blur-[120px] pointer-events-none" />
-
-        <div className="w-full max-w-lg sm:max-w-4xl relative z-10">
-          {/* Header */}
-          <div className="text-center mb-8 sm:mb-12">
-            <div className="relative inline-block mb-5">
-              <div className="absolute inset-0 bg-[#ba100a]/20 rounded-full blur-xl animate-pulse" />
+      <div className="min-h-screen bg-surface flex flex-col items-center justify-center px-4 py-8">
+        <div className="w-full max-w-md">
+          {/* Logo & Header */}
+          <div className="flex flex-col items-center text-center mb-10">
+            <div className="mb-6">
               <img
                 src="/images/logo-brigada.png"
                 alt="Brigada Camarão"
-                className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-2 border-white/10 shadow-2xl"
+                className="h-28 w-28 object-contain"
               />
             </div>
-            <h1 className="font-headline text-2xl sm:text-4xl font-extrabold text-white tracking-tight mb-1">
+            <h1 className="text-3xl font-black tracking-tight text-primary-container leading-tight mb-2 uppercase">
               Brigada Camarão
             </h1>
-            <div className="flex items-center justify-center gap-2 mt-2">
-              <Flame className="w-3 h-3 text-[#ba100a]" />
-              <p className="text-[11px] sm:text-xs text-white/30 font-semibold uppercase tracking-[0.25em]">
-                Sentinel Command
-              </p>
-              <Flame className="w-3 h-3 text-[#ba100a]" />
-            </div>
+            <p className="text-xs font-bold text-on-surface-variant uppercase tracking-[0.2em] mb-2">
+              Sentinel Command
+            </p>
+            <p className="text-on-surface-variant text-sm font-medium">
+              Selecione seu tipo de acesso para continuar.
+            </p>
           </div>
 
-          {/* 3 Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+          {/* 3 Role Cards */}
+          <div className="space-y-3">
             {roleCards.map((card) => (
               <button
                 key={card.id}
                 onClick={() => { resetForm(); setMode(card.id); }}
-                className={`group relative bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.06] p-5 sm:p-6 text-left transition-all duration-300 hover:bg-white/[0.06] hover:border-white/[0.12] hover:${card.glow} active:scale-[0.98]`}
+                className={`w-full bg-surface-container-lowest p-5 rounded-2xl border-l-[6px] ${card.borderColor} shadow-sm hover:shadow-md transition-all active:scale-[0.99] text-left flex items-center gap-4 group`}
               >
-                {/* Icon */}
-                <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${card.gradient} flex items-center justify-center mb-4 shadow-lg group-hover:scale-105 transition-transform`}>
-                  <card.icon className="w-5 h-5 text-white" />
+                <div className="w-12 h-12 rounded-2xl bg-primary-container flex items-center justify-center shrink-0">
+                  <Icon name={card.icon} filled className="text-on-primary text-xl" />
                 </div>
-                {/* Text */}
-                <h3 className="font-headline text-base sm:text-lg font-bold text-white mb-0.5">{card.title}</h3>
-                <p className="text-[11px] text-white/30 font-semibold mb-2">{card.subtitle}</p>
-                <p className="text-[11px] sm:text-xs text-white/20 leading-relaxed">
-                  {card.desc}
-                </p>
-                {/* Tag */}
-                <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between">
-                  <span className={`text-[9px] font-bold uppercase tracking-[0.15em] bg-gradient-to-r ${card.gradient} bg-clip-text text-transparent`}>
-                    {card.tag}
-                  </span>
-                  <ArrowRight className="w-3.5 h-3.5 text-white/20 group-hover:text-white/50 group-hover:translate-x-0.5 transition-all" />
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-base font-black text-on-surface tracking-tight">{card.title}</h3>
+                  <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mt-0.5">{card.subtitle}</p>
+                  <p className="text-xs text-outline mt-1 leading-relaxed">{card.desc}</p>
                 </div>
+                <Icon name="arrow_forward" className="text-outline/40 group-hover:text-primary-container transition-colors" />
               </button>
             ))}
           </div>
 
           {/* Footer */}
-          <p className="text-center text-[9px] text-white/15 mt-8 tracking-wider">
-            © 2026 Brigada Camarão · Prevenir · Combater · Salvar · LGPD
+          <div className="mt-8 pt-6 border-t border-surface-container-high">
+            <div className="flex items-center justify-center gap-2 text-on-surface-variant text-[11px] font-bold uppercase tracking-wider mb-4">
+              <Icon name="support_agent" filled className="text-lg" />
+              Precisa de ajuda com o acesso?
+            </div>
+            <div className="flex justify-center gap-6">
+              <a href="https://www.instagram.com/brigadacamarao/" target="_blank" rel="noopener noreferrer"
+                className="text-primary-container font-black text-xs uppercase tracking-wider hover:underline flex items-center gap-1">
+                <Icon name="photo_camera" className="text-base" /> Instagram
+              </a>
+              <a href="https://wa.me/5531999999999" target="_blank" rel="noopener noreferrer"
+                className="text-success font-black text-xs uppercase tracking-wider hover:underline flex items-center gap-1">
+                <Icon name="chat" className="text-base" /> WhatsApp
+              </a>
+            </div>
+          </div>
+
+          <p className="text-center text-[10px] text-outline/50 mt-6 font-bold uppercase tracking-wider">
+            © 2026 Brigada Camarão · Prevenir · Combater · Salvar
           </p>
         </div>
       </div>
@@ -193,22 +197,25 @@ export function LoginPage() {
   // ═══ REGISTRATION SUCCESS ═══
   if (registered) {
     return (
-      <div className="min-h-screen bg-[#0f0f13] flex items-center justify-center p-4">
-        <div className="w-full max-w-sm bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.06] p-8 text-center">
-          <div className="w-16 h-16 rounded-full bg-[#16a34a]/10 flex items-center justify-center mx-auto mb-5">
-            <CheckCircle className="w-8 h-8 text-[#16a34a]" />
+      <div className="min-h-screen bg-surface flex items-center justify-center p-4">
+        <div className="w-full max-w-md p-8 bg-surface-container-lowest shadow-2xl rounded-3xl text-center">
+          <div className="w-16 h-16 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-5">
+            <Icon name="check_circle" filled className="text-success text-3xl" />
           </div>
-          <h2 className="font-headline text-xl font-bold text-white mb-2">Cadastro Enviado</h2>
-          <p className="text-sm text-white/40 mb-6 leading-relaxed">
+          <h2 className="text-xl font-black text-on-surface uppercase mb-2">Cadastro Enviado</h2>
+          <p className="text-sm text-on-surface-variant mb-6 leading-relaxed">
             Aguardando aprovação do administrador. Você será notificado.
           </p>
-          <div className="bg-[#16a34a]/5 border border-[#16a34a]/10 rounded-xl p-3 mb-6">
-            <p className="text-[11px] text-[#16a34a]/80 font-semibold">
-              ⏳ Status: Pré-aprovação pendente
-            </p>
+          <div className="p-4 rounded-2xl bg-surface-container border-l-[6px] border-success mb-6">
+            <div className="flex gap-3">
+              <Icon name="hourglass_top" filled className="text-success text-xl shrink-0" />
+              <p className="text-xs font-black text-on-surface uppercase tracking-wider">
+                Status: Pré-aprovação pendente
+              </p>
+            </div>
           </div>
           <button onClick={goBack}
-            className="w-full py-3 bg-white/5 text-white font-bold rounded-xl text-sm hover:bg-white/10 transition-colors border border-white/10">
+            className="w-full py-3.5 bg-surface-container-low text-on-surface font-black rounded-2xl text-sm hover:bg-surface-container transition-all uppercase tracking-tight">
             Voltar ao Início
           </button>
         </div>
@@ -216,178 +223,223 @@ export function LoginPage() {
     );
   }
 
-  // ═══ FORM VIEWS (Admin / CT / Parceiro / Register) ═══
+  // ═══ FORM VIEWS ═══
   const cfgMap = {
-    admin: { title: 'Administrador', icon: Shield, gradient: 'from-[#ba100a] to-[#8b0000]', accent: '#ba100a', domain: '@brigadacamarao.com' },
-    ct: { title: 'Coordenador Técnico', icon: Briefcase, gradient: 'from-[#2563eb] to-[#1d4ed8]', accent: '#2563eb', domain: null },
-    parceiro: { title: 'Parceiro', icon: Users, gradient: 'from-[#16a34a] to-[#15803d]', accent: '#16a34a', domain: null },
-    register: { title: 'Novo Cadastro', icon: UserPlus, gradient: 'from-[#16a34a] to-[#15803d]', accent: '#16a34a', domain: null },
+    admin: { title: 'Administrador', icon: 'admin_panel_settings', color: 'primary-container', domain: '@brigadacamarao.com' },
+    ct: { title: 'Coordenador Técnico', icon: 'shield_person', color: 'secondary-container', domain: null },
+    parceiro: { title: 'Parceiro — Bombeiro Civil', icon: 'local_fire_department', color: 'success', domain: null },
+    register: { title: 'Novo Cadastro', icon: 'person_add', color: 'success', domain: null },
   };
   const cfg = cfgMap[mode];
-  const CardIcon = cfg.icon;
 
   return (
-    <div className="min-h-screen bg-[#0f0f13] flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Ambient */}
-      <div className="absolute top-[-30%] right-[-20%] w-[60vw] h-[60vw] rounded-full blur-[150px] pointer-events-none" style={{ backgroundColor: cfg.accent + '08' }} />
-
-      <div className="w-full max-w-[400px] relative z-10">
-        {/* Back */}
+    <div className="min-h-screen bg-surface flex items-center justify-center p-4">
+      <main className="w-full max-w-md p-6 md:p-10 bg-surface-container-lowest shadow-2xl rounded-3xl my-8 mx-auto">
+        {/* Back button */}
         <button onClick={goBack}
-          className="flex items-center gap-2 text-xs text-white/30 hover:text-white/60 mb-5 transition-colors group">
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+          className="flex items-center gap-1.5 text-xs font-bold text-on-surface-variant hover:text-primary-container mb-6 transition-colors uppercase tracking-wider">
+          <Icon name="arrow_back" className="text-lg" />
           Voltar
         </button>
 
-        <div className="bg-white/[0.03] backdrop-blur-md rounded-2xl border border-white/[0.06] overflow-hidden shadow-2xl shadow-black/20">
-          {/* Gradient accent */}
-          <div className={`h-1 bg-gradient-to-r ${cfg.gradient}`} />
+        {/* Header */}
+        <div className="flex flex-col items-center text-center mb-8">
+          <div className="w-14 h-14 rounded-2xl bg-primary-container flex items-center justify-center mb-4">
+            <Icon name={cfg.icon} filled className="text-on-primary text-2xl" />
+          </div>
+          <h2 className="text-2xl font-black tracking-tight text-primary-container leading-tight mb-1 uppercase">
+            {cfg.title}
+          </h2>
+          {cfg.domain && (
+            <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-[0.2em]">
+              {cfg.domain}
+            </p>
+          )}
+        </div>
 
-          <div className="p-6 sm:p-7">
-            {/* Header */}
-            <div className="flex items-center gap-3 mb-6">
-              <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${cfg.gradient} flex items-center justify-center shadow-lg`}>
-                <CardIcon className="w-5 h-5 text-white" />
+        {/* Error */}
+        {error && (
+          <div className="p-4 rounded-2xl bg-error-container border-l-[6px] border-error mb-5">
+            <div className="flex gap-3">
+              <Icon name="error" filled className="text-on-error-container text-xl shrink-0" />
+              <p className="text-xs font-black text-on-error-container">{error}</p>
+            </div>
+          </div>
+        )}
+
+        {/* ── Admin Form ── */}
+        {mode === 'admin' && (
+          <form onSubmit={handleAdminLogin} className="space-y-5">
+            <div className="space-y-1.5">
+              <label className={labelCls}>E-mail</label>
+              <div className="relative">
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                  className={inputCls} placeholder="admin@brigadacamarao.com" required />
+                <Icon name="mail" className="absolute right-4 top-1/2 -translate-y-1/2 text-outline/30 text-lg" />
               </div>
-              <div>
-                <h2 className="font-headline text-lg font-bold text-white">{cfg.title}</h2>
-                {cfg.domain && (
-                  <p className="text-[10px] font-bold uppercase tracking-[0.15em]" style={{ color: cfg.accent + 'aa' }}>
-                    {cfg.domain}
-                  </p>
-                )}
+            </div>
+            <div className="space-y-1.5">
+              <label className={labelCls}>Senha</label>
+              <div className="relative">
+                <input type={showPassword ? 'text' : 'password'} value={password}
+                  onChange={(e) => setPassword(e.target.value)} className={inputCls + ' pr-12'}
+                  placeholder="••••••••" required />
+                <button type="button" onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-outline/30 hover:text-primary-container transition-colors">
+                  <Icon name={showPassword ? 'visibility_off' : 'visibility'} className="text-lg" />
+                </button>
+              </div>
+            </div>
+            <div className="pt-2">
+              <button type="submit" disabled={loading}
+                className="w-full py-4 bg-primary-container text-on-primary font-black text-base rounded-2xl shadow-xl shadow-primary/30 hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 uppercase tracking-tight disabled:opacity-50">
+                {loading ? 'Entrando...' : <><span>Entrar</span><Icon name="arrow_forward" className="text-xl" /></>}
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* ── CT Form ── */}
+        {mode === 'ct' && (
+          <form onSubmit={handleCTLogin} className="space-y-5">
+            <div className="space-y-1.5">
+              <label className={labelCls}>E-mail</label>
+              <div className="relative">
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                  className={inputCls} placeholder="coordenador@email.com" required />
+                <Icon name="mail" className="absolute right-4 top-1/2 -translate-y-1/2 text-outline/30 text-lg" />
+              </div>
+            </div>
+            <div className="space-y-1.5">
+              <label className={labelCls}>Senha</label>
+              <div className="relative">
+                <input type={showPassword ? 'text' : 'password'} value={password}
+                  onChange={(e) => setPassword(e.target.value)} className={inputCls + ' pr-12'}
+                  placeholder="••••••••" required />
+                <button type="button" onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-outline/30 hover:text-primary-container transition-colors">
+                  <Icon name={showPassword ? 'visibility_off' : 'visibility'} className="text-lg" />
+                </button>
+              </div>
+            </div>
+            <div className="pt-2">
+              <button type="submit" disabled={loading}
+                className="w-full py-4 bg-primary-container text-on-primary font-black text-base rounded-2xl shadow-xl shadow-primary/30 hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 uppercase tracking-tight disabled:opacity-50">
+                {loading ? 'Entrando...' : <><span>Entrar</span><Icon name="arrow_forward" className="text-xl" /></>}
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* ── Parceiro Form ── */}
+        {mode === 'parceiro' && (
+          <form onSubmit={handleParceiroLogin} className="space-y-5">
+            <div className="space-y-1.5">
+              <label className={labelCls}>Nome Completo</label>
+              <div className="relative">
+                <input type="text" value={name} onChange={(e) => setName(e.target.value)}
+                  className={inputCls} placeholder="Como no seu RG/CNH" required />
+                <Icon name="person" className="absolute right-4 top-1/2 -translate-y-1/2 text-outline/30 text-lg" />
+              </div>
+            </div>
+            <div className="space-y-1.5">
+              <label className={labelCls}>CPF</label>
+              <div className="relative">
+                <input type="text" value={cpf} onChange={(e) => setCpf(formatCpf(e.target.value))}
+                  className={inputCls} placeholder="000.000.000-00" maxLength={14} required />
+                <Icon name="badge" className="absolute right-4 top-1/2 -translate-y-1/2 text-primary-container text-lg" />
               </div>
             </div>
 
-            {/* Error */}
-            {error && (
-              <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm p-3 rounded-xl mb-5 font-medium flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
-                {error}
-              </div>
-            )}
-
-            {/* ── Admin Form ── */}
-            {mode === 'admin' && (
-              <form onSubmit={handleAdminLogin} className="space-y-4">
-                <div><label className={labelCls}>E-mail</label>
-                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                    className={inputCls} placeholder="admin@brigadacamarao.com" required />
-                </div>
-                <div><label className={labelCls}>Senha</label>
-                  <div className="relative">
-                    <input type={showPassword ? 'text' : 'password'} value={password}
-                      onChange={(e) => setPassword(e.target.value)} className={inputCls + ' pr-12'}
-                      placeholder="••••••••" required />
-                    <button type="button" onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-white/20 hover:text-white/50 transition-colors p-1">
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                    </button>
-                  </div>
-                </div>
-                <button type="submit" disabled={loading}
-                  className={`w-full py-3 font-bold text-white rounded-xl text-sm flex items-center justify-center gap-2 bg-gradient-to-r ${cfg.gradient} shadow-lg transition-all active:scale-[0.98] disabled:opacity-50 hover:shadow-xl`}>
-                  {loading ? <span className="animate-pulse">Entrando...</span> : <>Entrar <ArrowRight className="w-4 h-4" /></>}
-                </button>
-              </form>
-            )}
-
-            {/* ── CT Form ── */}
-            {mode === 'ct' && (
-              <form onSubmit={handleCTLogin} className="space-y-4">
-                <div><label className={labelCls}>E-mail</label>
-                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                    className={inputCls} placeholder="coo@brigadacamarao.com" required />
-                </div>
-                <div><label className={labelCls}>Senha</label>
-                  <div className="relative">
-                    <input type={showPassword ? 'text' : 'password'} value={password}
-                      onChange={(e) => setPassword(e.target.value)} className={inputCls + ' pr-12'}
-                      placeholder="••••••••" required />
-                    <button type="button" onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-white/20 hover:text-white/50 transition-colors p-1">
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                    </button>
-                  </div>
-                </div>
-                <button type="submit" disabled={loading}
-                  className={`w-full py-3 font-bold text-white rounded-xl text-sm flex items-center justify-center gap-2 bg-gradient-to-r ${cfg.gradient} shadow-lg transition-all active:scale-[0.98] disabled:opacity-50 hover:shadow-xl`}>
-                  {loading ? <span className="animate-pulse">Entrando...</span> : <>Entrar <ArrowRight className="w-4 h-4" /></>}
-                </button>
-              </form>
-            )}
-
-            {/* ── Parceiro Form ── */}
-            {mode === 'parceiro' && (
-              <form onSubmit={handleParceiroLogin} className="space-y-4">
-                <div><label className={labelCls}>Nome Completo</label>
-                  <input type="text" value={name} onChange={(e) => setName(e.target.value)}
-                    className={inputCls} placeholder="João Pedro Santos" required />
-                </div>
-                <div><label className={labelCls}>CPF</label>
-                  <input type="text" value={cpf} onChange={(e) => setCpf(formatCpf(e.target.value))}
-                    className={inputCls} placeholder="000.000.000-00" maxLength={14} required />
-                </div>
-                <button type="submit" disabled={loading}
-                  className={`w-full py-3 font-bold text-white rounded-xl text-sm flex items-center justify-center gap-2 bg-gradient-to-r ${cfg.gradient} shadow-lg transition-all active:scale-[0.98] disabled:opacity-50 hover:shadow-xl`}>
-                  {loading ? <span className="animate-pulse">Verificando...</span> : <>Acessar Eventos <ArrowRight className="w-4 h-4" /></>}
-                </button>
-                <div className="pt-2 border-t border-white/[0.06]">
-                  <button type="button"
-                    onClick={() => { resetForm(); setMode('register'); }}
-                    className="w-full py-2.5 text-[13px] font-semibold text-[#16a34a]/80 hover:text-[#16a34a] hover:bg-[#16a34a]/5 rounded-xl transition-all flex items-center justify-center gap-2">
-                    <UserPlus className="w-4 h-4" />
-                    Primeiro acesso? Registre-se
-                  </button>
-                </div>
-              </form>
-            )}
-
-            {/* ── Register Form ── */}
-            {mode === 'register' && (
-              <form onSubmit={handleRegister} className="space-y-4">
-                <div className="bg-[#16a34a]/5 border border-[#16a34a]/10 rounded-xl p-3 mb-1">
-                  <p className="text-[11px] text-[#16a34a]/70 font-medium">
-                    📋 Cadastro sujeito a aprovação do administrador.
+            <div className="p-4 rounded-2xl bg-surface-container border-l-[6px] border-secondary-container shadow-sm">
+              <div className="flex gap-3">
+                <Icon name="info" filled className="text-secondary-container text-xl shrink-0" />
+                <div className="space-y-1">
+                  <p className="text-xs font-black text-on-surface uppercase tracking-wider">Acesso rápido</p>
+                  <p className="text-[11px] leading-relaxed text-on-surface-variant font-semibold">
+                    Use o <strong>CPF</strong> cadastrado para acessar eventos disponíveis e se candidatar.
                   </p>
                 </div>
-                <div><label className={labelCls}>Nome Completo</label>
-                  <input type="text" value={name} onChange={(e) => setName(e.target.value)}
-                    className={inputCls} placeholder="João Pedro Santos" required />
-                </div>
-                <div><label className={labelCls}>CPF</label>
-                  <input type="text" value={cpf} onChange={(e) => setCpf(formatCpf(e.target.value))}
-                    className={inputCls} placeholder="000.000.000-00" maxLength={14} required />
-                </div>
-                <div><label className={labelCls}>Telefone (opcional)</label>
-                  <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)}
-                    className={inputCls} placeholder="(31) 99999-9999" />
-                </div>
-                <button type="submit" disabled={loading}
-                  className={`w-full py-3 font-bold text-white rounded-xl text-sm flex items-center justify-center gap-2 bg-gradient-to-r ${cfg.gradient} shadow-lg transition-all active:scale-[0.98] disabled:opacity-50 hover:shadow-xl`}>
-                  {loading ? <span className="animate-pulse">Enviando...</span> : <>Enviar para Aprovação <ArrowRight className="w-4 h-4" /></>}
-                </button>
-              </form>
-            )}
+              </div>
+            </div>
 
-            {/* Demo hint */}
-            {(mode === 'admin' || mode === 'ct') && (
-              <div className="mt-5 pt-4 border-t border-white/[0.06]">
-                <p className="text-[10px] font-bold text-white/15 uppercase tracking-[0.15em] mb-1">Demo</p>
-                <p className="text-[12px] text-white/25">
-                  <span className="font-semibold text-white/40">
-                    {mode === 'admin' ? 'admin@brigadacamarao.com' : 'coo@brigadacamarao.com'}
-                  </span> — qualquer senha
+            <div className="pt-2 space-y-3">
+              <button type="submit" disabled={loading}
+                className="w-full py-4 bg-primary-container text-on-primary font-black text-base rounded-2xl shadow-xl shadow-primary/30 hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 uppercase tracking-tight disabled:opacity-50">
+                {loading ? 'Verificando...' : <><span>Acessar Eventos</span><Icon name="arrow_forward" className="text-xl" /></>}
+              </button>
+              <button type="button"
+                onClick={() => { resetForm(); setMode('register'); }}
+                className="w-full py-3 text-sm font-black text-success uppercase tracking-wider hover:bg-success/5 rounded-2xl transition-all flex items-center justify-center gap-2">
+                <Icon name="person_add" className="text-lg" />
+                Primeiro acesso? Registre-se
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* ── Register Form ── */}
+        {mode === 'register' && (
+          <form onSubmit={handleRegister} className="space-y-5">
+            <div className="p-4 rounded-2xl bg-surface-container border-l-[6px] border-success shadow-sm">
+              <div className="flex gap-3">
+                <Icon name="info" filled className="text-success text-xl shrink-0" />
+                <p className="text-[11px] leading-relaxed text-on-surface-variant font-semibold">
+                  Cadastro sujeito a <strong>aprovação do administrador</strong>. Você será notificado.
                 </p>
               </div>
-            )}
-          </div>
-        </div>
+            </div>
+            <div className="space-y-1.5">
+              <label className={labelCls}>Nome Completo</label>
+              <div className="relative">
+                <input type="text" value={name} onChange={(e) => setName(e.target.value)}
+                  className={inputCls} placeholder="Como no seu RG/CNH" required />
+                <Icon name="person" className="absolute right-4 top-1/2 -translate-y-1/2 text-outline/30 text-lg" />
+              </div>
+            </div>
+            <div className="space-y-1.5">
+              <label className={labelCls}>CPF</label>
+              <div className="relative">
+                <input type="text" value={cpf} onChange={(e) => setCpf(formatCpf(e.target.value))}
+                  className={inputCls} placeholder="000.000.000-00" maxLength={14} required />
+                <Icon name="badge" className="absolute right-4 top-1/2 -translate-y-1/2 text-primary-container text-lg" />
+              </div>
+            </div>
+            <div className="space-y-1.5">
+              <label className={labelCls}>Telefone (opcional)</label>
+              <div className="relative">
+                <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)}
+                  className={inputCls} placeholder="(31) 99999-9999" />
+                <Icon name="phone" className="absolute right-4 top-1/2 -translate-y-1/2 text-outline/30 text-lg" />
+              </div>
+            </div>
+            <div className="pt-2">
+              <button type="submit" disabled={loading}
+                className="w-full py-4 bg-primary-container text-on-primary font-black text-base rounded-2xl shadow-xl shadow-primary/30 hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 uppercase tracking-tight disabled:opacity-50">
+                {loading ? 'Enviando...' : <><span>Enviar para Aprovação</span><Icon name="arrow_forward" className="text-xl" /></>}
+              </button>
+            </div>
+          </form>
+        )}
 
-        <p className="text-center text-[9px] text-white/10 mt-6 tracking-wider">
-          © 2026 Brigada Camarão · LGPD
+        {/* Demo hint */}
+        {(mode === 'admin' || mode === 'ct') && (
+          <div className="mt-6 pt-5 border-t border-surface-container-high">
+            <p className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest mb-1">Demo</p>
+            <p className="text-xs text-outline font-medium">
+              <span className="font-bold text-on-surface">
+                {mode === 'admin' ? 'admin@brigadacamarao.com' : 'coo@brigadacamarao.com'}
+              </span> — qualquer senha
+            </p>
+          </div>
+        )}
+
+        {/* Terms footer */}
+        <p className="text-center text-[10px] font-black text-on-surface-variant uppercase tracking-widest mt-6">
+          Ao prosseguir, você aceita nossos{' '}
+          <a className="text-primary-container hover:underline" href="#">Termos de Atuação</a>
         </p>
-      </div>
+      </main>
     </div>
   );
 }

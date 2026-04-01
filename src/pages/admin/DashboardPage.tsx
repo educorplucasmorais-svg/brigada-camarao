@@ -84,8 +84,8 @@ const MARKET_COLORS = ['#ba100a', '#775652', '#705c2e', '#534341', '#ece0de'];
 
 const metaStatusColor: Record<string, string> = {
   'Em andamento': 'text-warning',
-  'No caminho': 'text-[#16a34a]',
-  'Planejado': 'text-[#6b7280]',
+  'No caminho': 'text-success',
+  'Planejado': 'text-on-surface-variant',
 };
 
 // ─── Tático Data ──────────────────────────────────────────────────
@@ -122,7 +122,7 @@ const upcomingEvents = [
 
 const recentActivities = [
   { icon: UserPlus, text: 'João Pedro Santos alocado para Festival BH', time: '2h atrás', color: 'bg-primary' },
-  { icon: FileCheck, text: 'Orçamento Arena Shows MG aprovado — R$ 72.000', time: '4h atrás', color: 'bg-[#16a34a]' },
+  { icon: FileCheck, text: 'Orçamento Arena Shows MG aprovado — R$ 72.000', time: '4h atrás', color: 'bg-success' },
   { icon: AlertCircle, text: '3 novas inscrições para vaga de Socorrista', time: '5h atrás', color: 'bg-tertiary' },
   { icon: CheckCircle, text: 'Evento Rock in BH finalizado com sucesso', time: '1 dia', color: 'bg-secondary' },
   { icon: UserPlus, text: 'Fernanda Oliveira obteve certificação NR-35', time: '2 dias', color: 'bg-primary' },
@@ -159,7 +159,7 @@ const equipamentos = [
 ];
 
 const statusConfig: Record<EscalaStatus, { dot: string; label: string }> = {
-  checked_in: { dot: 'bg-[#16a34a]', label: 'Presente' },
+  checked_in: { dot: 'bg-success', label: 'Presente' },
   pending: { dot: 'bg-warning', label: 'Aguardando' },
   absent: { dot: 'bg-error', label: 'Ausente' },
 };
@@ -191,20 +191,20 @@ export function DashboardPage() {
     <div className="space-y-6">
       {/* ═══ Header ═══ */}
       <div>
-        <h1 className="font-headline text-2xl sm:text-3xl font-extrabold tracking-tight text-[#1a1a1a]">
+        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-on-surface">
           {greeting}, {user?.name?.split(' ')[0] || 'Admin'}
         </h1>
         <div className="flex items-center gap-3 mt-1.5">
-          <p className="text-sm text-[#6b7280] capitalize">{today}</p>
-          <span className="flex items-center gap-1.5 text-sm text-[#16a34a] font-medium">
-            <span className="w-2 h-2 rounded-full bg-[#16a34a] inline-block" />
+          <p className="text-sm text-on-surface-variant capitalize">{today}</p>
+          <span className="flex items-center gap-1.5 text-sm text-success font-medium">
+            <span className="w-2 h-2 rounded-full bg-success inline-block" />
             Online
           </span>
         </div>
       </div>
 
       {/* ═══ Tab Selector ═══ */}
-      <div className="border-b border-[#e5e5e5]">
+      <div className="border-b border-surface-container-high">
         <div className="flex gap-6 sm:gap-8 overflow-x-auto">
           {tabs.map((tab) => (
             <button
@@ -212,13 +212,13 @@ export function DashboardPage() {
               onClick={() => setActiveTab(tab.id)}
               className={`relative pb-3 text-xs sm:text-sm font-bold uppercase tracking-widest transition-colors whitespace-nowrap ${
                 activeTab === tab.id
-                  ? 'text-[#1a1a1a]'
-                  : 'text-[#6b7280] hover:text-[#1a1a1a]'
+                  ? 'text-on-surface'
+                  : 'text-on-surface-variant hover:text-on-surface'
               }`}
             >
               {tab.label}
               {activeTab === tab.id && (
-                <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#ba100a] rounded-t-sm" />
+                <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-primary-container rounded-t-sm" />
               )}
             </button>
           ))}
@@ -232,8 +232,8 @@ export function DashboardPage() {
         <div className="space-y-6">
           {/* Section Label */}
           <div className="flex items-center gap-2">
-            <Telescope className="w-4 h-4 text-[#ba100a]" />
-            <span className="text-[11px] font-bold uppercase tracking-widest text-[#ba100a]">
+            <Telescope className="w-4 h-4 text-primary-container" />
+            <span className="text-[11px] font-bold uppercase tracking-widest text-primary-container">
               OKRs — Objetivos e Resultados-Chave
             </span>
           </div>
@@ -241,11 +241,11 @@ export function DashboardPage() {
           {/* OKR Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {okrs.map((okr) => (
-              <div key={okr.title} className="bg-white rounded-xl border border-[#e5e5e5] shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+              <div key={okr.title} className="bg-surface-container-lowest rounded-xl border border-surface-container-high shadow-sm overflow-hidden hover:shadow-md transition-shadow">
                 <div className="h-1.5" style={{ background: `linear-gradient(90deg, ${okr.color}, ${okr.color}88)` }} />
                 <div className="p-6">
-                  <h4 className="font-black text-[#1a1a1a] text-sm leading-tight">{okr.title}</h4>
-                  <p className="text-xs text-[#6b7280] mt-1">{okr.kr}</p>
+                  <h4 className="font-black text-on-surface text-sm leading-tight">{okr.title}</h4>
+                  <p className="text-xs text-on-surface-variant mt-1">{okr.kr}</p>
 
                   <div className="flex items-center justify-center my-4 sm:my-5">
                     <div className="relative w-24 h-24 sm:w-32 sm:h-32">
@@ -274,16 +274,16 @@ export function DashboardPage() {
 
                   <div className="flex items-end justify-between">
                     <div>
-                      <p className="text-xl font-black text-[#1a1a1a]">{okr.current}</p>
-                      <p className="text-xs text-[#6b7280]">meta: {okr.target}</p>
+                      <p className="text-xl font-black text-on-surface">{okr.current}</p>
+                      <p className="text-xs text-on-surface-variant">meta: {okr.target}</p>
                     </div>
                     <div className="flex items-center gap-1.5">
                       {okr.status === 'Atingido' ? (
-                        <CheckCircle className="w-4 h-4 text-[#16a34a]" />
+                        <CheckCircle className="w-4 h-4 text-success" />
                       ) : (
                         <TrendingUp className="w-4 h-4 text-warning" />
                       )}
-                      <span className={`text-xs font-bold ${okr.status === 'Atingido' ? 'text-[#16a34a]' : 'text-warning'}`}>
+                      <span className={`text-xs font-bold ${okr.status === 'Atingido' ? 'text-success' : 'text-warning'}`}>
                         {okr.status}
                       </span>
                     </div>
@@ -294,8 +294,8 @@ export function DashboardPage() {
           </div>
 
           {/* Receita Anual Chart */}
-          <div className="bg-white rounded-xl border border-[#e5e5e5] shadow-sm p-6">
-            <h3 className="text-[11px] font-black text-[#6b7280] uppercase tracking-widest mb-5">
+          <div className="bg-surface-container-lowest rounded-xl border border-surface-container-high shadow-sm p-6">
+            <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest mb-5">
               Receita Anual — Real vs Meta
             </h3>
             <div className="h-48 sm:h-64 lg:h-72">
@@ -327,8 +327,8 @@ export function DashboardPage() {
           </div>
 
           {/* Market Share */}
-          <div className="bg-white rounded-xl border border-[#e5e5e5] shadow-sm p-6">
-            <h3 className="text-[11px] font-black text-[#6b7280] uppercase tracking-widest mb-5">
+          <div className="bg-surface-container-lowest rounded-xl border border-surface-container-high shadow-sm p-6">
+            <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest mb-5">
               Market Share — Brigadas em MG
             </h3>
             <div className="h-48 sm:h-64">
@@ -352,34 +352,34 @@ export function DashboardPage() {
           </div>
 
           {/* Metas Anuais */}
-          <div className="bg-white rounded-xl border border-[#e5e5e5] shadow-sm p-6">
-            <h3 className="text-[11px] font-black text-[#6b7280] uppercase tracking-widest mb-5">
+          <div className="bg-surface-container-lowest rounded-xl border border-surface-container-high shadow-sm p-6">
+            <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest mb-5">
               Metas Anuais 2026
             </h3>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-[#e5e5e5]">
-                    <th className="text-left py-3 px-4 text-[11px] font-black text-[#6b7280] uppercase tracking-widest">Meta</th>
-                    <th className="text-left py-3 px-4 text-[11px] font-black text-[#6b7280] uppercase tracking-widest">Status</th>
-                    <th className="text-left py-3 px-4 text-[11px] font-black text-[#6b7280] uppercase tracking-widest">Progresso</th>
+                  <tr className="border-b border-surface-container-high">
+                    <th className="text-left py-3 px-4 text-[11px] font-black text-on-surface-variant uppercase tracking-widest">Meta</th>
+                    <th className="text-left py-3 px-4 text-[11px] font-black text-on-surface-variant uppercase tracking-widest">Status</th>
+                    <th className="text-left py-3 px-4 text-[11px] font-black text-on-surface-variant uppercase tracking-widest">Progresso</th>
                   </tr>
                 </thead>
                 <tbody>
                   {metasAnuais.map((m) => (
                     <tr key={m.meta} className="border-b border-[#f4f4f5] hover:bg-[#f9f9f9] transition-colors">
-                      <td className="py-3 px-4 font-bold text-[#1a1a1a]">{m.meta}</td>
+                      <td className="py-3 px-4 font-bold text-on-surface">{m.meta}</td>
                       <td className="py-3 px-4">
-                        <span className={`text-xs font-bold ${metaStatusColor[m.status] ?? 'text-[#6b7280]'}`}>
+                        <span className={`text-xs font-bold ${metaStatusColor[m.status] ?? 'text-on-surface-variant'}`}>
                           {m.status}
                         </span>
                       </td>
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-3">
                           <div className="flex-1 h-2 bg-[#f4f4f5] rounded-full overflow-hidden max-w-[120px]">
-                            <div className="h-full rounded-full bg-[#ba100a] transition-all" style={{ width: `${m.pct}%` }} />
+                            <div className="h-full rounded-full bg-primary-container transition-all" style={{ width: `${m.pct}%` }} />
                           </div>
-                          <span className="text-xs font-bold text-[#1a1a1a] whitespace-nowrap">
+                          <span className="text-xs font-bold text-on-surface whitespace-nowrap">
                             {m.progresso !== '—' ? `${m.progresso} (${m.pct}%)` : `${m.pct}%`}
                           </span>
                         </div>
@@ -407,8 +407,8 @@ export function DashboardPage() {
           </div>
 
           {/* ReS — Recrutamento & Seleção */}
-          <div className="bg-white rounded-xl border border-[#e5e5e5] shadow-sm p-6">
-            <h3 className="text-[11px] font-black text-[#1a1a1a] uppercase tracking-widest mb-6">
+          <div className="bg-surface-container-lowest rounded-xl border border-surface-container-high shadow-sm p-6">
+            <h3 className="text-[11px] font-black text-on-surface uppercase tracking-widest mb-6">
               RES — RECRUTAMENTO & SELEÇÃO
             </h3>
 
@@ -417,8 +417,8 @@ export function DashboardPage() {
               {pipelineData.map((stage, i) => (
                 <div key={stage.stage} className="flex items-center flex-1 min-w-0">
                   <div className="flex flex-col items-center flex-1">
-                    <p className="text-[10px] font-bold text-[#6b7280] uppercase tracking-wider mb-2">{stage.stage}</p>
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#16a34a] flex items-center justify-center">
+                    <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-2">{stage.stage}</p>
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-success flex items-center justify-center">
                       <span className="text-white font-black text-sm sm:text-base">{stage.count}</span>
                     </div>
                   </div>
@@ -440,7 +440,7 @@ export function DashboardPage() {
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
-                  <p className="text-[10px] font-bold text-[#6b7280] mt-1">{stage.stage}</p>
+                  <p className="text-[10px] font-bold text-on-surface-variant mt-1">{stage.stage}</p>
                 </div>
               ))}
             </div>
@@ -449,12 +449,12 @@ export function DashboardPage() {
           {/* Charts + Events Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Revenue Chart */}
-            <div className="bg-white rounded-xl border border-[#e5e5e5] shadow-sm p-6">
+            <div className="bg-surface-container-lowest rounded-xl border border-surface-container-high shadow-sm p-6">
               <div className="flex items-center justify-between mb-5">
-                <h3 className="text-[11px] font-black text-[#6b7280] uppercase tracking-widest">
+                <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest">
                   Receita Mensal
                 </h3>
-                <span className="text-xs font-bold text-[#16a34a] bg-[#16a34a]/10 px-2 py-1 rounded-md">+58% 6 meses</span>
+                <span className="text-xs font-bold text-success bg-success/10 px-2 py-1 rounded-md">+58% 6 meses</span>
               </div>
               <div className="h-48 sm:h-64">
                 <ResponsiveContainer width="100%" height="100%">
@@ -484,31 +484,31 @@ export function DashboardPage() {
             </div>
 
             {/* Upcoming Events */}
-            <div className="bg-white rounded-xl border border-[#e5e5e5] shadow-sm p-6">
+            <div className="bg-surface-container-lowest rounded-xl border border-surface-container-high shadow-sm p-6">
               <div className="flex items-center justify-between mb-5">
-                <h3 className="text-[11px] font-black text-[#6b7280] uppercase tracking-widest">
+                <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest">
                   Próximos Eventos
                 </h3>
-                <button className="text-[11px] font-black text-[#ba100a] uppercase tracking-wider flex items-center gap-1 hover:underline">
+                <button className="text-[11px] font-black text-primary-container uppercase tracking-wider flex items-center gap-1 hover:underline">
                   Ver Todos <ArrowRight className="w-3 h-3" />
                 </button>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {upcomingEvents.map((evt) => (
-                  <div key={evt.title} className="border border-[#e5e5e5] rounded-lg p-3 hover:shadow-sm transition-shadow">
+                  <div key={evt.title} className="border border-surface-container-high rounded-lg p-3 hover:shadow-sm transition-shadow">
                     <div className="flex items-start gap-3">
                       <div className="w-11 h-11 rounded-lg bg-[#fef2f2] flex flex-col items-center justify-center shrink-0">
-                        <span className="text-sm font-black text-[#ba100a] leading-none">{evt.date.split('/')[0]}</span>
-                        <span className="text-[9px] font-bold text-[#ba100a]/60">/{evt.date.split('/')[1]}</span>
+                        <span className="text-sm font-black text-primary-container leading-none">{evt.date.split('/')[0]}</span>
+                        <span className="text-[9px] font-bold text-primary-container/60">/{evt.date.split('/')[1]}</span>
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-bold text-[#1a1a1a] text-sm truncate">{evt.title}</p>
-                        <p className="text-xs text-[#6b7280] flex items-center gap-1 mt-0.5">
+                        <p className="font-bold text-on-surface text-sm truncate">{evt.title}</p>
+                        <p className="text-xs text-on-surface-variant flex items-center gap-1 mt-0.5">
                           <MapPin className="w-3 h-3" /> {evt.location}
                         </p>
                         <div className="flex items-center justify-between mt-2">
-                          <span className="text-[10px] font-bold text-[#6b7280]">{evt.status}</span>
-                          <span className="text-xs font-black text-[#1a1a1a]">{evt.team}/{evt.total} <span className="font-normal text-[#6b7280]">equipe</span></span>
+                          <span className="text-[10px] font-bold text-on-surface-variant">{evt.status}</span>
+                          <span className="text-xs font-black text-on-surface">{evt.team}/{evt.total} <span className="font-normal text-on-surface-variant">equipe</span></span>
                         </div>
                         {/* WhatsApp + Instagram quick links */}
                         <div className="flex items-center gap-2 mt-2 pt-2 border-t border-[#f0f0f0]">
@@ -542,12 +542,12 @@ export function DashboardPage() {
           </div>
 
           {/* Recent Activities */}
-          <div className="bg-white rounded-xl border border-[#e5e5e5] shadow-sm p-6">
+          <div className="bg-surface-container-lowest rounded-xl border border-surface-container-high shadow-sm p-6">
             <div className="flex items-center justify-between mb-5">
-              <h3 className="text-[11px] font-black text-[#6b7280] uppercase tracking-widest">
+              <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest">
                 Atividades Recentes
               </h3>
-              <button className="text-[11px] font-black text-[#ba100a] uppercase tracking-wider flex items-center gap-1 hover:underline">
+              <button className="text-[11px] font-black text-primary-container uppercase tracking-wider flex items-center gap-1 hover:underline">
                 Ver Todas <ArrowRight className="w-3 h-3" />
               </button>
             </div>
@@ -563,8 +563,8 @@ export function DashboardPage() {
                     )}
                   </div>
                   <div className="flex-1 min-w-0 pt-1">
-                    <p className="text-sm text-[#1a1a1a]">{act.text}</p>
-                    <p className="text-xs text-[#6b7280] mt-0.5 flex items-center gap-1">
+                    <p className="text-sm text-on-surface">{act.text}</p>
+                    <p className="text-xs text-on-surface-variant mt-0.5 flex items-center gap-1">
                       <Clock className="w-3 h-3" /> {act.time}
                     </p>
                   </div>
@@ -576,27 +576,27 @@ export function DashboardPage() {
           {/* Active Events Table */}
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-[11px] font-black text-[#6b7280] uppercase tracking-widest">Eventos em Andamento</h2>
+              <h2 className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest">Eventos em Andamento</h2>
             </div>
             <div className="space-y-3">
               {activeEvents.slice(0, 5).map((event) => (
-                <div key={event.id} className="bg-white p-4 lg:p-5 rounded-xl border border-[#e5e5e5] shadow-sm flex items-center gap-4 hover:shadow-md transition-shadow">
+                <div key={event.id} className="bg-surface-container-lowest p-4 lg:p-5 rounded-xl border border-surface-container-high shadow-sm flex items-center gap-4 hover:shadow-md transition-shadow">
                   <div className="w-10 h-10 rounded-lg bg-[#fef2f2] flex items-center justify-center shrink-0">
-                    <Flame className="w-5 h-5 text-[#ba100a]" />
+                    <Flame className="w-5 h-5 text-primary-container" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-bold text-[#1a1a1a] text-sm truncate">{event.title}</p>
+                    <p className="font-bold text-on-surface text-sm truncate">{event.title}</p>
                     <div className="flex items-center gap-3 mt-1">
-                      <span className="text-xs text-[#6b7280] flex items-center gap-1">
+                      <span className="text-xs text-on-surface-variant flex items-center gap-1">
                         <Calendar className="w-3 h-3" /> {event.date}
                       </span>
-                      <span className="text-xs text-[#6b7280] flex items-center gap-1">
+                      <span className="text-xs text-on-surface-variant flex items-center gap-1">
                         <MapPin className="w-3 h-3" /> {event.location}
                       </span>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
-                    <span className="text-xs font-bold text-[#6b7280]">{event.filledVacancies}/{event.vacancies}</span>
+                    <span className="text-xs font-bold text-on-surface-variant">{event.filledVacancies}/{event.vacancies}</span>
                     <StatusBadge status={event.status} />
                   </div>
                 </div>
@@ -635,34 +635,34 @@ export function DashboardPage() {
           </div>
 
           {/* Escala do Dia */}
-          <div className="bg-white rounded-xl border border-[#e5e5e5] shadow-sm p-4 sm:p-6">
-            <h3 className="text-[11px] font-black text-[#6b7280] uppercase tracking-widest mb-4 sm:mb-5">
+          <div className="bg-surface-container-lowest rounded-xl border border-surface-container-high shadow-sm p-4 sm:p-6">
+            <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest mb-4 sm:mb-5">
               Escala do Dia — 05/04/2026
             </h3>
             <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-[#e5e5e5]">
-                    <th className="text-left py-3 px-4 text-[11px] font-black text-[#6b7280] uppercase tracking-widest">QT</th>
-                    <th className="text-left py-3 px-4 text-[11px] font-black text-[#6b7280] uppercase tracking-widest">Nome</th>
-                    <th className="text-left py-3 px-4 text-[11px] font-black text-[#6b7280] uppercase tracking-widest">Horário</th>
-                    <th className="text-left py-3 px-4 text-[11px] font-black text-[#6b7280] uppercase tracking-widest">Status</th>
-                    <th className="text-right py-3 px-4 text-[11px] font-black text-[#6b7280] uppercase tracking-widest">Remuneração</th>
+                  <tr className="border-b border-surface-container-high">
+                    <th className="text-left py-3 px-4 text-[11px] font-black text-on-surface-variant uppercase tracking-widest">QT</th>
+                    <th className="text-left py-3 px-4 text-[11px] font-black text-on-surface-variant uppercase tracking-widest">Nome</th>
+                    <th className="text-left py-3 px-4 text-[11px] font-black text-on-surface-variant uppercase tracking-widest">Horário</th>
+                    <th className="text-left py-3 px-4 text-[11px] font-black text-on-surface-variant uppercase tracking-widest">Status</th>
+                    <th className="text-right py-3 px-4 text-[11px] font-black text-on-surface-variant uppercase tracking-widest">Remuneração</th>
                   </tr>
                 </thead>
                 <tbody>
                   {escalaDia.map((row) => (
                     <tr key={row.qt} className="border-b border-[#f4f4f5] hover:bg-[#f9f9f9] transition-colors">
-                      <td className="py-3 px-4 font-black text-[#1a1a1a]">{row.qt}</td>
-                      <td className="py-3 px-4 font-bold text-[#1a1a1a]">{row.nome}</td>
-                      <td className="py-3 px-4 text-[#6b7280]">{row.horario}</td>
+                      <td className="py-3 px-4 font-black text-on-surface">{row.qt}</td>
+                      <td className="py-3 px-4 font-bold text-on-surface">{row.nome}</td>
+                      <td className="py-3 px-4 text-on-surface-variant">{row.horario}</td>
                       <td className="py-3 px-4">
                         <span className="flex items-center gap-2">
                           <span className={`w-2.5 h-2.5 rounded-full ${statusConfig[row.status].dot}`} />
                           <span className="text-xs font-bold">{statusConfig[row.status].label}</span>
                         </span>
                       </td>
-                      <td className="py-3 px-4 text-right font-bold text-[#1a1a1a]">
+                      <td className="py-3 px-4 text-right font-bold text-on-surface">
                         R$ {row.remuneracao.toFixed(2).replace('.', ',')}
                       </td>
                     </tr>
@@ -675,22 +675,22 @@ export function DashboardPage() {
           {/* Resumo Financeiro */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <DollarSign className="w-4 h-4 text-[#ba100a]" />
-              <span className="text-[11px] font-bold uppercase tracking-widest text-[#ba100a]">
+              <DollarSign className="w-4 h-4 text-primary-container" />
+              <span className="text-[11px] font-bold uppercase tracking-widest text-primary-container">
                 Resumo Financeiro do Evento
               </span>
             </div>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {([
-                { label: 'Total Folha', value: 'R$ 4.718,96', color: 'bg-[#ba100a]' },
-                { label: 'Pagos', value: 'R$ 2.150,00', color: 'bg-[#16a34a]' },
+                { label: 'Total Folha', value: 'R$ 4.718,96', color: 'bg-primary-container' },
+                { label: 'Pagos', value: 'R$ 2.150,00', color: 'bg-success' },
                 { label: 'Pendentes', value: 'R$ 2.568,96', color: 'bg-warning' },
                 { label: 'Custo/hora médio', value: 'R$ 12,81', color: 'bg-tertiary' },
               ] as const).map((card) => (
-                <div key={card.label} className="bg-white rounded-xl border border-[#e5e5e5] shadow-sm p-5 relative overflow-hidden hover:shadow-md transition-shadow">
+                <div key={card.label} className="bg-surface-container-lowest rounded-xl border border-surface-container-high shadow-sm p-5 relative overflow-hidden hover:shadow-md transition-shadow">
                   <div className={`absolute top-0 left-0 w-1 h-full ${card.color}`} />
-                  <p className="text-[11px] font-black text-[#6b7280] uppercase tracking-widest">{card.label}</p>
-                  <p className="text-xl lg:text-2xl font-black tracking-tight text-[#1a1a1a] mt-2">{card.value}</p>
+                  <p className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest">{card.label}</p>
+                  <p className="text-xl lg:text-2xl font-black tracking-tight text-on-surface mt-2">{card.value}</p>
                 </div>
               ))}
             </div>
@@ -699,10 +699,10 @@ export function DashboardPage() {
           {/* Check-in Timeline + Equipamentos */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Check-in Timeline */}
-            <div className="bg-white rounded-xl border border-[#e5e5e5] shadow-sm p-6">
+            <div className="bg-surface-container-lowest rounded-xl border border-surface-container-high shadow-sm p-6">
               <div className="flex items-center gap-2 mb-5">
-                <Clock className="w-4 h-4 text-[#ba100a]" />
-                <h3 className="text-[11px] font-black text-[#6b7280] uppercase tracking-widest">
+                <Clock className="w-4 h-4 text-primary-container" />
+                <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest">
                   Check-in de Hoje
                 </h3>
               </div>
@@ -711,7 +711,7 @@ export function DashboardPage() {
                   <div key={i} className="flex items-start gap-4">
                     <div className="relative">
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
-                        ci.tipo.includes('atrasado') ? 'bg-warning' : 'bg-[#16a34a]'
+                        ci.tipo.includes('atrasado') ? 'bg-warning' : 'bg-success'
                       }`}>
                         <Clock className="w-3.5 h-3.5 text-white" />
                       </div>
@@ -720,8 +720,8 @@ export function DashboardPage() {
                       )}
                     </div>
                     <div className="flex-1 min-w-0 pt-0.5">
-                      <p className="text-sm font-bold text-[#1a1a1a]">{ci.nome}</p>
-                      <p className="text-xs text-[#6b7280] mt-0.5">
+                      <p className="text-sm font-bold text-on-surface">{ci.nome}</p>
+                      <p className="text-xs text-on-surface-variant mt-0.5">
                         {ci.hora} — {ci.tipo}
                       </p>
                     </div>
@@ -731,10 +731,10 @@ export function DashboardPage() {
             </div>
 
             {/* Material / Equipamento */}
-            <div className="bg-white rounded-xl border border-[#e5e5e5] shadow-sm p-6">
+            <div className="bg-surface-container-lowest rounded-xl border border-surface-container-high shadow-sm p-6">
               <div className="flex items-center gap-2 mb-5">
-                <Package className="w-4 h-4 text-[#ba100a]" />
-                <h3 className="text-[11px] font-black text-[#6b7280] uppercase tracking-widest">
+                <Package className="w-4 h-4 text-primary-container" />
+                <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest">
                   Material / Equipamento
                 </h3>
               </div>
@@ -742,12 +742,12 @@ export function DashboardPage() {
                 {equipamentos.map((eq) => (
                   <div key={eq.item} className="flex items-center gap-3 p-3 rounded-lg bg-[#f9f9f9] border border-[#f4f4f5]">
                     {eq.conferido ? (
-                      <CheckCircle className="w-5 h-5 text-[#16a34a] shrink-0" />
+                      <CheckCircle className="w-5 h-5 text-success shrink-0" />
                     ) : (
                       <AlertTriangle className="w-5 h-5 text-warning shrink-0" />
                     )}
-                    <span className="text-sm font-bold text-[#1a1a1a] flex-1">{eq.item}</span>
-                    <span className={`text-xs font-bold ${eq.conferido ? 'text-[#16a34a]' : 'text-warning'}`}>
+                    <span className="text-sm font-bold text-on-surface flex-1">{eq.item}</span>
+                    <span className={`text-xs font-bold ${eq.conferido ? 'text-success' : 'text-warning'}`}>
                       {eq.conferido ? 'Conferido' : 'Pendente'}
                     </span>
                   </div>

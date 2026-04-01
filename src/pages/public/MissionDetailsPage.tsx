@@ -38,7 +38,7 @@ export function MissionDetailsPage() {
         </div>
 
         {/* Status card */}
-        <div className="bg-white rounded-2xl p-5 shadow-sm mb-4">
+        <div className="bg-surface-container-lowest rounded-2xl p-5 shadow-sm mb-4">
           <div className="flex items-center gap-2 mb-3">
             <div className="w-3 h-3 rounded-full bg-success pulse-dot" />
             <span className="text-sm font-bold text-success">Inscrição Confirmada</span>
@@ -50,7 +50,7 @@ export function MissionDetailsPage() {
 
         {/* Info sections */}
         <div className="space-y-3">
-          <div className="bg-white rounded-2xl p-4 shadow-sm flex items-center gap-4">
+          <div className="bg-surface-container-lowest rounded-2xl p-4 shadow-sm flex items-center gap-4">
             <div className="w-10 h-10 rounded-xl bg-tertiary-container flex items-center justify-center">
               <Shirt className="w-5 h-5 text-on-tertiary-container" />
             </div>
@@ -60,7 +60,7 @@ export function MissionDetailsPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-4 shadow-sm flex items-center gap-4">
+          <div className="bg-surface-container-lowest rounded-2xl p-4 shadow-sm flex items-center gap-4">
             <div className="w-10 h-10 rounded-xl bg-tertiary-container flex items-center justify-center">
               <Building2 className="w-5 h-5 text-on-tertiary-container" />
             </div>
@@ -71,7 +71,7 @@ export function MissionDetailsPage() {
             <ChevronDown className="w-4 h-4 text-outline" />
           </div>
 
-          <div className="bg-white rounded-2xl p-4 shadow-sm">
+          <div className="bg-surface-container-lowest rounded-2xl p-4 shadow-sm">
             <div className="flex items-center gap-4 mb-3">
               <div className="w-10 h-10 rounded-xl bg-tertiary-container flex items-center justify-center">
                 <Radio className="w-5 h-5 text-on-tertiary-container" />
@@ -92,7 +92,7 @@ export function MissionDetailsPage() {
         </div>
 
         {/* Registrations section */}
-        <div className="mt-6 bg-white rounded-2xl p-4 shadow-sm">
+        <div className="mt-6 bg-surface-container-lowest rounded-2xl p-4 shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Users className="w-5 h-5 text-primary" />

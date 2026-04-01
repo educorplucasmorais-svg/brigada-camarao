@@ -34,7 +34,7 @@ export function AvailableEventsPage() {
 
         <div className="space-y-6">
           {available.map((event) => (
-            <div key={event.id} className="bg-white rounded-2xl shadow-sm overflow-hidden">
+            <div key={event.id} className="bg-surface-container-lowest rounded-2xl shadow-sm overflow-hidden">
               {/* Event image placeholder */}
               <div className="h-40 bg-gradient-to-br from-surface-container-high to-surface-container relative">
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -96,7 +96,7 @@ export function AvailableEventsPage() {
       </div>
 
       {/* Bottom Nav */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-outline-variant/20 flex lg:hidden z-30">
+      <nav className="fixed bottom-0 left-0 right-0 bg-surface-container-lowest border-t border-outline-variant/20 flex lg:hidden z-30">
         <Link to="/eventos" className="flex-1 flex flex-col items-center py-3 text-primary">
           <Calendar className="w-5 h-5" />
           <span className="text-[10px] font-bold uppercase mt-1">Eventos</span>
