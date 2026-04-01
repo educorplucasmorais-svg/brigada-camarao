@@ -36,6 +36,7 @@ model Event {
   budget          Float    @default(0)
   description     String?
   uniform         String?
+  whatsappGroup   String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 

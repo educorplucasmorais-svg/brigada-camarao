@@ -1,80 +1,78 @@
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { LineChart, Line, ResponsiveContainer } from 'recharts';
 
 interface StatsCardProps {
   title: string;
   value: string | number;
-  icon: LucideIcon;
+  icon?: LucideIcon;
   change?: string;
   borderColor?: string;
   accentColor?: string;
   trend?: 'up' | 'down';
   progress?: number;
+  sparkData?: number[];
 }
 
 export function StatsCard({
   title,
   value,
-  icon: Icon,
   change,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  borderColor: _borderColor = 'border-primary',
-  accentColor = 'bg-primary',
   trend,
-  progress,
+  sparkData,
 }: StatsCardProps) {
-  const trendColor = trend === 'up' ? 'text-success' : trend === 'down' ? 'text-error' : '';
-  const iconColor = accentColor === 'bg-primary' ? 'text-primary' : accentColor === 'bg-tertiary' ? 'text-tertiary' : accentColor === 'bg-secondary' ? 'text-secondary' : 'text-success';
-  const iconBg = accentColor === 'bg-primary' ? 'bg-primary/8' : accentColor === 'bg-tertiary' ? 'bg-tertiary/8' : accentColor === 'bg-secondary' ? 'bg-secondary/8' : 'bg-success/8';
+  const trendColor = trend === 'up' ? 'text-[#16a34a]' : trend === 'down' ? 'text-error' : '';
+
+  const chartData = sparkData?.map((v, i) => ({ i, v }));
 
   return (
-    <div className="group relative bg-surface-container-lowest rounded-2xl border border-outline/8 shadow-sm hover:shadow-md transition-all duration-300">
-      {/* Subtle left accent bar */}
-      <div className={`absolute left-0 top-3 bottom-3 w-[3px] rounded-full ${accentColor} opacity-60 group-hover:opacity-100 transition-opacity`} />
+    <div className="group relative bg-white rounded-xl border border-[#e5e5e5] shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden">
+      {/* Left red accent */}
+      <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#ba100a]" />
 
-      <div className="p-4 sm:p-5 pl-5 sm:pl-6 flex flex-col gap-2.5">
-        {/* Header row */}
-        <div className="flex items-center justify-between">
-          <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-on-surface-variant/70 leading-none">
+      <div className="p-4 sm:p-5 pl-5 sm:pl-6 flex items-start justify-between gap-3">
+        <div className="flex flex-col gap-1.5 min-w-0">
+          {/* Title */}
+          <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-[#6b7280] leading-none">
             {title}
           </span>
-          <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg ${iconBg} flex items-center justify-center`}>
-            <Icon className={`w-4 h-4 ${iconColor}`} />
-          </div>
-        </div>
 
-        {/* Value */}
-        <div className="flex items-baseline gap-2">
-          <span className="text-xl sm:text-2xl font-bold tracking-tight text-on-surface font-headline leading-none">
+          {/* Value */}
+          <span className="text-xl sm:text-2xl font-bold tracking-tight text-[#1a1a1a] font-headline leading-none mt-1">
             {value}
           </span>
+
+          {/* Change indicator */}
+          {(change || trend) && (
+            <div className="flex items-center gap-1.5 mt-1">
+              {trend && (
+                trend === 'up'
+                  ? <TrendingUp className={`w-3.5 h-3.5 ${trendColor}`} />
+                  : <TrendingDown className={`w-3.5 h-3.5 ${trendColor}`} />
+              )}
+              {change && (
+                <p className={`text-[11px] font-medium ${trendColor || 'text-[#6b7280]'}`}>
+                  {change}
+                </p>
+              )}
+            </div>
+          )}
         </div>
 
-        {/* Change indicator */}
-        {(change || trend) && (
-          <div className="flex items-center gap-1.5">
-            {trend && (
-              <span className={`flex items-center justify-center w-5 h-5 rounded-full ${trend === 'up' ? 'bg-success/10' : 'bg-error/10'}`}>
-                {trend === 'up' ? <TrendingUp className={`w-3 h-3 ${trendColor}`} /> : <TrendingDown className={`w-3 h-3 ${trendColor}`} />}
-              </span>
-            )}
-            {change && (
-              <p className={`text-[11px] font-medium ${trendColor || 'text-on-surface-variant/60'}`}>
-                {change}
-              </p>
-            )}
-          </div>
-        )}
-
-        {/* Progress bar */}
-        {progress !== undefined && (
-          <div className="mt-0.5">
-            <div className="w-full h-1.5 bg-outline/8 rounded-full overflow-hidden">
-              <div
-                className="h-full rounded-full transition-all duration-700 ease-out progress-gradient"
-                style={{ width: `${Math.min(progress, 100)}%` }}
-              />
-            </div>
+        {/* Sparkline */}
+        {chartData && chartData.length > 0 && (
+          <div className="w-20 h-10 shrink-0">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={chartData}>
+                <Line
+                  type="monotone"
+                  dataKey="v"
+                  stroke="#16a34a"
+                  strokeWidth={2}
+                  dot={false}
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
         )}
       </div>

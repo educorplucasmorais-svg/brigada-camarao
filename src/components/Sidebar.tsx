@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Calendar, Users, Briefcase, FileText,
-  Shield, Menu, X, LogOut
+  Shield, Menu, X, LogOut, MessageCircle
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { InstagramIcon } from './InstagramIcon';
 
 const navItems = [
   { to: '/admin', icon: LayoutDashboard, label: 'Painel', end: true },
@@ -36,23 +37,23 @@ export function Sidebar() {
   const sidebarContent = (
     <div className="flex flex-col h-full">
       {/* Brand Block */}
-      <div className="px-6 pt-6 pb-4">
-        <div className="flex items-center gap-3 mb-3">
+      <div className="px-5 pt-6 pb-5">
+        <div className="flex items-center gap-3 mb-4">
           <img
             src="/images/logo-brigada.png"
             alt="Brigada Camarão"
-            className="w-11 h-11 rounded-full object-cover shadow-lg shadow-primary/30 logo-pulse"
+            className="w-11 h-11 rounded-full object-cover shadow-lg shadow-[#ba100a]/30 logo-pulse"
           />
           <div>
-            <h1 className="text-sm font-black text-on-surface uppercase tracking-tight leading-tight font-headline">
+            <h1 className="text-sm font-black text-white uppercase tracking-tight leading-tight font-headline">
               Brigada Camarão
             </h1>
-            <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.15em] mt-0.5">
+            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.15em] mt-0.5">
               Sentinel Command
             </p>
           </div>
         </div>
-        <div className="h-px bg-gradient-to-r from-primary/20 via-outline-variant/30 to-transparent" />
+        <div className="h-px bg-gradient-to-r from-gray-600/40 via-gray-700/20 to-transparent" />
       </div>
 
       {/* Navigation */}
@@ -66,11 +67,11 @@ export function Sidebar() {
                 onClick={() => setMobileOpen(false)}
                 className={({ isActive }) =>
                   isActive
-                    ? 'flex items-center gap-4 bg-white text-primary font-bold rounded-l-full ml-4 pl-4 py-3 border-r-4 border-primary transition-all shadow-sm glow-primary'
-                    : 'flex items-center gap-4 text-on-surface-variant px-8 py-3 hover:bg-surface-container-high/60 hover:text-on-surface rounded-lg mx-3 transition-all card-hover'
+                    ? 'flex items-center gap-3 text-white font-bold bg-white/10 border-l-[3px] border-[#ba100a] pl-[17px] pr-4 py-3 mx-2 transition-all'
+                    : 'flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 pl-5 pr-4 py-3 mx-2 border-l-[3px] border-transparent transition-all'
                 }
               >
-                <item.icon className="w-5 h-5" />
+                <item.icon className="w-[18px] h-[18px]" />
                 <span className="text-sm">{item.label}</span>
               </NavLink>
             </li>
@@ -78,18 +79,43 @@ export function Sidebar() {
         </ul>
       </nav>
 
+      {/* Quick Social Links */}
+      <div className="px-5 py-3 border-t border-gray-700/40">
+        <p className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mb-2">Links Rápidos</p>
+        <div className="flex items-center gap-2">
+          <a
+            href="https://www.instagram.com/brigadacamarao/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#E1306C]/15 text-[#E1306C] hover:bg-[#E1306C]/25 transition-colors text-xs font-bold flex-1 justify-center"
+          >
+            <InstagramIcon className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Instagram</span>
+          </a>
+          <a
+            href="https://wa.me/5531999999999"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#25D366]/15 text-[#25D366] hover:bg-[#25D366]/25 transition-colors text-xs font-bold flex-1 justify-center"
+          >
+            <MessageCircle className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">WhatsApp</span>
+          </a>
+        </div>
+      </div>
+
       {/* User Section */}
-      <div className="px-5 py-4 border-t border-outline-variant/20">
+      <div className="px-5 py-4 border-t border-gray-700/40">
         {user && (
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-on-primary-container flex items-center justify-center shadow-md">
-              <span className="text-sm font-black text-on-primary">
+            <div className="w-10 h-10 rounded-full bg-[#ba100a] flex items-center justify-center shrink-0">
+              <span className="text-sm font-black text-white">
                 {user.name.split(' ').map(n => n[0]).slice(0, 2).join('')}
               </span>
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-bold text-on-surface truncate">{user.name}</p>
-              <span className="inline-block mt-0.5 px-2 py-0.5 rounded-full bg-primary-container text-on-primary-container text-[10px] font-black uppercase tracking-wider">
+              <p className="text-sm font-bold text-white truncate">{user.name}</p>
+              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
                 {roleLabel(user.role)}
               </span>
             </div>
@@ -97,7 +123,7 @@ export function Sidebar() {
         )}
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 text-on-surface-variant hover:text-error hover:bg-error-container/40 text-sm font-semibold transition-all py-2.5 px-3 rounded-xl"
+          className="w-full flex items-center gap-3 text-gray-500 hover:text-red-400 text-sm font-semibold transition-all py-2.5 px-1"
         >
           <LogOut className="w-4 h-4" />
           <span>Sair do Sistema</span>
@@ -110,24 +136,24 @@ export function Sidebar() {
     <>
       <button
         onClick={() => setMobileOpen(!mobileOpen)}
-        className="lg:hidden fixed top-3 left-3 z-50 p-3 bg-primary rounded-2xl text-on-primary shadow-xl shadow-primary/30 active:scale-95 transition-transform"
+        className="lg:hidden fixed top-3 left-3 z-50 p-3 bg-[#1e1e2d] rounded-xl text-white shadow-xl active:scale-95 transition-transform"
       >
         {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </button>
 
       {mobileOpen && (
-        <div className="lg:hidden fixed inset-0 bg-black/40 z-40" onClick={() => setMobileOpen(false)} />
+        <div className="lg:hidden fixed inset-0 bg-black/50 z-40" onClick={() => setMobileOpen(false)} />
       )}
 
       <aside
-        className={`lg:hidden fixed top-0 left-0 h-full w-[280px] sm:w-72 glass-strong z-40 transform transition-transform duration-300 shadow-2xl ${
+        className={`lg:hidden fixed top-0 left-0 h-full w-[280px] sm:w-72 bg-[#1e1e2d] z-40 transform transition-transform duration-300 shadow-2xl ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {sidebarContent}
       </aside>
 
-      <aside className="hidden lg:flex flex-col h-screen w-64 sidebar-gradient sticky top-0 border-r border-outline-variant/10">
+      <aside className="hidden lg:flex flex-col h-screen w-64 bg-[#1e1e2d] sticky top-0">
         {sidebarContent}
       </aside>
     </>

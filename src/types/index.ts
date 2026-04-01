@@ -19,6 +19,7 @@ export interface Event {
   budget: number;
   description?: string;
   uniform?: string;
+  whatsappGroup?: string;
 }
 
 export interface Vacancy {
