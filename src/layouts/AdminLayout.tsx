@@ -10,7 +10,7 @@ export function AdminLayout() {
   }
 
   return (
-    <div className="flex min-h-screen bg-surface">
+    <div className="flex min-h-screen bg-[#f5f5f7]">
       <Sidebar />
       <main className="flex-1 overflow-y-auto overflow-x-hidden">
         <div className="p-4 pt-16 sm:p-6 sm:pt-18 lg:p-8 lg:pt-8 lg:p-10">

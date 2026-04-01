@@ -8,29 +8,35 @@ const roleCards = [
   {
     id: 'admin' as const,
     title: 'Administrador',
-    subtitle: 'Dashboard Estratégico',
+    subtitle: 'Dashboard Estratégico.',
     desc: 'Gestão completa do sistema, relatórios e controle financeiro.',
-    tag: '@brigadacamarao.com',
-    icon: 'admin_panel_settings',
-    borderColor: 'border-primary-container',
+    tag: '@BRIGADACAMARAO.COM',
+    icon: 'shield',
+    iconBg: 'bg-[#8b0000]',
+    accentBar: 'from-[#ba100a] to-[#ff4444]',
+    tagColor: 'text-[#ff6b6b]',
   },
   {
     id: 'ct' as const,
     title: 'Coordenador',
-    subtitle: 'Gestão Tática',
+    subtitle: 'Gestão Tática.',
     desc: 'Coordenação de equipes, escalas e operações em campo.',
-    tag: 'Login + Senha',
-    icon: 'shield_person',
-    borderColor: 'border-secondary-container',
+    tag: 'LOGIN + SENHA',
+    icon: 'work',
+    iconBg: 'bg-[#1d4ed8]',
+    accentBar: 'from-[#2563eb] to-[#60a5fa]',
+    tagColor: 'text-[#60a5fa]',
   },
   {
     id: 'parceiro' as const,
     title: 'Parceiro',
-    subtitle: 'Acesso Rápido',
+    subtitle: 'Acesso Rápido.',
     desc: 'Bombeiro Civil — visualize eventos e candidate-se rapidamente.',
-    tag: 'Nome + CPF',
-    icon: 'local_fire_department',
-    borderColor: 'border-success',
+    tag: 'NOME + CPF',
+    icon: 'groups',
+    iconBg: 'bg-[#15803d]',
+    accentBar: 'from-[#16a34a] to-[#4ade80]',
+    tagColor: 'text-[#4ade80]',
   },
 ] as const;
 
@@ -119,75 +125,80 @@ export function LoginPage() {
   };
   const goBack = () => { resetForm(); setMode('select'); };
 
-  const inputCls = 'w-full px-4 py-3.5 bg-surface-container-low border-none rounded-2xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm outline-none';
-  const labelCls = 'block text-[11px] font-black text-on-surface-variant uppercase tracking-widest px-1 mb-1.5';
+  const inputCls = 'w-full px-4 py-3.5 bg-white/[0.06] border border-white/[0.08] rounded-xl text-white font-medium placeholder:text-white/25 focus:border-white/20 focus:ring-2 focus:ring-white/10 focus:bg-white/[0.08] transition-all text-sm outline-none';
+  const labelCls = 'block text-[10px] font-bold text-white/40 uppercase tracking-[0.15em] mb-1.5 pl-0.5';
 
-  // ═══ ROLE SELECTION ═══
+  // ═══ ROLE SELECTION — Stitch Dark Glassmorphism ═══
   if (mode === 'select') {
     return (
-      <div className="min-h-screen bg-surface flex flex-col items-center justify-center px-4 py-8">
-        <div className="w-full max-w-md">
-          {/* Logo & Header */}
-          <div className="flex flex-col items-center text-center mb-10">
-            <div className="mb-6">
+      <div className="min-h-screen bg-[#12121a] flex flex-col items-center justify-center px-4 py-8 relative overflow-hidden">
+        {/* Watermark seal */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.04]">
+          <img
+            src="/images/logo-brigada.png"
+            alt=""
+            className="w-[500px] h-[500px] sm:w-[600px] sm:h-[600px] object-contain"
+          />
+        </div>
+
+        <div className="w-full max-w-4xl relative z-10">
+          {/* Logo */}
+          <div className="text-center mb-10 sm:mb-14">
+            <div className="inline-block mb-6">
               <img
                 src="/images/logo-brigada.png"
                 alt="Brigada Camarão"
-                className="h-28 w-28 object-contain"
+                className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover mx-auto opacity-90"
               />
             </div>
-            <h1 className="text-3xl font-black tracking-tight text-primary-container leading-tight mb-2 uppercase">
-              Brigada Camarão
-            </h1>
-            <p className="text-xs font-bold text-on-surface-variant uppercase tracking-[0.2em] mb-2">
+            <h1 className="text-xl sm:text-2xl font-light text-white/70 tracking-[0.4em] uppercase">
               Sentinel Command
-            </p>
-            <p className="text-on-surface-variant text-sm font-medium">
-              Selecione seu tipo de acesso para continuar.
-            </p>
+            </h1>
           </div>
 
-          {/* 3 Role Cards */}
-          <div className="space-y-3">
+          {/* 3 Cards Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 max-w-3xl mx-auto">
             {roleCards.map((card) => (
               <button
                 key={card.id}
                 onClick={() => { resetForm(); setMode(card.id); }}
-                className={`w-full bg-surface-container-lowest p-5 rounded-2xl border-l-[6px] ${card.borderColor} shadow-sm hover:shadow-md transition-all active:scale-[0.99] text-left flex items-center gap-4 group`}
+                className="group relative bg-white/[0.04] backdrop-blur-xl rounded-2xl border border-white/[0.08] overflow-hidden text-center transition-all duration-300 hover:bg-white/[0.07] hover:border-white/[0.15] hover:scale-[1.02] active:scale-[0.98] flex flex-col"
               >
-                <div className="w-12 h-12 rounded-2xl bg-primary-container flex items-center justify-center shrink-0">
-                  <Icon name={card.icon} filled className="text-on-primary text-xl" />
+                {/* Card content */}
+                <div className="px-5 pt-7 pb-5 flex-1 flex flex-col items-center">
+                  {/* Icon circle */}
+                  <div className={`w-14 h-14 rounded-full ${card.iconBg} flex items-center justify-center mb-5 shadow-lg`}>
+                    <Icon name={card.icon} filled className="text-white text-2xl" />
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="text-lg font-bold text-white mb-1 tracking-tight">{card.title}</h3>
+
+                  {/* Subtitle (italic bold) */}
+                  <p className="text-xs font-semibold text-white/50 italic mb-3">{card.subtitle}</p>
+
+                  {/* Description */}
+                  <p className="text-[11px] text-white/30 leading-relaxed mb-5">
+                    {card.desc}
+                  </p>
+
+                  {/* Tag */}
+                  <div className="mt-auto">
+                    <span className={`text-[10px] font-black uppercase tracking-[0.2em] ${card.tagColor}`}>
+                      {card.tag}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-base font-black text-on-surface tracking-tight">{card.title}</h3>
-                  <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mt-0.5">{card.subtitle}</p>
-                  <p className="text-xs text-outline mt-1 leading-relaxed">{card.desc}</p>
-                </div>
-                <Icon name="arrow_forward" className="text-outline/40 group-hover:text-primary-container transition-colors" />
+
+                {/* Bottom accent bar */}
+                <div className={`h-[3px] bg-gradient-to-r ${card.accentBar} opacity-70 group-hover:opacity-100 transition-opacity`} />
               </button>
             ))}
           </div>
 
           {/* Footer */}
-          <div className="mt-8 pt-6 border-t border-surface-container-high">
-            <div className="flex items-center justify-center gap-2 text-on-surface-variant text-[11px] font-bold uppercase tracking-wider mb-4">
-              <Icon name="support_agent" filled className="text-lg" />
-              Precisa de ajuda com o acesso?
-            </div>
-            <div className="flex justify-center gap-6">
-              <a href="https://www.instagram.com/brigadacamarao/" target="_blank" rel="noopener noreferrer"
-                className="text-primary-container font-black text-xs uppercase tracking-wider hover:underline flex items-center gap-1">
-                <Icon name="photo_camera" className="text-base" /> Instagram
-              </a>
-              <a href="https://wa.me/5531999999999" target="_blank" rel="noopener noreferrer"
-                className="text-success font-black text-xs uppercase tracking-wider hover:underline flex items-center gap-1">
-                <Icon name="chat" className="text-base" /> WhatsApp
-              </a>
-            </div>
-          </div>
-
-          <p className="text-center text-[10px] text-outline/50 mt-6 font-bold uppercase tracking-wider">
-            © 2026 Brigada Camarão · Prevenir · Combater · Salvar
+          <p className="text-center text-[10px] text-white/20 mt-10 tracking-wider font-medium">
+            © 2026 Brigada Camarão • Prevenir • Combater • Salvar • LGPD
           </p>
         </div>
       </div>
@@ -197,25 +208,25 @@ export function LoginPage() {
   // ═══ REGISTRATION SUCCESS ═══
   if (registered) {
     return (
-      <div className="min-h-screen bg-surface flex items-center justify-center p-4">
-        <div className="w-full max-w-md p-8 bg-surface-container-lowest shadow-2xl rounded-3xl text-center">
-          <div className="w-16 h-16 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-5">
-            <Icon name="check_circle" filled className="text-success text-3xl" />
+      <div className="min-h-screen bg-[#12121a] flex items-center justify-center p-4">
+        <div className="w-full max-w-sm bg-white/[0.04] backdrop-blur-xl rounded-2xl border border-white/[0.08] p-8 text-center">
+          <div className="w-16 h-16 rounded-full bg-[#15803d]/20 flex items-center justify-center mx-auto mb-5">
+            <Icon name="check_circle" filled className="text-[#4ade80] text-3xl" />
           </div>
-          <h2 className="text-xl font-black text-on-surface uppercase mb-2">Cadastro Enviado</h2>
-          <p className="text-sm text-on-surface-variant mb-6 leading-relaxed">
+          <h2 className="text-xl font-bold text-white mb-2">Cadastro Enviado</h2>
+          <p className="text-sm text-white/40 mb-6 leading-relaxed">
             Aguardando aprovação do administrador. Você será notificado.
           </p>
-          <div className="p-4 rounded-2xl bg-surface-container border-l-[6px] border-success mb-6">
-            <div className="flex gap-3">
-              <Icon name="hourglass_top" filled className="text-success text-xl shrink-0" />
-              <p className="text-xs font-black text-on-surface uppercase tracking-wider">
+          <div className="bg-[#15803d]/10 border border-[#4ade80]/15 rounded-xl p-3.5 mb-6">
+            <div className="flex items-center justify-center gap-2">
+              <Icon name="hourglass_top" filled className="text-[#4ade80] text-lg" />
+              <p className="text-[11px] text-[#4ade80]/80 font-bold uppercase tracking-wider">
                 Status: Pré-aprovação pendente
               </p>
             </div>
           </div>
           <button onClick={goBack}
-            className="w-full py-3.5 bg-surface-container-low text-on-surface font-black rounded-2xl text-sm hover:bg-surface-container transition-all uppercase tracking-tight">
+            className="w-full py-3.5 bg-white/[0.06] text-white font-bold rounded-xl text-sm hover:bg-white/[0.1] transition-all border border-white/[0.08]">
             Voltar ao Início
           </button>
         </div>
@@ -225,221 +236,218 @@ export function LoginPage() {
 
   // ═══ FORM VIEWS ═══
   const cfgMap = {
-    admin: { title: 'Administrador', icon: 'admin_panel_settings', color: 'primary-container', domain: '@brigadacamarao.com' },
-    ct: { title: 'Coordenador Técnico', icon: 'shield_person', color: 'secondary-container', domain: null },
-    parceiro: { title: 'Parceiro — Bombeiro Civil', icon: 'local_fire_department', color: 'success', domain: null },
-    register: { title: 'Novo Cadastro', icon: 'person_add', color: 'success', domain: null },
+    admin: { title: 'Administrador', icon: 'shield', iconBg: 'bg-[#8b0000]', accent: '#ba100a', domain: '@brigadacamarao.com' },
+    ct: { title: 'Coordenador Técnico', icon: 'work', iconBg: 'bg-[#1d4ed8]', accent: '#2563eb', domain: null },
+    parceiro: { title: 'Parceiro', icon: 'groups', iconBg: 'bg-[#15803d]', accent: '#16a34a', domain: null },
+    register: { title: 'Novo Cadastro', icon: 'person_add', iconBg: 'bg-[#15803d]', accent: '#16a34a', domain: null },
   };
   const cfg = cfgMap[mode];
 
   return (
-    <div className="min-h-screen bg-surface flex items-center justify-center p-4">
-      <main className="w-full max-w-md p-6 md:p-10 bg-surface-container-lowest shadow-2xl rounded-3xl my-8 mx-auto">
-        {/* Back button */}
+    <div className="min-h-screen bg-[#12121a] flex items-center justify-center p-4 sm:p-6 relative overflow-hidden">
+      {/* Watermark */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03]">
+        <img src="/images/logo-brigada.png" alt="" className="w-[500px] h-[500px] object-contain" />
+      </div>
+
+      <div className="w-full max-w-[420px] relative z-10">
+        {/* Back */}
         <button onClick={goBack}
-          className="flex items-center gap-1.5 text-xs font-bold text-on-surface-variant hover:text-primary-container mb-6 transition-colors uppercase tracking-wider">
+          className="flex items-center gap-2 text-xs text-white/30 hover:text-white/60 mb-5 transition-colors font-bold uppercase tracking-wider">
           <Icon name="arrow_back" className="text-lg" />
           Voltar
         </button>
 
-        {/* Header */}
-        <div className="flex flex-col items-center text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-primary-container flex items-center justify-center mb-4">
-            <Icon name={cfg.icon} filled className="text-on-primary text-2xl" />
-          </div>
-          <h2 className="text-2xl font-black tracking-tight text-primary-container leading-tight mb-1 uppercase">
-            {cfg.title}
-          </h2>
-          {cfg.domain && (
-            <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-[0.2em]">
-              {cfg.domain}
-            </p>
-          )}
-        </div>
+        <div className="bg-white/[0.04] backdrop-blur-xl rounded-2xl border border-white/[0.08] overflow-hidden shadow-2xl">
+          {/* Top accent bar */}
+          <div className="h-[3px]" style={{ background: `linear-gradient(90deg, ${cfg.accent}, ${cfg.accent}88)` }} />
 
-        {/* Error */}
-        {error && (
-          <div className="p-4 rounded-2xl bg-error-container border-l-[6px] border-error mb-5">
-            <div className="flex gap-3">
-              <Icon name="error" filled className="text-on-error-container text-xl shrink-0" />
-              <p className="text-xs font-black text-on-error-container">{error}</p>
-            </div>
-          </div>
-        )}
-
-        {/* ── Admin Form ── */}
-        {mode === 'admin' && (
-          <form onSubmit={handleAdminLogin} className="space-y-5">
-            <div className="space-y-1.5">
-              <label className={labelCls}>E-mail</label>
-              <div className="relative">
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                  className={inputCls} placeholder="admin@brigadacamarao.com" required />
-                <Icon name="mail" className="absolute right-4 top-1/2 -translate-y-1/2 text-outline/30 text-lg" />
+          <div className="p-6 sm:p-8">
+            {/* Header */}
+            <div className="text-center mb-7">
+              <div className={`w-14 h-14 rounded-full ${cfg.iconBg} flex items-center justify-center mx-auto mb-4 shadow-lg`}>
+                <Icon name={cfg.icon} filled className="text-white text-2xl" />
               </div>
-            </div>
-            <div className="space-y-1.5">
-              <label className={labelCls}>Senha</label>
-              <div className="relative">
-                <input type={showPassword ? 'text' : 'password'} value={password}
-                  onChange={(e) => setPassword(e.target.value)} className={inputCls + ' pr-12'}
-                  placeholder="••••••••" required />
-                <button type="button" onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-outline/30 hover:text-primary-container transition-colors">
-                  <Icon name={showPassword ? 'visibility_off' : 'visibility'} className="text-lg" />
-                </button>
-              </div>
-            </div>
-            <div className="pt-2">
-              <button type="submit" disabled={loading}
-                className="w-full py-4 bg-primary-container text-on-primary font-black text-base rounded-2xl shadow-xl shadow-primary/30 hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 uppercase tracking-tight disabled:opacity-50">
-                {loading ? 'Entrando...' : <><span>Entrar</span><Icon name="arrow_forward" className="text-xl" /></>}
-              </button>
-            </div>
-          </form>
-        )}
-
-        {/* ── CT Form ── */}
-        {mode === 'ct' && (
-          <form onSubmit={handleCTLogin} className="space-y-5">
-            <div className="space-y-1.5">
-              <label className={labelCls}>E-mail</label>
-              <div className="relative">
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                  className={inputCls} placeholder="coordenador@email.com" required />
-                <Icon name="mail" className="absolute right-4 top-1/2 -translate-y-1/2 text-outline/30 text-lg" />
-              </div>
-            </div>
-            <div className="space-y-1.5">
-              <label className={labelCls}>Senha</label>
-              <div className="relative">
-                <input type={showPassword ? 'text' : 'password'} value={password}
-                  onChange={(e) => setPassword(e.target.value)} className={inputCls + ' pr-12'}
-                  placeholder="••••••••" required />
-                <button type="button" onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-outline/30 hover:text-primary-container transition-colors">
-                  <Icon name={showPassword ? 'visibility_off' : 'visibility'} className="text-lg" />
-                </button>
-              </div>
-            </div>
-            <div className="pt-2">
-              <button type="submit" disabled={loading}
-                className="w-full py-4 bg-primary-container text-on-primary font-black text-base rounded-2xl shadow-xl shadow-primary/30 hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 uppercase tracking-tight disabled:opacity-50">
-                {loading ? 'Entrando...' : <><span>Entrar</span><Icon name="arrow_forward" className="text-xl" /></>}
-              </button>
-            </div>
-          </form>
-        )}
-
-        {/* ── Parceiro Form ── */}
-        {mode === 'parceiro' && (
-          <form onSubmit={handleParceiroLogin} className="space-y-5">
-            <div className="space-y-1.5">
-              <label className={labelCls}>Nome Completo</label>
-              <div className="relative">
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)}
-                  className={inputCls} placeholder="Como no seu RG/CNH" required />
-                <Icon name="person" className="absolute right-4 top-1/2 -translate-y-1/2 text-outline/30 text-lg" />
-              </div>
-            </div>
-            <div className="space-y-1.5">
-              <label className={labelCls}>CPF</label>
-              <div className="relative">
-                <input type="text" value={cpf} onChange={(e) => setCpf(formatCpf(e.target.value))}
-                  className={inputCls} placeholder="000.000.000-00" maxLength={14} required />
-                <Icon name="badge" className="absolute right-4 top-1/2 -translate-y-1/2 text-primary-container text-lg" />
-              </div>
+              <h2 className="text-xl font-bold text-white mb-1">{cfg.title}</h2>
+              {cfg.domain && (
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: cfg.accent }}>
+                  {cfg.domain}
+                </p>
+              )}
             </div>
 
-            <div className="p-4 rounded-2xl bg-surface-container border-l-[6px] border-secondary-container shadow-sm">
-              <div className="flex gap-3">
-                <Icon name="info" filled className="text-secondary-container text-xl shrink-0" />
-                <div className="space-y-1">
-                  <p className="text-xs font-black text-on-surface uppercase tracking-wider">Acesso rápido</p>
-                  <p className="text-[11px] leading-relaxed text-on-surface-variant font-semibold">
-                    Use o <strong>CPF</strong> cadastrado para acessar eventos disponíveis e se candidatar.
+            {/* Error */}
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-3.5 mb-5 flex items-center gap-2.5">
+                <Icon name="error" filled className="text-red-400 text-lg shrink-0" />
+                <p className="text-xs font-medium text-red-400">{error}</p>
+              </div>
+            )}
+
+            {/* ── Admin Form ── */}
+            {mode === 'admin' && (
+              <form onSubmit={handleAdminLogin} className="space-y-4">
+                <div>
+                  <label className={labelCls}>E-mail</label>
+                  <div className="relative">
+                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                      className={inputCls} placeholder="admin@brigadacamarao.com" required />
+                    <Icon name="mail" className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/15 text-lg" />
+                  </div>
+                </div>
+                <div>
+                  <label className={labelCls}>Senha</label>
+                  <div className="relative">
+                    <input type={showPassword ? 'text' : 'password'} value={password}
+                      onChange={(e) => setPassword(e.target.value)} className={inputCls + ' pr-12'}
+                      placeholder="••••••••" required />
+                    <button type="button" onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/15 hover:text-white/40 transition-colors">
+                      <Icon name={showPassword ? 'visibility_off' : 'visibility'} className="text-lg" />
+                    </button>
+                  </div>
+                </div>
+                <div className="pt-2">
+                  <button type="submit" disabled={loading}
+                    className="w-full py-3.5 font-bold text-white rounded-xl text-sm flex items-center justify-center gap-2 shadow-lg transition-all active:scale-[0.98] disabled:opacity-50"
+                    style={{ background: `linear-gradient(135deg, ${cfg.accent}, ${cfg.accent}cc)` }}>
+                    {loading ? 'Entrando...' : <><span>Entrar</span><Icon name="arrow_forward" className="text-lg" /></>}
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* ── CT Form ── */}
+            {mode === 'ct' && (
+              <form onSubmit={handleCTLogin} className="space-y-4">
+                <div>
+                  <label className={labelCls}>E-mail</label>
+                  <div className="relative">
+                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                      className={inputCls} placeholder="coordenador@email.com" required />
+                    <Icon name="mail" className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/15 text-lg" />
+                  </div>
+                </div>
+                <div>
+                  <label className={labelCls}>Senha</label>
+                  <div className="relative">
+                    <input type={showPassword ? 'text' : 'password'} value={password}
+                      onChange={(e) => setPassword(e.target.value)} className={inputCls + ' pr-12'}
+                      placeholder="••••••••" required />
+                    <button type="button" onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/15 hover:text-white/40 transition-colors">
+                      <Icon name={showPassword ? 'visibility_off' : 'visibility'} className="text-lg" />
+                    </button>
+                  </div>
+                </div>
+                <div className="pt-2">
+                  <button type="submit" disabled={loading}
+                    className="w-full py-3.5 font-bold text-white rounded-xl text-sm flex items-center justify-center gap-2 shadow-lg transition-all active:scale-[0.98] disabled:opacity-50"
+                    style={{ background: `linear-gradient(135deg, ${cfg.accent}, ${cfg.accent}cc)` }}>
+                    {loading ? 'Entrando...' : <><span>Entrar</span><Icon name="arrow_forward" className="text-lg" /></>}
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* ── Parceiro Form ── */}
+            {mode === 'parceiro' && (
+              <form onSubmit={handleParceiroLogin} className="space-y-4">
+                <div>
+                  <label className={labelCls}>Nome Completo</label>
+                  <div className="relative">
+                    <input type="text" value={name} onChange={(e) => setName(e.target.value)}
+                      className={inputCls} placeholder="Como no seu RG/CNH" required />
+                    <Icon name="person" className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/15 text-lg" />
+                  </div>
+                </div>
+                <div>
+                  <label className={labelCls}>CPF</label>
+                  <div className="relative">
+                    <input type="text" value={cpf} onChange={(e) => setCpf(formatCpf(e.target.value))}
+                      className={inputCls} placeholder="000.000.000-00" maxLength={14} required />
+                    <Icon name="badge" className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/15 text-lg" />
+                  </div>
+                </div>
+                <div className="pt-2 space-y-3">
+                  <button type="submit" disabled={loading}
+                    className="w-full py-3.5 font-bold text-white rounded-xl text-sm flex items-center justify-center gap-2 shadow-lg transition-all active:scale-[0.98] disabled:opacity-50"
+                    style={{ background: `linear-gradient(135deg, ${cfg.accent}, ${cfg.accent}cc)` }}>
+                    {loading ? 'Verificando...' : <><span>Acessar Eventos</span><Icon name="arrow_forward" className="text-lg" /></>}
+                  </button>
+                  <div className="pt-1 border-t border-white/[0.06]">
+                    <button type="button"
+                      onClick={() => { resetForm(); setMode('register'); }}
+                      className="w-full py-2.5 text-xs font-bold text-[#4ade80]/70 hover:text-[#4ade80] hover:bg-[#4ade80]/5 rounded-xl transition-all flex items-center justify-center gap-2 uppercase tracking-wider">
+                      <Icon name="person_add" className="text-base" />
+                      Primeiro acesso? Registre-se
+                    </button>
+                  </div>
+                </div>
+              </form>
+            )}
+
+            {/* ── Register Form ── */}
+            {mode === 'register' && (
+              <form onSubmit={handleRegister} className="space-y-4">
+                <div className="bg-[#15803d]/10 border border-[#4ade80]/10 rounded-xl p-3 flex items-start gap-2.5">
+                  <Icon name="info" filled className="text-[#4ade80] text-base shrink-0 mt-0.5" />
+                  <p className="text-[11px] text-[#4ade80]/70 font-medium leading-relaxed">
+                    Cadastro sujeito a <strong className="text-[#4ade80]/90">aprovação do administrador</strong>. Você será notificado.
                   </p>
                 </div>
-              </div>
-            </div>
+                <div>
+                  <label className={labelCls}>Nome Completo</label>
+                  <div className="relative">
+                    <input type="text" value={name} onChange={(e) => setName(e.target.value)}
+                      className={inputCls} placeholder="Como no seu RG/CNH" required />
+                    <Icon name="person" className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/15 text-lg" />
+                  </div>
+                </div>
+                <div>
+                  <label className={labelCls}>CPF</label>
+                  <div className="relative">
+                    <input type="text" value={cpf} onChange={(e) => setCpf(formatCpf(e.target.value))}
+                      className={inputCls} placeholder="000.000.000-00" maxLength={14} required />
+                    <Icon name="badge" className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/15 text-lg" />
+                  </div>
+                </div>
+                <div>
+                  <label className={labelCls}>Telefone (opcional)</label>
+                  <div className="relative">
+                    <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)}
+                      className={inputCls} placeholder="(31) 99999-9999" />
+                    <Icon name="phone" className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/15 text-lg" />
+                  </div>
+                </div>
+                <div className="pt-2">
+                  <button type="submit" disabled={loading}
+                    className="w-full py-3.5 font-bold text-white rounded-xl text-sm flex items-center justify-center gap-2 shadow-lg transition-all active:scale-[0.98] disabled:opacity-50"
+                    style={{ background: `linear-gradient(135deg, ${cfg.accent}, ${cfg.accent}cc)` }}>
+                    {loading ? 'Enviando...' : <><span>Enviar para Aprovação</span><Icon name="arrow_forward" className="text-lg" /></>}
+                  </button>
+                </div>
+              </form>
+            )}
 
-            <div className="pt-2 space-y-3">
-              <button type="submit" disabled={loading}
-                className="w-full py-4 bg-primary-container text-on-primary font-black text-base rounded-2xl shadow-xl shadow-primary/30 hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 uppercase tracking-tight disabled:opacity-50">
-                {loading ? 'Verificando...' : <><span>Acessar Eventos</span><Icon name="arrow_forward" className="text-xl" /></>}
-              </button>
-              <button type="button"
-                onClick={() => { resetForm(); setMode('register'); }}
-                className="w-full py-3 text-sm font-black text-success uppercase tracking-wider hover:bg-success/5 rounded-2xl transition-all flex items-center justify-center gap-2">
-                <Icon name="person_add" className="text-lg" />
-                Primeiro acesso? Registre-se
-              </button>
-            </div>
-          </form>
-        )}
-
-        {/* ── Register Form ── */}
-        {mode === 'register' && (
-          <form onSubmit={handleRegister} className="space-y-5">
-            <div className="p-4 rounded-2xl bg-surface-container border-l-[6px] border-success shadow-sm">
-              <div className="flex gap-3">
-                <Icon name="info" filled className="text-success text-xl shrink-0" />
-                <p className="text-[11px] leading-relaxed text-on-surface-variant font-semibold">
-                  Cadastro sujeito a <strong>aprovação do administrador</strong>. Você será notificado.
+            {/* Demo hint */}
+            {(mode === 'admin' || mode === 'ct') && (
+              <div className="mt-5 pt-4 border-t border-white/[0.06]">
+                <p className="text-[9px] font-bold text-white/15 uppercase tracking-[0.15em] mb-1">Demo</p>
+                <p className="text-[11px] text-white/25">
+                  <span className="font-semibold text-white/40">
+                    {mode === 'admin' ? 'admin@brigadacamarao.com' : 'coo@brigadacamarao.com'}
+                  </span> — qualquer senha
                 </p>
               </div>
-            </div>
-            <div className="space-y-1.5">
-              <label className={labelCls}>Nome Completo</label>
-              <div className="relative">
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)}
-                  className={inputCls} placeholder="Como no seu RG/CNH" required />
-                <Icon name="person" className="absolute right-4 top-1/2 -translate-y-1/2 text-outline/30 text-lg" />
-              </div>
-            </div>
-            <div className="space-y-1.5">
-              <label className={labelCls}>CPF</label>
-              <div className="relative">
-                <input type="text" value={cpf} onChange={(e) => setCpf(formatCpf(e.target.value))}
-                  className={inputCls} placeholder="000.000.000-00" maxLength={14} required />
-                <Icon name="badge" className="absolute right-4 top-1/2 -translate-y-1/2 text-primary-container text-lg" />
-              </div>
-            </div>
-            <div className="space-y-1.5">
-              <label className={labelCls}>Telefone (opcional)</label>
-              <div className="relative">
-                <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)}
-                  className={inputCls} placeholder="(31) 99999-9999" />
-                <Icon name="phone" className="absolute right-4 top-1/2 -translate-y-1/2 text-outline/30 text-lg" />
-              </div>
-            </div>
-            <div className="pt-2">
-              <button type="submit" disabled={loading}
-                className="w-full py-4 bg-primary-container text-on-primary font-black text-base rounded-2xl shadow-xl shadow-primary/30 hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 uppercase tracking-tight disabled:opacity-50">
-                {loading ? 'Enviando...' : <><span>Enviar para Aprovação</span><Icon name="arrow_forward" className="text-xl" /></>}
-              </button>
-            </div>
-          </form>
-        )}
-
-        {/* Demo hint */}
-        {(mode === 'admin' || mode === 'ct') && (
-          <div className="mt-6 pt-5 border-t border-surface-container-high">
-            <p className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest mb-1">Demo</p>
-            <p className="text-xs text-outline font-medium">
-              <span className="font-bold text-on-surface">
-                {mode === 'admin' ? 'admin@brigadacamarao.com' : 'coo@brigadacamarao.com'}
-              </span> — qualquer senha
-            </p>
+            )}
           </div>
-        )}
+        </div>
 
-        {/* Terms footer */}
-        <p className="text-center text-[10px] font-black text-on-surface-variant uppercase tracking-widest mt-6">
-          Ao prosseguir, você aceita nossos{' '}
-          <a className="text-primary-container hover:underline" href="#">Termos de Atuação</a>
+        <p className="text-center text-[10px] text-white/15 mt-6 tracking-wider font-medium">
+          © 2026 Brigada Camarão • LGPD
         </p>
-      </main>
+      </div>
     </div>
   );
 }

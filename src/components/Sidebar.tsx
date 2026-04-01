@@ -46,17 +46,18 @@ export function Sidebar() {
           <img
             src="/images/logo-brigada.png"
             alt="Brigada Camarão"
-            className="w-11 h-11 rounded-full object-cover shadow-md"
+            className="w-11 h-11 rounded-full object-cover shadow-lg"
           />
           <div>
-            <h1 className="text-sm font-black text-on-surface uppercase tracking-tight leading-tight">
+            <h1 className="text-sm font-black text-white uppercase tracking-tight leading-tight">
               Brigada Camarão
             </h1>
-            <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.15em] mt-0.5">
+            <p className="text-[10px] font-bold text-white/40 uppercase tracking-[0.15em] mt-0.5">
               Sentinel Command
             </p>
           </div>
         </div>
+        <div className="h-px bg-white/[0.06]" />
       </div>
 
       {/* Navigation */}
@@ -70,8 +71,8 @@ export function Sidebar() {
                 onClick={() => setMobileOpen(false)}
                 className={({ isActive }) =>
                   isActive
-                    ? 'flex items-center gap-4 bg-surface-container-lowest text-primary-container font-bold rounded-l-full ml-4 pl-4 py-3 border-r-4 border-primary-container transition-all'
-                    : 'flex items-center gap-4 text-on-surface-variant px-8 py-3 hover:text-primary-container transition-all'
+                    ? 'flex items-center gap-4 bg-white/[0.08] text-white font-bold rounded-l-full ml-4 pl-4 py-3 border-r-4 border-[#ba100a] transition-all'
+                    : 'flex items-center gap-4 text-white/40 px-8 py-3 hover:text-white/70 hover:bg-white/[0.03] transition-all'
                 }
               >
                 {({ isActive }) => (
@@ -87,14 +88,14 @@ export function Sidebar() {
       </nav>
 
       {/* Quick Social Links */}
-      <div className="px-5 py-3 border-t border-surface-container-high">
-        <p className="text-[9px] font-black text-on-surface-variant uppercase tracking-widest mb-2">Links Rápidos</p>
+      <div className="px-5 py-3 border-t border-white/[0.06]">
+        <p className="text-[9px] font-black text-white/20 uppercase tracking-widest mb-2">Links Rápidos</p>
         <div className="flex items-center gap-2">
           <a
             href="https://www.instagram.com/brigadacamarao/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-[#E1306C]/10 text-[#E1306C] hover:bg-[#E1306C]/20 transition-colors text-xs font-bold flex-1 justify-center"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#E1306C]/15 text-[#E1306C] hover:bg-[#E1306C]/25 transition-colors text-xs font-bold flex-1 justify-center"
           >
             <Icon name="photo_camera" className="text-base" />
             <span className="hidden sm:inline">Instagram</span>
@@ -103,7 +104,7 @@ export function Sidebar() {
             href="https://wa.me/5531999999999"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366]/20 transition-colors text-xs font-bold flex-1 justify-center"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#25D366]/15 text-[#25D366] hover:bg-[#25D366]/25 transition-colors text-xs font-bold flex-1 justify-center"
           >
             <Icon name="chat" className="text-base" />
             <span className="hidden sm:inline">WhatsApp</span>
@@ -112,17 +113,17 @@ export function Sidebar() {
       </div>
 
       {/* User Section */}
-      <div className="px-5 py-4 border-t border-surface-container-high">
+      <div className="px-5 py-4 border-t border-white/[0.06]">
         {user && (
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
-              <span className="text-sm font-black text-on-primary">
+            <div className="w-10 h-10 rounded-full bg-[#ba100a] flex items-center justify-center shrink-0">
+              <span className="text-sm font-black text-white">
                 {user.name.split(' ').map(n => n[0]).slice(0, 2).join('')}
               </span>
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-bold text-on-surface truncate">{user.name}</p>
-              <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
+              <p className="text-sm font-bold text-white truncate">{user.name}</p>
+              <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">
                 {roleLabel(user.role)}
               </span>
             </div>
@@ -130,7 +131,7 @@ export function Sidebar() {
         )}
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 text-on-surface-variant hover:text-error text-sm font-semibold transition-all py-2.5 px-1 rounded-xl hover:bg-error/5"
+          className="w-full flex items-center gap-3 text-white/25 hover:text-red-400 text-sm font-semibold transition-all py-2.5 px-1 rounded-xl hover:bg-white/[0.03]"
         >
           <Icon name="logout" className="text-lg" />
           <span>Sair do Sistema</span>
@@ -144,19 +145,19 @@ export function Sidebar() {
       {/* Mobile toggle */}
       <button
         onClick={() => setMobileOpen(!mobileOpen)}
-        className="lg:hidden fixed top-3 left-3 z-50 p-3 bg-surface-container-lowest rounded-2xl text-on-surface shadow-lg active:scale-95 transition-transform border border-surface-container-high"
+        className="lg:hidden fixed top-3 left-3 z-50 p-3 bg-[#1a1a2e] rounded-xl text-white shadow-xl active:scale-95 transition-transform"
       >
         <Icon name={mobileOpen ? 'close' : 'menu'} className="text-xl" />
       </button>
 
       {/* Mobile overlay */}
       {mobileOpen && (
-        <div className="lg:hidden fixed inset-0 bg-black/30 z-40" onClick={() => setMobileOpen(false)} />
+        <div className="lg:hidden fixed inset-0 bg-black/50 z-40" onClick={() => setMobileOpen(false)} />
       )}
 
       {/* Mobile sidebar */}
       <aside
-        className={`lg:hidden fixed top-0 left-0 h-full w-[280px] sm:w-72 bg-surface-container-low z-40 transform transition-transform duration-300 shadow-2xl ${
+        className={`lg:hidden fixed top-0 left-0 h-full w-[280px] sm:w-72 bg-[#1a1a2e] z-40 transform transition-transform duration-300 shadow-2xl ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -164,7 +165,7 @@ export function Sidebar() {
       </aside>
 
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex flex-col h-screen w-64 bg-surface-container-low sticky top-0">
+      <aside className="hidden lg:flex flex-col h-screen w-64 bg-[#1a1a2e] sticky top-0">
         {sidebarContent}
       </aside>
     </>
