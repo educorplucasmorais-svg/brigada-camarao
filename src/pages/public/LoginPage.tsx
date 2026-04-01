@@ -131,57 +131,101 @@ export function LoginPage() {
   };
   const goBack = () => { resetForm(); setMode('select'); };
 
-  // ═══ ROLE SELECTION — Stitch Dark Glassmorphism ═══
+  // ═══ ROLE SELECTION — Premium Dark UI ═══
   if (mode === 'select') {
     return (
-      <div className="min-h-screen bg-[#12121a] flex flex-col items-center justify-center px-4 py-8 relative overflow-hidden">
-        {/* Watermark seal */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.04]">
-          <img src="/images/logo-brigada.png" alt=""
-            className="w-[500px] h-[500px] sm:w-[600px] sm:h-[600px] object-contain" />
-        </div>
+      <div className="fixed inset-0 bg-[#0a0a12] flex flex-col items-center justify-center px-4 py-6 overflow-auto">
+        {/* Ambient glow effects */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#ba100a]/[0.06] rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-0 left-1/4 w-[400px] h-[200px] bg-[#2563eb]/[0.04] rounded-full blur-[100px] pointer-events-none" />
 
-        <div className="w-full max-w-4xl relative z-10">
-          {/* Logo */}
-          <div className="text-center mb-10 sm:mb-14">
-            <div className="inline-block mb-6">
+        <div className="w-full max-w-[840px] relative z-10">
+          {/* Logo + Title */}
+          <div className="text-center mb-12 sm:mb-16">
+            <div className="relative inline-block mb-5">
+              <div className="absolute inset-0 bg-[#ba100a]/20 rounded-full blur-xl scale-150" />
               <img src="/images/logo-brigada.png" alt="Brigada Camarão"
-                className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover mx-auto opacity-90" />
+                className="relative w-16 h-16 sm:w-[72px] sm:h-[72px] object-contain mx-auto drop-shadow-2xl" />
             </div>
-            <h1 className="text-xl sm:text-2xl font-light text-white/70 tracking-[0.4em] uppercase">
+            <h1 className="text-[13px] sm:text-[15px] font-medium text-white/40 tracking-[0.5em] uppercase mb-1">
               Sentinel Command
             </h1>
+            <div className="w-12 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mx-auto mt-4" />
           </div>
 
-          {/* 3 Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 max-w-3xl mx-auto">
-            {roleCards.map((card) => (
-              <button
-                key={card.id}
-                onClick={() => { resetForm(); setMode(card.id); }}
-                className={`group relative bg-white/[0.04] backdrop-blur-xl rounded-2xl border border-white/[0.08] overflow-hidden text-center transition-all duration-300 hover:bg-white/[0.07] hover:${card.borderGlow} hover:scale-[1.02] active:scale-[0.98] flex flex-col`}
-              >
-                <div className="px-5 pt-7 pb-5 flex-1 flex flex-col items-center">
-                  <div className={`w-14 h-14 rounded-full ${card.iconBg} flex items-center justify-center mb-5 shadow-lg`}>
-                    <Icon name={card.icon} filled className="text-white text-2xl" />
+          {/* 3 Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 max-w-[780px] mx-auto px-2">
+            {roleCards.map((card) => {
+              const colors: Record<string, { border: string; glow: string; iconRing: string }> = {
+                admin: { border: 'rgba(186,16,10,0.25)', glow: 'rgba(186,16,10,0.08)', iconRing: 'rgba(186,16,10,0.3)' },
+                ct: { border: 'rgba(37,99,235,0.25)', glow: 'rgba(37,99,235,0.08)', iconRing: 'rgba(37,99,235,0.3)' },
+                parceiro: { border: 'rgba(22,163,74,0.25)', glow: 'rgba(22,163,74,0.08)', iconRing: 'rgba(22,163,74,0.3)' },
+              };
+              const c = colors[card.id] || colors.admin;
+              return (
+                <button
+                  key={card.id}
+                  onClick={() => { resetForm(); setMode(card.id); }}
+                  className="group relative rounded-2xl text-center transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] flex flex-col cursor-pointer"
+                  style={{
+                    background: `linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.015) 100%)`,
+                    border: `1px solid ${c.border}`,
+                    boxShadow: `0 4px 30px ${c.glow}, inset 0 1px 0 rgba(255,255,255,0.04)`,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.boxShadow = `0 8px 40px ${c.glow.replace('0.08', '0.18')}, inset 0 1px 0 rgba(255,255,255,0.06)`;
+                    e.currentTarget.style.borderColor = c.border.replace('0.25', '0.5');
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.boxShadow = `0 4px 30px ${c.glow}, inset 0 1px 0 rgba(255,255,255,0.04)`;
+                    e.currentTarget.style.borderColor = c.border;
+                  }}
+                >
+                  <div className="px-6 pt-8 pb-6 flex-1 flex flex-col items-center">
+                    {/* Icon with ring */}
+                    <div className="relative mb-5">
+                      <div className="absolute inset-0 rounded-full scale-[1.6] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                        style={{ background: `radial-gradient(circle, ${c.iconRing}, transparent 70%)` }} />
+                      <div className={`relative w-12 h-12 rounded-xl ${card.iconBg} flex items-center justify-center shadow-lg`}
+                        style={{ boxShadow: `0 4px 15px ${c.iconRing}` }}>
+                        <Icon name={card.icon} filled className="text-white text-xl" />
+                      </div>
+                    </div>
+
+                    <h3 className="text-base font-bold text-white/90 mb-0.5 tracking-tight">{card.title}</h3>
+                    <p className="text-[11px] font-medium text-white/35 italic mb-3">{card.subtitle}</p>
+                    <p className="text-[11px] text-white/25 leading-relaxed mb-5 max-w-[200px]">{card.desc}</p>
+
+                    <div className="mt-auto">
+                      <span className={`inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.2em] ${card.tagColor} opacity-80 group-hover:opacity-100 transition-opacity`}>
+                        <span className="w-1 h-1 rounded-full bg-current" />
+                        {card.tag}
+                      </span>
+                    </div>
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-1 tracking-tight">{card.title}</h3>
-                  <p className="text-xs font-semibold text-white/50 italic mb-3">{card.subtitle}</p>
-                  <p className="text-[11px] text-white/30 leading-relaxed mb-5">{card.desc}</p>
-                  <div className="mt-auto">
-                    <span className={`text-[10px] font-black uppercase tracking-[0.2em] ${card.tagColor}`}>
-                      {card.tag}
-                    </span>
-                  </div>
-                </div>
-                <div className={`h-[3px] bg-gradient-to-r ${card.accentBar} opacity-70 group-hover:opacity-100 transition-opacity`} />
-              </button>
-            ))}
+
+                  {/* Bottom accent line */}
+                  <div className="h-px mx-4 mb-0 rounded-full opacity-50 group-hover:opacity-100 transition-opacity"
+                    style={{ background: `linear-gradient(90deg, transparent, ${c.border.replace('0.25', '0.6')}, transparent)` }} />
+                  <div className="h-0.5" />
+                </button>
+              );
+            })}
           </div>
 
-          <p className="text-center text-[10px] text-white/20 mt-10 tracking-wider font-medium">
-            © 2026 Brigada Camarão • Prevenir • Combater • Salvar • LGPD
-          </p>
+          {/* Footer */}
+          <div className="text-center mt-10 sm:mt-14 space-y-2">
+            <div className="flex items-center justify-center gap-4 text-[10px] text-white/15 tracking-wider font-medium">
+              <span>Prevenir</span>
+              <span className="w-0.5 h-0.5 rounded-full bg-white/20" />
+              <span>Combater</span>
+              <span className="w-0.5 h-0.5 rounded-full bg-white/20" />
+              <span>Salvar</span>
+            </div>
+            <p className="text-[9px] text-white/10 tracking-wider">
+              © 2026 Brigada Camarão · LGPD Compliance
+            </p>
+          </div>
         </div>
       </div>
     );
