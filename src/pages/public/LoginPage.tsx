@@ -43,10 +43,10 @@ const roleCards = [
   },
 ] as const;
 
-const Icon = ({ name, filled = false, className = '' }: { name: string; filled?: boolean; className?: string }) => (
+const Icon = ({ name, filled = false, className = '', style }: { name: string; filled?: boolean; className?: string; style?: React.CSSProperties }) => (
   <span
     className={`material-symbols-outlined ${className}`}
-    style={filled ? { fontVariationSettings: "'FILL' 1" } : {}}
+    style={{ ...(filled ? { fontVariationSettings: "'FILL' 1" } : {}), ...style }}
   >
     {name}
   </span>
