@@ -108,7 +108,7 @@ export function Sidebar() {
     <>
       <button
         onClick={() => setMobileOpen(!mobileOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2.5 bg-primary rounded-2xl text-on-primary shadow-xl shadow-primary/30"
+        className="lg:hidden fixed top-3 left-3 z-50 p-3 bg-primary rounded-2xl text-on-primary shadow-xl shadow-primary/30 active:scale-95 transition-transform"
       >
         {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </button>
@@ -118,7 +118,7 @@ export function Sidebar() {
       )}
 
       <aside
-        className={`lg:hidden fixed top-0 left-0 h-full w-72 glass-strong z-40 transform transition-transform duration-300 shadow-2xl ${
+        className={`lg:hidden fixed top-0 left-0 h-full w-[280px] sm:w-72 glass-strong z-40 transform transition-transform duration-300 shadow-2xl ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >

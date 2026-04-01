@@ -46,7 +46,7 @@ export function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
       {/* ═══ LEFT — Photo Slideshow Hero ═══ */}
-      <div className="relative lg:w-[55%] min-h-[40vh] lg:min-h-screen flex flex-col justify-center items-center overflow-hidden">
+      <div className="relative lg:w-[55%] min-h-[35vh] sm:min-h-[40vh] lg:min-h-screen flex flex-col justify-center items-center overflow-hidden">
         {/* Photo layers */}
         {heroPhotos.map((photo, i) => (
           <div
@@ -69,28 +69,28 @@ export function LoginPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-primary/40 to-black/70 z-10" />
 
         {/* Content */}
-        <div className="relative z-20 text-center lg:text-left px-8 lg:px-16 max-w-lg">
+        <div className="relative z-20 text-center lg:text-left px-6 sm:px-8 lg:px-16 max-w-lg">
           {/* Logo */}
-          <div className="flex items-center gap-3 mb-8 justify-center lg:justify-start">
-            <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 logo-pulse">
-              <Flame className="w-9 h-9 text-white" />
+          <div className="flex items-center gap-3 mb-4 sm:mb-8 justify-center lg:justify-start">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 logo-pulse">
+              <Flame className="w-7 h-7 sm:w-9 sm:h-9 text-white" />
             </div>
           </div>
 
-          <h1 className="font-headline text-5xl sm:text-6xl lg:text-7xl font-extrabold uppercase tracking-tight leading-[0.9] text-white mb-4 drop-shadow-2xl">
+          <h1 className="font-headline text-3xl sm:text-5xl lg:text-7xl font-extrabold uppercase tracking-tight leading-[0.9] text-white mb-4 drop-shadow-2xl">
             Brigada<br />Camarão
           </h1>
 
-          <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
+          <p className="text-xs sm:text-[11px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
             Recrutamento de Bombeiro Civil
           </p>
 
-          <p className="text-lg text-white/50 font-medium italic mb-10">
+          <p className="text-base sm:text-lg text-white/50 font-medium italic mb-6 sm:mb-10">
             "Sempre perto de você"
           </p>
 
-          {/* Stats row */}
-          <div className="hidden lg:flex items-center gap-6 py-6 border-t border-white/10">
+          {/* Stats row — visible on md+ */}
+          <div className="hidden md:flex items-center gap-6 py-6 border-t border-white/10">
             {[
               { icon: Shield, value: '156', label: 'Bombeiros' },
               { icon: Users, value: '47', label: 'Eventos' },
@@ -108,7 +108,7 @@ export function LoginPage() {
           </div>
 
           {/* Photo indicator dots */}
-          <div className="hidden lg:flex items-center gap-1.5 mt-8">
+          <div className="flex items-center gap-1.5 mt-6 justify-center lg:justify-start">
             {heroPhotos.map((_, i) => (
               <div
                 key={i}
@@ -120,15 +120,15 @@ export function LoginPage() {
       </div>
 
       {/* ═══ RIGHT — Login Form ═══ */}
-      <div className="flex-1 flex items-center justify-center p-6 sm:p-10 lg:p-16 bg-surface-container-lowest">
+      <div className="flex-1 flex items-center justify-center p-5 sm:p-10 lg:p-16 bg-surface-container-lowest">
         <main className="w-full max-w-[420px]">
           {/* Header */}
-          <div className="mb-10">
+          <div className="mb-6 sm:mb-10">
             <div className="flex items-center gap-2 mb-4">
               <Lock className="w-4 h-4 text-primary" />
               <span className="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Acesso Seguro</span>
             </div>
-            <h2 className="font-headline text-3xl lg:text-4xl font-extrabold tracking-tight text-on-surface leading-tight">
+            <h2 className="font-headline text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-on-surface leading-tight">
               Entre na sua<br />conta
             </h2>
             <p className="text-sm text-on-surface-variant mt-3 leading-relaxed">
@@ -176,7 +176,7 @@ export function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-outline/60 hover:text-on-surface transition-colors"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-outline/60 hover:text-on-surface transition-colors p-1"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>

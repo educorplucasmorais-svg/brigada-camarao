@@ -56,10 +56,14 @@ body {
 
 /* ─── Scrollbar ──────────────────────────────────────────────────── */
 
-::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: #fef1ef; }
 ::-webkit-scrollbar-thumb { background: #d8c2bf; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #857371; }
+
+@media (max-width: 640px) {
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+}
 
 /* ─── Glassmorphism ──────────────────────────────────────────────── */
 
@@ -348,4 +352,25 @@ body {
   width: 24px;
   border-radius: 3px;
   background: rgba(255,255,255,0.9);
+}
+
+/* ─── Mobile Optimizations ───────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .chameleon-gradient,
+  .chameleon-text,
+  .btn-gradient,
+  .slideshow-photo,
+  .logo-pulse,
+  .animate-float,
+  .animate-float-delayed,
+  .pulse-dot { animation: none !important; }
+  .card-hover:hover { transform: none; }
+}
+
+@media (max-width: 640px) {
+  .chameleon-gradient { background-size: 100% 100%; animation: none; }
+  .slideshow-photo { animation-duration: 12s; }
+  .card-hover:hover { transform: none; }
+  .card-hover { border-bottom: none; }
 }

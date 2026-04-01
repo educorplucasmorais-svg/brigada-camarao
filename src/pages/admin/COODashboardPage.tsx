@@ -35,15 +35,15 @@ export function COODashboardPage() {
   return (
     <div className="space-y-6">
       {/* Hero */}
-      <div className="chameleon-gradient rounded-2xl p-6 lg:p-8 text-white relative overflow-hidden">
-        <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-white/5 blur-2xl" />
+      <div className="chameleon-gradient rounded-2xl p-5 sm:p-6 lg:p-8 text-white relative overflow-hidden">
+        <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-white/5 blur-2xl hidden sm:block" />
         <div className="relative z-10 flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-white/15 flex items-center justify-center border border-white/20 logo-pulse">
             <Shield className="w-6 h-6 text-white" />
           </div>
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/60">Sentinel Response</p>
-            <h1 className="text-2xl lg:text-3xl font-extrabold tracking-tight font-headline">Painel Executivo</h1>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight font-headline">Painel Executivo</h1>
           </div>
         </div>
       </div>
@@ -96,7 +96,7 @@ export function COODashboardPage() {
             </h3>
             <span className="text-xs font-bold text-success">+58% 6 meses</span>
           </div>
-          <div className="h-64">
+          <div className="h-48 sm:h-64">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={revenueTrend}>
                 <defs>
@@ -128,9 +128,9 @@ export function COODashboardPage() {
           <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest mb-5">
             Ocupação por Tipo de Evento
           </h3>
-          <div className="h-64">
+          <div className="h-48 sm:h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={occupancyByType} barSize={36}>
+              <BarChart data={occupancyByType} barSize={24}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#ece0de" />
                 <XAxis dataKey="tipo" tick={{ fontSize: 11, fill: '#534341' }} axisLine={false} tickLine={false} />
                 <YAxis
@@ -152,11 +152,11 @@ export function COODashboardPage() {
       </div>
 
       {/* Financial Summary Table */}
-      <div className="bg-surface-container-lowest rounded-2xl shadow-sm p-6 card-hover">
-        <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest mb-5">
+      <div className="bg-surface-container-lowest rounded-2xl shadow-sm p-4 sm:p-6 card-hover">
+        <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest mb-4 sm:mb-5">
           Resumo Financeiro — Orçamentos
         </h3>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-outline-variant/20">

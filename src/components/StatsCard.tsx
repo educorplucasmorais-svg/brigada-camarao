@@ -30,9 +30,9 @@ export function StatsCard({
       {/* Gradient accent strip */}
       <div className={`h-1 w-full ${accentColor}`} />
 
-      <div className="p-6 lg:p-7 flex flex-col gap-3">
+      <div className="p-4 sm:p-6 lg:p-7 flex flex-col gap-3">
         <div className="flex items-center justify-between">
-          <span className="text-[11px] font-black uppercase tracking-widest text-on-surface-variant">
+          <span className="text-[11px] font-black uppercase tracking-widest text-on-surface-variant leading-tight">
             {title}
           </span>
           <div className={`w-10 h-10 rounded-xl ${accentColor} bg-opacity-10 flex items-center justify-center`}>
@@ -41,7 +41,7 @@ export function StatsCard({
         </div>
 
         <div className="animate-count">
-          <div className="text-4xl lg:text-5xl font-black tracking-tighter text-on-surface font-headline">
+          <div className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tighter text-on-surface font-headline">
             {value}
           </div>
         </div>
@@ -63,7 +63,7 @@ export function StatsCard({
 
         {progress !== undefined && (
           <div className="mt-1">
-            <div className="w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+            <div className="w-full h-2 sm:h-1.5 bg-surface-container-high rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full progress-bar-fill progress-gradient"
                 style={{ width: `${Math.min(progress, 100)}%` }}
