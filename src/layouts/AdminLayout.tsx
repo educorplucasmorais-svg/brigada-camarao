@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 export function AdminLayout() {
   const { isAuthenticated, user } = useAuth();
 
-  if (!isAuthenticated || !user || user.role === 'staff') {
+  if (!isAuthenticated || !user) {
     return <Navigate to="/" replace />;
   }
 

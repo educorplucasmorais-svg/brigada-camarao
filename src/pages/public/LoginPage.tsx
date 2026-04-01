@@ -1,219 +1,460 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Eye, EyeOff, Shield, Users, Star, Lock } from 'lucide-react';
+import { ArrowRight, Eye, EyeOff, Lock, Shield, Briefcase, Users, UserPlus, CheckCircle } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
-// Fotos da Brigada Camarão — substitua por fotos reais do Instagram (@brigadacamarao)
-// Basta trocar os arquivos em /public/images/hero/
-const heroPhotos = [
-  '/images/hero/hero-1.jpg', // Brigadistas em ação
-  '/images/hero/hero-2.jpg', // Treinamento de resgate
-  '/images/hero/hero-3.jpg', // Evento — estrutura
-  '/images/hero/hero-4.jpg', // Grande evento
-  '/images/hero/hero-5.jpg', // Primeiros socorros
-];
+type LoginMode = 'select' | 'admin' | 'ct' | 'parceiro' | 'register';
 
 export function LoginPage() {
+  const [mode, setMode] = useState<LoginMode>('select');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [cpf, setCpf] = useState('');
+  const [phone, setPhone] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [currentPhoto, setCurrentPhoto] = useState(0);
-  const { login } = useAuth();
+  const [registered, setRegistered] = useState(false);
+  const { login, loginByCpf, registerParceiro } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentPhoto((prev) => (prev + 1) % heroPhotos.length);
-    }, 6000);
-    return () => clearInterval(interval);
-  }, []);
+  const formatCpf = (v: string) => {
+    const digits = v.replace(/\D/g, '').slice(0, 11);
+    if (digits.length <= 3) return digits;
+    if (digits.length <= 6) return `${digits.slice(0, 3)}.${digits.slice(3)}`;
+    if (digits.length <= 9) return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6)}`;
+    return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6, 9)}-${digits.slice(9)}`;
+  };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleAdminLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    if (!email.includes('@brigadacamarao.com')) {
+      setError('Use um e-mail @brigadacamarao.com');
+      return;
+    }
+    setLoading(true);
+    const success = await login(email, password);
+    setLoading(false);
+    if (success) navigate('/admin');
+    else setError('Credenciais inválidas.');
+  };
+
+  const handleCTLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
     const success = await login(email, password);
     setLoading(false);
-    if (success) {
-      navigate('/admin');
+    if (success) navigate('/admin');
+    else setError('Credenciais inválidas.');
+  };
+
+  const handleParceiroLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    const cleanCpf = cpf.replace(/\D/g, '');
+    if (cleanCpf.length !== 11) {
+      setError('CPF deve ter 11 dígitos.');
+      return;
+    }
+    setLoading(true);
+    const success = await loginByCpf(name, cleanCpf);
+    setLoading(false);
+    if (success) navigate('/admin');
+    else setError('CPF não encontrado. Registre-se primeiro.');
+  };
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    const cleanCpf = cpf.replace(/\D/g, '');
+    if (!name.trim() || cleanCpf.length !== 11) {
+      setError('Preencha nome e CPF completo.');
+      return;
+    }
+    setLoading(true);
+    const result = await registerParceiro({ name, cpf: cleanCpf, phone });
+    setLoading(false);
+    if (result.success) {
+      setRegistered(true);
     } else {
-      setError('Credenciais inválidas. Verifique e-mail e senha.');
+      setError('Erro ao registrar. Tente novamente.');
     }
   };
 
-  return (
-    <div className="min-h-screen flex flex-col lg:flex-row">
-      {/* ═══ LEFT — Photo Slideshow Hero ═══ */}
-      <div className="relative lg:w-[55%] min-h-[35vh] sm:min-h-[40vh] lg:min-h-screen flex flex-col justify-center items-center overflow-hidden">
-        {/* Photo layers */}
-        {heroPhotos.map((photo, i) => (
-          <div
-            key={i}
-            className={`absolute inset-0 transition-opacity duration-[2000ms] ease-in-out ${
-              i === currentPhoto ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            <img
-              src={photo}
-              alt=""
-              className="w-full h-full object-cover slideshow-photo"
-              style={{ filter: 'blur(2px)' }}
-              key={`${i}-${currentPhoto === i ? 'active' : 'idle'}`}
-            />
-          </div>
-        ))}
+  const resetForm = () => {
+    setEmail('');
+    setPassword('');
+    setName('');
+    setCpf('');
+    setPhone('');
+    setError('');
+    setShowPassword(false);
+    setRegistered(false);
+  };
 
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-primary/40 to-black/70 z-10" />
+  const goBack = () => {
+    resetForm();
+    setMode('select');
+  };
 
-        {/* Content */}
-        <div className="relative z-20 text-center lg:text-left px-6 sm:px-8 lg:px-16 max-w-lg">
-          {/* Logo */}
-          <div className="flex items-center gap-3 mb-4 sm:mb-8 justify-center lg:justify-start">
+  const inputClass = 'w-full px-4 py-3.5 bg-[#f9fafb] border border-[#e5e5e5] rounded-xl focus:border-[#ba100a] focus:ring-2 focus:ring-[#ba100a]/10 text-[#1a1a1a] font-medium placeholder:text-[#9ca3af] transition-all text-[15px] outline-none';
+  const labelClass = 'block text-[11px] font-bold text-[#6b7280] uppercase tracking-widest mb-1.5 pl-0.5';
+
+  // ═══ ROLE SELECTION ═══
+  if (mode === 'select') {
+    return (
+      <div className="min-h-screen bg-[#f4f4f5] flex items-center justify-center p-4">
+        <div className="w-full max-w-4xl">
+          {/* Header */}
+          <div className="text-center mb-10">
             <img
               src="/images/logo-brigada.png"
               alt="Brigada Camarão"
-              className="w-14 h-14 sm:w-20 sm:h-20 rounded-full object-cover border-2 border-white/30 shadow-2xl logo-pulse"
+              className="w-20 h-20 rounded-full object-cover mx-auto mb-4 shadow-lg"
             />
+            <h1 className="font-headline text-3xl sm:text-4xl font-extrabold text-[#1a1a1a] tracking-tight">
+              Brigada Camarão
+            </h1>
+            <p className="text-sm text-[#6b7280] mt-2">Sentinel Command — Selecione seu perfil de acesso</p>
           </div>
 
-          <h1 className="font-headline text-3xl sm:text-5xl lg:text-7xl font-extrabold uppercase tracking-tight leading-[0.9] text-white mb-4 drop-shadow-2xl">
-            Brigada<br />Camarão
-          </h1>
-
-          <p className="text-xs sm:text-[11px] font-bold uppercase tracking-[0.3em] text-white/60 mb-2">
-            Recrutamento de Bombeiro Civil
-          </p>
-
-          <p className="text-base sm:text-lg text-white/50 font-medium italic mb-6 sm:mb-10">
-            "Sempre perto de você"
-          </p>
-
-          {/* Stats row — visible on md+ */}
-          <div className="hidden md:flex items-center gap-6 py-6 border-t border-white/10">
-            {[
-              { icon: Shield, value: '156', label: 'Bombeiros' },
-              { icon: Users, value: '47', label: 'Eventos' },
-              { icon: Star, value: '96%', label: 'Satisfação' },
-            ].map((stat, i) => (
-              <div key={i} className="flex items-center gap-3">
-                <stat.icon className="w-5 h-5 text-white/40" />
-                <div>
-                  <p className="text-2xl font-extrabold font-headline text-white">{stat.value}</p>
-                  <p className="text-[9px] uppercase tracking-[0.2em] text-white/40 font-bold">{stat.label}</p>
-                </div>
-                {i < 2 && <div className="w-px h-8 bg-white/10 ml-4" />}
+          {/* 3 Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+            {/* Admin Card */}
+            <button
+              onClick={() => { resetForm(); setMode('admin'); }}
+              className="group bg-white rounded-2xl border border-[#e5e5e5] p-6 sm:p-8 text-left hover:shadow-lg hover:border-[#ba100a]/30 transition-all"
+            >
+              <div className="w-12 h-12 rounded-xl bg-[#ba100a]/10 flex items-center justify-center mb-4 group-hover:bg-[#ba100a]/20 transition-colors">
+                <Shield className="w-6 h-6 text-[#ba100a]" />
               </div>
-            ))}
-          </div>
-
-          {/* Photo indicator dots */}
-          <div className="flex items-center gap-1.5 mt-6 justify-center lg:justify-start">
-            {heroPhotos.map((_, i) => (
-              <div
-                key={i}
-                className={`photo-dot ${i === currentPhoto ? 'active' : ''}`}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ═══ RIGHT — Login Form ═══ */}
-      <div className="flex-1 flex items-center justify-center p-5 sm:p-10 lg:p-16 bg-surface-container-lowest">
-        <main className="w-full max-w-[420px]">
-          {/* Header */}
-          <div className="mb-6 sm:mb-10">
-            <div className="flex items-center gap-2 mb-4">
-              <Lock className="w-4 h-4 text-primary" />
-              <span className="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Acesso Seguro</span>
-            </div>
-            <h2 className="font-headline text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-on-surface leading-tight">
-              Entre na sua<br />conta
-            </h2>
-            <p className="text-sm text-on-surface-variant mt-3 leading-relaxed">
-              Gerencie eventos, equipes e escalas em tempo real.
-            </p>
-          </div>
-
-          {/* Error */}
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 text-sm p-4 rounded-xl mb-6 font-medium flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0" />
-              {error}
-            </div>
-          )}
-
-          {/* Form */}
-          <form className="space-y-5" onSubmit={handleSubmit}>
-            <div className="space-y-2">
-              <label className="block text-[11px] font-bold text-on-surface-variant uppercase tracking-widest pl-1">
-                E-mail
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-4 bg-surface-container-low border border-outline-variant/30 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/10 text-on-surface font-medium placeholder:text-outline/40 transition-all text-[15px] outline-none"
-                placeholder="seu@email.com"
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-[11px] font-bold text-on-surface-variant uppercase tracking-widest pl-1">
-                Senha
-              </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-4 pr-12 bg-surface-container-low border border-outline-variant/30 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/10 text-on-surface font-medium placeholder:text-outline/40 transition-all text-[15px] outline-none"
-                  placeholder="••••••••"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-outline/60 hover:text-on-surface transition-colors p-1"
-                >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
+              <h3 className="font-headline text-lg font-bold text-[#1a1a1a] mb-1">Admin</h3>
+              <p className="text-xs text-[#6b7280] leading-relaxed">
+                Gestão completa do sistema. Dashboard estratégico, tático e operacional.
+              </p>
+              <div className="mt-4 pt-3 border-t border-[#f0f0f0]">
+                <span className="text-[10px] font-bold text-[#ba100a] uppercase tracking-wider">
+                  @brigadacamarao.com
+                </span>
               </div>
-            </div>
+            </button>
 
-            <div className="pt-2">
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-4 btn-gradient font-headline font-bold text-[15px] rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 uppercase tracking-wider disabled:opacity-50"
-              >
-                {loading ? 'Entrando...' : 'Entrar'}
-                <ArrowRight className="w-5 h-5" />
-              </button>
-            </div>
-          </form>
+            {/* CT Card */}
+            <button
+              onClick={() => { resetForm(); setMode('ct'); }}
+              className="group bg-white rounded-2xl border border-[#e5e5e5] p-6 sm:p-8 text-left hover:shadow-lg hover:border-[#2563eb]/30 transition-all"
+            >
+              <div className="w-12 h-12 rounded-xl bg-[#2563eb]/10 flex items-center justify-center mb-4 group-hover:bg-[#2563eb]/20 transition-colors">
+                <Briefcase className="w-6 h-6 text-[#2563eb]" />
+              </div>
+              <h3 className="font-headline text-lg font-bold text-[#1a1a1a] mb-1">CT</h3>
+              <p className="text-xs text-[#6b7280] leading-relaxed">
+                Coordenador Técnico. Gestão de equipes e operações em campo.
+              </p>
+              <div className="mt-4 pt-3 border-t border-[#f0f0f0]">
+                <span className="text-[10px] font-bold text-[#2563eb] uppercase tracking-wider">
+                  Login + Senha
+                </span>
+              </div>
+            </button>
 
-          {/* Divider */}
-          <div className="border-t border-outline-variant/20 mt-8 pt-6">
-            <div className="bg-surface-container-low border border-outline-variant/15 rounded-xl p-5">
-              <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1.5">
-                Acesso Demo
+            {/* Parceiro Card */}
+            <button
+              onClick={() => { resetForm(); setMode('parceiro'); }}
+              className="group bg-white rounded-2xl border border-[#e5e5e5] p-6 sm:p-8 text-left hover:shadow-lg hover:border-[#16a34a]/30 transition-all"
+            >
+              <div className="w-12 h-12 rounded-xl bg-[#16a34a]/10 flex items-center justify-center mb-4 group-hover:bg-[#16a34a]/20 transition-colors">
+                <Users className="w-6 h-6 text-[#16a34a]" />
+              </div>
+              <h3 className="font-headline text-lg font-bold text-[#1a1a1a] mb-1">Parceiro</h3>
+              <p className="text-xs text-[#6b7280] leading-relaxed">
+                Bombeiro Civil. Acesso rápido a eventos disponíveis para candidatura.
               </p>
-              <p className="text-[13px] text-on-surface-variant leading-relaxed">
-                <span className="font-semibold text-on-surface">admin@brigadacamarao.com</span> — qualquer senha
-              </p>
-            </div>
+              <div className="mt-4 pt-3 border-t border-[#f0f0f0]">
+                <span className="text-[10px] font-bold text-[#16a34a] uppercase tracking-wider">
+                  Nome + CPF
+                </span>
+              </div>
+            </button>
           </div>
 
           {/* Footer */}
-          <p className="text-center text-[10px] text-outline/50 mt-6">
-            © 2026 Brigada Camarão · LGPD Compliant
+          <p className="text-center text-[10px] text-[#9ca3af] mt-8">
+            © 2026 Brigada Camarão · Prevenir · Combater · Salvar · LGPD Compliant
           </p>
-        </main>
+        </div>
+      </div>
+    );
+  }
+
+  // ═══ REGISTRATION SUCCESS ═══
+  if (registered) {
+    return (
+      <div className="min-h-screen bg-[#f4f4f5] flex items-center justify-center p-4">
+        <div className="w-full max-w-md bg-white rounded-2xl border border-[#e5e5e5] p-8 text-center">
+          <div className="w-16 h-16 rounded-full bg-[#16a34a]/10 flex items-center justify-center mx-auto mb-4">
+            <CheckCircle className="w-8 h-8 text-[#16a34a]" />
+          </div>
+          <h2 className="font-headline text-2xl font-bold text-[#1a1a1a] mb-2">Cadastro Enviado!</h2>
+          <p className="text-sm text-[#6b7280] mb-6 leading-relaxed">
+            Seu cadastro foi enviado para aprovação do administrador.
+            Você receberá uma notificação assim que for aprovado.
+          </p>
+          <div className="bg-[#fef9c3] border border-[#fde047] rounded-xl p-4 mb-6">
+            <p className="text-xs text-[#854d0e] font-medium">
+              ⏳ Status: <strong>Aguardando aprovação</strong>
+            </p>
+          </div>
+          <button
+            onClick={goBack}
+            className="w-full py-3.5 bg-[#1a1a1a] text-white font-bold rounded-xl hover:bg-[#333] transition-colors text-sm"
+          >
+            Voltar ao Início
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ═══ LOGIN / REGISTER FORMS ═══
+  const configs = {
+    admin: { title: 'Admin', accent: '#ba100a', icon: Shield, domain: '@brigadacamarao.com' },
+    ct: { title: 'Coordenador Técnico', accent: '#2563eb', icon: Briefcase, domain: null },
+    parceiro: { title: 'Parceiro', accent: '#16a34a', icon: Users, domain: null },
+    register: { title: 'Registrar Parceiro', accent: '#16a34a', icon: UserPlus, domain: null },
+  };
+  const cfg = configs[mode];
+
+  return (
+    <div className="min-h-screen bg-[#f4f4f5] flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        {/* Back button */}
+        <button
+          onClick={goBack}
+          className="flex items-center gap-2 text-sm text-[#6b7280] hover:text-[#1a1a1a] mb-6 transition-colors"
+        >
+          <ArrowRight className="w-4 h-4 rotate-180" />
+          Voltar
+        </button>
+
+        <div className="bg-white rounded-2xl border border-[#e5e5e5] shadow-sm overflow-hidden">
+          {/* Card accent bar */}
+          <div className="h-1" style={{ backgroundColor: cfg.accent }} />
+
+          <div className="p-6 sm:p-8">
+            {/* Header */}
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: cfg.accent + '15' }}>
+                <cfg.icon className="w-5 h-5" style={{ color: cfg.accent }} />
+              </div>
+              <div>
+                <h2 className="font-headline text-xl font-bold text-[#1a1a1a]">{cfg.title}</h2>
+                {cfg.domain && (
+                  <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: cfg.accent }}>
+                    {cfg.domain}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Error */}
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 text-sm p-3 rounded-xl mb-5 font-medium flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-red-500 shrink-0" />
+                {error}
+              </div>
+            )}
+
+            {/* ── Admin Form ── */}
+            {mode === 'admin' && (
+              <form onSubmit={handleAdminLogin} className="space-y-4">
+                <div>
+                  <label className={labelClass}>E-mail</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className={inputClass}
+                    placeholder="admin@brigadacamarao.com"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>Senha</label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className={inputClass + ' pr-12'}
+                      placeholder="••••••••"
+                      required
+                    />
+                    <button type="button" onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9ca3af] hover:text-[#1a1a1a] transition-colors">
+                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
+                </div>
+                <button type="submit" disabled={loading}
+                  className="w-full py-3.5 font-bold text-white rounded-xl text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50"
+                  style={{ backgroundColor: cfg.accent }}>
+                  {loading ? 'Entrando...' : 'Entrar'} <ArrowRight className="w-4 h-4" />
+                </button>
+              </form>
+            )}
+
+            {/* ── CT Form ── */}
+            {mode === 'ct' && (
+              <form onSubmit={handleCTLogin} className="space-y-4">
+                <div>
+                  <label className={labelClass}>E-mail</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className={inputClass}
+                    placeholder="seu@email.com"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>Senha</label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className={inputClass + ' pr-12'}
+                      placeholder="••••••••"
+                      required
+                    />
+                    <button type="button" onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9ca3af] hover:text-[#1a1a1a] transition-colors">
+                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
+                </div>
+                <button type="submit" disabled={loading}
+                  className="w-full py-3.5 font-bold text-white rounded-xl text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50"
+                  style={{ backgroundColor: cfg.accent }}>
+                  {loading ? 'Entrando...' : 'Entrar'} <ArrowRight className="w-4 h-4" />
+                </button>
+              </form>
+            )}
+
+            {/* ── Parceiro Form (Nome + CPF) ── */}
+            {mode === 'parceiro' && (
+              <form onSubmit={handleParceiroLogin} className="space-y-4">
+                <div>
+                  <label className={labelClass}>Nome Completo</label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className={inputClass}
+                    placeholder="João Pedro Santos"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>CPF</label>
+                  <input
+                    type="text"
+                    value={cpf}
+                    onChange={(e) => setCpf(formatCpf(e.target.value))}
+                    className={inputClass}
+                    placeholder="000.000.000-00"
+                    maxLength={14}
+                    required
+                  />
+                </div>
+                <button type="submit" disabled={loading}
+                  className="w-full py-3.5 font-bold text-white rounded-xl text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50"
+                  style={{ backgroundColor: cfg.accent }}>
+                  {loading ? 'Entrando...' : 'Acessar Eventos'} <ArrowRight className="w-4 h-4" />
+                </button>
+                <div className="pt-2 border-t border-[#f0f0f0]">
+                  <button type="button"
+                    onClick={() => { resetForm(); setMode('register'); }}
+                    className="w-full py-3 text-sm font-bold text-[#16a34a] hover:bg-[#16a34a]/5 rounded-xl transition-colors flex items-center justify-center gap-2">
+                    <UserPlus className="w-4 h-4" />
+                    Primeiro acesso? Registre-se
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* ── Register Form (Parceiro) ── */}
+            {mode === 'register' && (
+              <form onSubmit={handleRegister} className="space-y-4">
+                <div className="bg-[#f0fdf4] border border-[#bbf7d0] rounded-xl p-3 mb-2">
+                  <p className="text-xs text-[#166534] font-medium">
+                    📋 Seu cadastro será enviado para aprovação do administrador antes de ativar o acesso.
+                  </p>
+                </div>
+                <div>
+                  <label className={labelClass}>Nome Completo</label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className={inputClass}
+                    placeholder="João Pedro Santos"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>CPF</label>
+                  <input
+                    type="text"
+                    value={cpf}
+                    onChange={(e) => setCpf(formatCpf(e.target.value))}
+                    className={inputClass}
+                    placeholder="000.000.000-00"
+                    maxLength={14}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>Telefone (opcional)</label>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className={inputClass}
+                    placeholder="(31) 99999-9999"
+                  />
+                </div>
+                <button type="submit" disabled={loading}
+                  className="w-full py-3.5 font-bold text-white rounded-xl text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50"
+                  style={{ backgroundColor: cfg.accent }}>
+                  {loading ? 'Enviando...' : 'Enviar para Aprovação'} <ArrowRight className="w-4 h-4" />
+                </button>
+              </form>
+            )}
+
+            {/* Demo credentials */}
+            {(mode === 'admin' || mode === 'ct') && (
+              <div className="mt-5 pt-4 border-t border-[#f0f0f0]">
+                <p className="text-[10px] font-bold text-[#9ca3af] uppercase tracking-wider mb-1">Acesso Demo</p>
+                <p className="text-xs text-[#6b7280]">
+                  <span className="font-semibold text-[#1a1a1a]">
+                    {mode === 'admin' ? 'admin@brigadacamarao.com' : 'coo@brigadacamarao.com'}
+                  </span> — qualquer senha
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <p className="text-center text-[10px] text-[#9ca3af] mt-6">
+          © 2026 Brigada Camarão · LGPD Compliant
+        </p>
       </div>
     </div>
   );
