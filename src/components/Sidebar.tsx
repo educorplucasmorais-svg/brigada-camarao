@@ -11,15 +11,42 @@ const Icon = ({ name, filled = false, className = '' }: { name: string; filled?:
   </span>
 );
 
-const navItems = [
-  { to: '/admin', icon: 'dashboard', label: 'Painel', end: true },
-  { to: '/admin/coo', icon: 'monitoring', label: 'Painel COO' },
-  { to: '/admin/eventos', icon: 'emergency', label: 'Eventos' },
-  { to: '/admin/vagas', icon: 'work', label: 'Vagas' },
-  { to: '/admin/orcamentos', icon: 'request_quote', label: 'Orçamentos' },
-  { to: '/admin/equipe', icon: 'groups', label: 'Equipe' },
-  { to: '/admin/perfil', icon: 'qr_code', label: 'Perfil & QR' },
-];
+interface NavItem { to: string; icon: string; label: string; end?: boolean }
+
+const navByRole: Record<string, NavItem[]> = {
+  // Parceiro: simplified — profile, events, vacancies
+  parceiro: [
+    { to: '/admin/perfil', icon: 'person', label: 'Meu Perfil', end: true },
+    { to: '/admin/eventos', icon: 'calendar_month', label: 'Eventos' },
+    { to: '/admin/vagas', icon: 'work', label: 'Vagas Disponíveis' },
+  ],
+  // Staff (CT/Coordenador): tactical view
+  staff: [
+    { to: '/admin', icon: 'dashboard', label: 'Painel', end: true },
+    { to: '/admin/eventos', icon: 'emergency', label: 'Eventos' },
+    { to: '/admin/vagas', icon: 'work', label: 'Vagas' },
+    { to: '/admin/equipe', icon: 'groups', label: 'Equipe' },
+    { to: '/admin/perfil', icon: 'qr_code', label: 'Perfil & QR' },
+  ],
+  // COO: strategic + tactical
+  coo: [
+    { to: '/admin', icon: 'dashboard', label: 'Painel Geral', end: true },
+    { to: '/admin/eventos', icon: 'emergency', label: 'Eventos' },
+    { to: '/admin/vagas', icon: 'work', label: 'Vagas' },
+    { to: '/admin/orcamentos', icon: 'request_quote', label: 'Orçamentos' },
+    { to: '/admin/equipe', icon: 'groups', label: 'Equipe' },
+    { to: '/admin/perfil', icon: 'qr_code', label: 'Perfil & QR' },
+  ],
+  // Admin: full access
+  admin: [
+    { to: '/admin', icon: 'dashboard', label: 'Painel Geral', end: true },
+    { to: '/admin/eventos', icon: 'emergency', label: 'Eventos' },
+    { to: '/admin/vagas', icon: 'work', label: 'Vagas' },
+    { to: '/admin/orcamentos', icon: 'request_quote', label: 'Orçamentos' },
+    { to: '/admin/equipe', icon: 'groups', label: 'Equipe' },
+    { to: '/admin/perfil', icon: 'qr_code', label: 'Perfil & QR' },
+  ],
+};
 
 export function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -35,11 +62,14 @@ export function Sidebar() {
     switch (role) {
       case 'admin': return 'Administrador';
       case 'coo': return 'COO';
-      default: return 'Equipe';
+      case 'parceiro': return 'Bombeiro Civil';
+      default: return 'Coordenador';
     }
   };
 
   const userInitials = user?.name?.split(' ').map(n => n[0]).slice(0, 2).join('') || 'BC';
+  const navItems = navByRole[user?.role || 'parceiro'] || navByRole.parceiro;
+  const isParceiro = user?.role === 'parceiro';
 
   const sidebarContent = (
     <div className="flex flex-col h-full">
@@ -56,11 +86,21 @@ export function Sidebar() {
               Brigada Camarão
             </h1>
             <p className="text-[10px] font-bold text-white/40 uppercase tracking-[0.15em] mt-0.5">
-              Sentinel Command
+              {isParceiro ? 'Portal Parceiro' : 'Sentinel Command'}
             </p>
           </div>
         </div>
         <div className="h-px bg-white/[0.06]" />
+      </div>
+
+      {/* Role Badge */}
+      <div className="px-5 mb-3">
+        <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.06]">
+          <span className="w-2 h-2 rounded-full bg-[#2e7d32]" />
+          <span className="text-[10px] font-bold text-white/50 uppercase tracking-wider">
+            {roleLabel(user?.role || '')}
+          </span>
+        </div>
       </div>
 
       {/* Navigation */}
@@ -143,7 +183,7 @@ export function Sidebar() {
 
   return (
     <>
-      {/* ── Mobile Top Bar (Stitch prototype) ── */}
+      {/* ── Mobile Top Bar ── */}
       <header className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-surface-container-high">
         <div className="flex items-center justify-between px-4 py-2.5">
           <div className="flex items-center gap-2.5">
@@ -157,12 +197,15 @@ export function Sidebar() {
               className="w-8 h-8 rounded-full object-cover" />
             <div className="leading-tight">
               <p className="text-xs font-black text-on-surface tracking-tight">Brigada Camarão</p>
-              <p className="text-[9px] font-medium text-on-surface-variant">Sentinel Command</p>
+              <p className="text-[9px] font-medium text-on-surface-variant">
+                {isParceiro ? 'Portal Parceiro' : 'Sentinel Command'}
+              </p>
             </div>
           </div>
-          <div className="w-9 h-9 rounded-full bg-[#ba100a] flex items-center justify-center shadow-sm">
+          <NavLink to="/admin/perfil" onClick={() => setMobileOpen(false)}
+            className="w-9 h-9 rounded-full bg-[#ba100a] flex items-center justify-center shadow-sm">
             <span className="text-xs font-black text-white">{userInitials}</span>
-          </div>
+          </NavLink>
         </div>
       </header>
 

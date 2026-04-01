@@ -234,175 +234,186 @@ export function LoginPage() {
   // ═══ REGISTRATION SUCCESS ═══
   if (registered) {
     return (
-      <div className="min-h-screen login-grid-bg flex items-center justify-center p-4">
-        <div className="w-full max-w-sm bg-[#1e1e2a]/80 backdrop-blur-2xl rounded-2xl border border-[#16a34a]/30 overflow-hidden shadow-2xl">
-          <div className="h-1 bg-gradient-to-r from-[#16a34a] via-[#4ade80] to-[#16a34a]" />
-          <div className="p-8 text-center">
-            <div className="w-16 h-16 rounded-full bg-[#15803d]/20 flex items-center justify-center mx-auto mb-5">
-              <Icon name="check_circle" filled className="text-[#4ade80] text-3xl" />
+      <div className="min-h-screen bg-surface flex flex-col items-center justify-center p-4">
+        <main className="w-full max-w-md p-6 md:p-10 bg-white shadow-2xl rounded-3xl">
+          <div className="flex flex-col items-center text-center">
+            <div className="w-20 h-20 rounded-full bg-[#e8f5e9] flex items-center justify-center mb-6">
+              <Icon name="check_circle" filled className="text-[#2e7d32] text-4xl" />
             </div>
-            <h2 className="text-xl font-bold text-white mb-2">Cadastro Enviado</h2>
-            <p className="text-sm text-white/40 mb-4 leading-relaxed">
+            <h2 className="text-2xl font-black text-primary uppercase tracking-tight mb-2">Cadastro Enviado</h2>
+            <p className="text-sm text-on-surface-variant font-medium mb-6">
               Aguardando aprovação do administrador. Você será notificado.
             </p>
-            <div className="bg-[#15803d]/10 border border-[#4ade80]/15 rounded-xl p-3.5 mb-4">
-              <div className="flex items-center justify-center gap-2">
-                <Icon name="qr_code" filled className="text-[#4ade80] text-lg" />
-                <p className="text-[11px] text-[#4ade80]/80 font-bold uppercase tracking-wider">
+            <div className="w-full space-y-3 mb-6">
+              <div className="p-3 rounded-2xl bg-surface-container-low flex items-center justify-center gap-2">
+                <Icon name="qr_code" filled className="text-primary text-lg" />
+                <p className="text-[11px] font-black text-on-surface uppercase tracking-wider">
                   QR Code gerado automaticamente
                 </p>
               </div>
-            </div>
-            <div className="bg-[#15803d]/10 border border-[#4ade80]/15 rounded-xl p-3.5 mb-6">
-              <div className="flex items-center justify-center gap-2">
-                <Icon name="hourglass_top" filled className="text-[#4ade80] text-lg" />
-                <p className="text-[11px] text-[#4ade80]/80 font-bold uppercase tracking-wider">
+              <div className="p-3 rounded-2xl bg-surface-container-low flex items-center justify-center gap-2">
+                <Icon name="hourglass_top" filled className="text-secondary text-lg" />
+                <p className="text-[11px] font-black text-on-surface-variant uppercase tracking-wider">
                   Status: Pré-aprovação pendente
                 </p>
               </div>
             </div>
             <button onClick={goBack}
-              className="w-full py-3.5 bg-white/[0.06] text-white font-bold rounded-xl text-sm hover:bg-white/[0.1] transition-all border border-white/[0.08]">
+              className="w-full py-4 bg-primary text-on-primary font-black text-base rounded-2xl shadow-xl shadow-primary/30 hover:bg-primary-container transition-all active:scale-[0.98] uppercase tracking-tight">
               Voltar ao Início
             </button>
           </div>
-        </div>
+        </main>
+        <div className="fixed bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary-container to-primary pointer-events-none opacity-40" />
       </div>
     );
   }
 
-  // ═══ REGISTRATION FORM — Stitch Light Design (Recrutamento) ═══
-  if (mode === 'register') {
+  // ═══ PARCEIRO / REGISTER — Stitch MD3 Form (pixel-perfect) ═══
+  if (mode === 'register' || mode === 'parceiro') {
+    const isRegister = mode === 'register';
+    const handleSubmit = isRegister ? handleRegister : handleParceiroLogin;
+
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#f8f5f2] to-[#f0ebe6] flex items-center justify-center p-4 sm:p-6">
-        <div className="w-full max-w-md">
-          <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
-            {/* Header */}
-            <div className="pt-10 pb-6 px-8 text-center">
+      <div className="min-h-screen bg-surface flex flex-col items-center justify-center p-4">
+        <main className="w-full max-w-md p-6 md:p-10 bg-white shadow-2xl rounded-3xl my-8 mx-auto">
+          {/* Header */}
+          <div className="flex flex-col items-center text-center mb-10">
+            <div className="mb-6">
               <img src="/images/logo-brigada.png" alt="Brigada Camarão"
-                className="w-24 h-24 rounded-full object-contain mx-auto mb-5" />
-              <h1 className="text-2xl sm:text-[28px] font-black text-[#2c1810] tracking-tight leading-tight mb-2">
-                BEM-VINDO À BRIGADA<br />CAMARÃO
-              </h1>
-              <p className="text-[11px] font-bold text-[#8a7060] tracking-[0.2em] uppercase mb-1.5">
-                Recrutamento de Bombeiro Civil
-              </p>
-              <p className="text-xs text-[#a09080]">
-                Informe seus dados para prosseguir com a inscrição.
-              </p>
+                className="h-32 w-32 object-contain" />
+            </div>
+            <h2 className="text-3xl font-black tracking-tight text-primary leading-tight mb-2 uppercase">
+              Bem-vindo à Brigada Camarão
+            </h2>
+            <p className="text-xs font-bold text-on-surface-variant uppercase tracking-[0.2em] mb-4">
+              Recrutamento de Bombeiro Civil
+            </p>
+            <p className="text-on-surface-variant text-sm font-medium">
+              Informe seus dados para prosseguir com a inscrição.
+            </p>
+          </div>
+
+          {/* Error */}
+          {error && (
+            <div className="mb-5 p-4 rounded-2xl bg-error-container flex items-center gap-3">
+              <Icon name="error" filled className="text-on-error-container text-xl shrink-0" />
+              <p className="text-xs font-bold text-on-error-container">{error}</p>
+            </div>
+          )}
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Nome Completo */}
+            <div className="space-y-1.5">
+              <label className="block text-[11px] font-black text-on-surface-variant uppercase tracking-widest px-1">
+                Nome Completo
+              </label>
+              <div className="relative">
+                <input type="text" value={name} onChange={(e) => setName(e.target.value)}
+                  placeholder="Como no seu RG/CNH" required
+                  className="w-full px-4 py-3.5 bg-surface-container-low border-none rounded-2xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm" />
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline/30 text-lg">
+                  person
+                </span>
+              </div>
             </div>
 
-            {/* Form */}
-            <form onSubmit={handleRegister} className="px-8 pb-8 space-y-5">
-              {error && (
-                <div className="bg-red-50 border border-red-200 rounded-xl p-3 flex items-center gap-2.5">
-                  <Icon name="error" filled className="text-red-500 text-lg shrink-0" />
-                  <p className="text-xs font-medium text-red-600">{error}</p>
-                </div>
-              )}
-
-              {/* Nome Completo */}
-              <div>
-                <label className="block text-[10px] font-black text-[#3a2e26] uppercase tracking-[0.15em] mb-2">
-                  Nome Completo
-                </label>
-                <div className="relative">
-                  <input type="text" value={name} onChange={(e) => setName(e.target.value)}
-                    placeholder="Como no seu RG/CNH" required
-                    className="w-full px-4 py-3.5 bg-[#faf8f6] border border-[#e8e0d8] rounded-xl text-sm text-[#2c1810] font-medium placeholder:text-[#c0b0a0] outline-none focus:border-[#ba100a]/50 focus:ring-2 focus:ring-[#ba100a]/10 transition-all" />
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                    <Icon name="person" className="text-lg text-[#c0b0a0]" />
-                  </div>
-                </div>
+            {/* CPF */}
+            <div className="space-y-1.5">
+              <label className="block text-[11px] font-black text-on-surface-variant uppercase tracking-widest px-1">
+                CPF
+              </label>
+              <div className="relative">
+                <input type="text" value={cpf} onChange={(e) => setCpf(formatCpf(e.target.value))}
+                  placeholder="000.000.000-00" maxLength={14} required
+                  className="w-full px-4 py-3.5 bg-surface-container-low border-none rounded-2xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm" />
+                <Icon name="badge" filled className="absolute right-4 top-1/2 -translate-y-1/2 text-primary text-lg" />
               </div>
+            </div>
 
-              {/* CPF */}
-              <div>
-                <label className="block text-[10px] font-black text-[#3a2e26] uppercase tracking-[0.15em] mb-2">
-                  CPF
-                </label>
-                <div className="relative">
-                  <input type="text" value={cpf} onChange={(e) => setCpf(formatCpf(e.target.value))}
-                    placeholder="000.000.000-00" maxLength={14} required
-                    className="w-full px-4 py-3.5 bg-[#faf8f6] border border-[#e8e0d8] rounded-xl text-sm text-[#2c1810] font-medium placeholder:text-[#c0b0a0] outline-none focus:border-[#ba100a]/50 focus:ring-2 focus:ring-[#ba100a]/10 transition-all" />
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                    <Icon name="badge" filled className="text-lg text-[#ba100a]/40" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Chave PIX */}
-              <div>
-                <label className="block text-[10px] font-black text-[#3a2e26] uppercase tracking-[0.15em] mb-2">
+            {/* Chave PIX (only on register) */}
+            {isRegister && (
+              <div className="space-y-1.5">
+                <label className="block text-[11px] font-black text-on-surface-variant uppercase tracking-widest px-1">
                   Chave PIX
                 </label>
                 <div className="relative">
                   <input type="text" value={pixKey} onChange={(e) => setPixKey(e.target.value)}
                     placeholder="E-mail, CPF ou Celular"
-                    className="w-full px-4 py-3.5 bg-[#faf8f6] border border-[#e8e0d8] rounded-xl text-sm text-[#2c1810] font-medium placeholder:text-[#c0b0a0] outline-none focus:border-[#ba100a]/50 focus:ring-2 focus:ring-[#ba100a]/10 transition-all" />
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                    <Icon name="pix" filled className="text-lg text-[#ba100a]/40" />
-                  </div>
+                    className="w-full px-4 py-3.5 bg-surface-container-low border-none rounded-2xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm" />
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline/30 text-lg">
+                    account_balance_wallet
+                  </span>
                 </div>
               </div>
+            )}
 
-              {/* Nº Credencial */}
-              <div>
-                <label className="block text-[10px] font-black text-[#3a2e26] uppercase tracking-[0.15em] mb-2">
+            {/* Nº Credencial (only on register) */}
+            {isRegister && (
+              <div className="space-y-1.5">
+                <label className="block text-[11px] font-black text-on-surface-variant uppercase tracking-widest px-1">
                   Nº Credencial
                 </label>
                 <div className="relative">
                   <input type="text" value={credentialNumber} onChange={(e) => setCredentialNumber(e.target.value)}
                     placeholder="Ex: BC-12345"
-                    className="w-full px-4 py-3.5 bg-[#faf8f6] border border-[#e8e0d8] rounded-xl text-sm text-[#2c1810] font-medium placeholder:text-[#c0b0a0] outline-none focus:border-[#ba100a]/50 focus:ring-2 focus:ring-[#ba100a]/10 transition-all" />
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                    <Icon name="verified" filled className="text-lg text-[#ba100a]/40" />
-                  </div>
+                    className="w-full px-4 py-3.5 bg-surface-container-low border-none rounded-2xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm" />
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline/30 text-lg">
+                    admin_panel_settings
+                  </span>
                 </div>
               </div>
+            )}
 
-              {/* Telefone */}
-              <div>
-                <label className="block text-[10px] font-black text-[#3a2e26] uppercase tracking-[0.15em] mb-2">
-                  Telefone <span className="text-[#c0b0a0] font-medium normal-case">(opcional)</span>
-                </label>
-                <div className="relative">
-                  <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)}
-                    placeholder="(31) 99999-9999"
-                    className="w-full px-4 py-3.5 bg-[#faf8f6] border border-[#e8e0d8] rounded-xl text-sm text-[#2c1810] font-medium placeholder:text-[#c0b0a0] outline-none focus:border-[#ba100a]/50 focus:ring-2 focus:ring-[#ba100a]/10 transition-all" />
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                    <Icon name="phone" className="text-lg text-[#c0b0a0]" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Info Box (Stitch) */}
-              <div className="bg-[#fef9f0] border border-[#f5e0c0] rounded-xl p-4 flex items-start gap-3">
-                <Icon name="info" filled className="text-[#d4a050] text-lg shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-xs font-extrabold text-[#7a5c30] mb-1">Por que pedimos isso?</p>
-                  <p className="text-[11px] text-[#8a7060] leading-relaxed">
-                    O <strong className="text-[#5a4030]">CPF</strong> é necessário para o seguro de acidentes pessoais durante os eventos, e a <strong className="text-[#5a4030]">Chave PIX</strong> garante o recebimento ágil de suas diárias e reembolsos após a conclusão do serviço.
+            {/* Info Box — matches Stitch exactly */}
+            <div className="p-4 rounded-2xl bg-surface-container border-l-[6px] border-secondary shadow-sm">
+              <div className="flex gap-3">
+                <Icon name="info" filled className="text-secondary text-xl shrink-0" />
+                <div className="space-y-1">
+                  <p className="text-xs font-black text-on-surface uppercase tracking-wider">Por que pedimos isso?</p>
+                  <p className="text-[11px] leading-relaxed text-on-surface-variant font-semibold">
+                    O <strong>CPF</strong> é necessário para o seguro de acidentes pessoais durante os eventos, e a <strong>Chave PIX</strong> garante o recebimento ágil de suas diárias e reembolsos após a conclusão do serviço.
                   </p>
                 </div>
               </div>
+            </div>
 
-              {/* Submit */}
+            {/* Action Button */}
+            <div className="pt-4 space-y-4">
               <button type="submit" disabled={loading}
-                className="w-full py-4 bg-gradient-to-r from-[#900001] to-[#ba100a] text-white font-extrabold rounded-xl text-sm tracking-wider uppercase flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg hover:shadow-xl hover:brightness-110">
-                <Icon name="how_to_reg" className="text-lg" />
-                {loading ? 'Enviando...' : 'Enviar para Aprovação'}
+                className="w-full py-4 bg-primary text-on-primary font-black text-base rounded-2xl shadow-xl shadow-primary/30 hover:bg-primary-container transition-all active:scale-[0.98] flex items-center justify-center gap-2 uppercase tracking-tight disabled:opacity-50">
+                {loading ? 'Processando...' : (isRegister ? 'Cadastrar / Entrar' : 'Cadastrar / Entrar')}
+                <Icon name="arrow_forward" className="text-xl" />
               </button>
+              <p className="text-center text-[10px] font-black text-on-surface-variant uppercase tracking-widest">
+                Ao prosseguir, você aceita nossos{' '}
+                <span className="text-primary hover:underline cursor-pointer">Termos de Atuação</span>
+              </p>
+            </div>
+          </form>
 
-              {/* Back link */}
+          {/* Support Footer */}
+          <div className="mt-8 pt-6 border-t border-surface-container-high">
+            <div className="flex items-center justify-center gap-2 text-on-surface-variant text-[11px] font-bold uppercase tracking-wider mb-4">
+              <Icon name="support_agent" filled className="text-lg" />
+              Precisa de ajuda com o acesso?
+            </div>
+            <div className="flex justify-center gap-8">
+              <a href="https://wa.me/5531999999999" target="_blank" rel="noopener noreferrer"
+                className="text-primary font-black text-xs uppercase tracking-widest hover:opacity-80 transition-opacity">
+                WhatsApp Suporte
+              </a>
               <button type="button" onClick={goBack}
-                className="w-full py-2.5 text-xs font-bold text-[#8a7060] hover:text-[#5a4030] transition-colors flex items-center justify-center gap-2">
-                <Icon name="arrow_back" className="text-base" />
-                Voltar para seleção
+                className="text-on-surface font-black text-xs uppercase tracking-widest hover:opacity-80 transition-opacity">
+                Voltar
               </button>
-            </form>
+            </div>
           </div>
-        </div>
+        </main>
+
+        {/* Decorative Bottom Gradient */}
+        <div className="fixed bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary-container to-primary pointer-events-none opacity-40" />
       </div>
     );
   }
@@ -429,7 +440,7 @@ export function LoginPage() {
       inputIcon1: 'person_outline', inputIcon2: 'badge',
       ph1: 'Nome Completo', ph2: 'CPF (000.000.000-00)',
       btnText: 'ACESSAR EVENTOS',
-    },
+    }, // parceiro form handled by Stitch MD3 section above
   };
   const cfg = cfgMap[mode as 'admin' | 'ct' | 'parceiro'];
 
@@ -558,33 +569,7 @@ export function LoginPage() {
               </form>
             )}
 
-            {/* ── Parceiro Form ── */}
-            {mode === 'parceiro' && (
-              <form onSubmit={handleParceiroLogin} className="space-y-4">
-                {styledInput(cfg.inputIcon1, {
-                  type: 'text', value: name, onChange: (e) => setName(e.target.value),
-                  placeholder: cfg.ph1, required: true,
-                }, cfg.accent)}
-                {styledInput(cfg.inputIcon2, {
-                  type: 'text', value: cpf,
-                  onChange: (e) => setCpf(formatCpf(e.target.value)),
-                  placeholder: cfg.ph2, maxLength: 14, required: true,
-                }, cfg.accent)}
-                <div className="pt-2 space-y-3">
-                  <button type="submit" disabled={loading}
-                    className="w-full py-4 font-extrabold text-white rounded-xl text-sm tracking-widest uppercase flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg hover:brightness-110"
-                    style={{ background: cfg.accent }}>
-                    {loading ? 'Verificando...' : cfg.btnText}
-                  </button>
-                  <button type="button" onClick={() => { resetForm(); setMode('register'); }}
-                    className="w-full py-2.5 text-xs font-bold hover:bg-white/[0.04] rounded-xl transition-all flex items-center justify-center gap-2"
-                    style={{ color: `${cfg.accentLight}99` }}>
-                    <Icon name="person_add" className="text-base" />
-                    Primeiro acesso? Registre-se
-                  </button>
-                </div>
-              </form>
-            )}
+            {/* ── Parceiro now uses Stitch MD3 form (handled above) ── */}
 
             {/* ── Footer Links (Stitch style) ── */}
             <div className="mt-6 space-y-2 text-center">
