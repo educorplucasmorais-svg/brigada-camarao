@@ -2,16 +2,21 @@ import { Search, Users } from 'lucide-react';
 import { useState } from 'react';
 import { mockVacancies } from '../../data/mockData';
 import { StatusBadge } from '../../components/StatusBadge';
+import { DataBadge } from '../../components/DataBadge';
+import { useApiData } from '../../hooks/useApiData';
+import { api } from '../../lib/api';
+import type { Vacancy } from '../../types';
 
 export function VacancyManagementPage() {
   const [search, setSearch] = useState('');
-  const filtered = mockVacancies.filter((v) =>
+  const { data: vacancies, isLive } = useApiData<Vacancy[]>(() => api.getVacancies(), mockVacancies);
+  const filtered = vacancies.filter((v) =>
     v.eventTitle.toLowerCase().includes(search.toLowerCase()) ||
     v.role.toLowerCase().includes(search.toLowerCase())
   );
 
-  const totalFilled = mockVacancies.reduce((a, v) => a + v.filled, 0);
-  const totalQty = mockVacancies.reduce((a, v) => a + v.quantity, 0);
+  const totalFilled = vacancies.reduce((a, v) => a + v.filled, 0);
+  const totalQty = vacancies.reduce((a, v) => a + v.quantity, 0);
   const fillRate = Math.round((totalFilled / totalQty) * 100);
 
   return (
@@ -23,7 +28,10 @@ export function VacancyManagementPage() {
 
       {/* Fill rate hero */}
       <div className="bg-primary rounded-2xl p-6 mb-6">
-        <p className="text-on-primary/70 text-xs font-bold uppercase tracking-widest mb-2">Mural de Vagas</p>
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-on-primary/70 text-xs font-bold uppercase tracking-widest">Mural de Vagas</p>
+          <DataBadge isLive={isLive} />
+        </div>
         <div className="flex items-end gap-4">
           <span className="text-5xl font-black text-on-primary">{fillRate}%</span>
           <div className="mb-1">

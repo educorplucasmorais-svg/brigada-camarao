@@ -58,7 +58,6 @@ export function LoginPage() {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [cpf, setCpf] = useState('');
-  const [phone, setPhone] = useState('');
   const [pixKey, setPixKey] = useState('');
   const [credentialNumber, setCredentialNumber] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -100,32 +99,30 @@ export function LoginPage() {
     else setError('Credenciais inválidas.');
   };
 
-  const handleParceiroLogin = async (e: React.FormEvent) => {
+  const handleParceiroSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     const cleanCpf = cpf.replace(/\D/g, '');
+    if (!name.trim()) { setError('Informe seu nome completo.'); return; }
     if (cleanCpf.length !== 11) { setError('CPF deve ter 11 dígitos.'); return; }
     setLoading(true);
-    const ok = await loginByCpf(name, cleanCpf);
+    // Try login first
+    const loginOk = await loginByCpf(name, cleanCpf);
+    if (loginOk) { navigate('/eventos'); return; }
+    // If login fails, register
+    const result = await registerParceiro({ name, cpf: cleanCpf, pixKey, credentialNumber });
     setLoading(false);
-    if (ok) navigate('/admin');
-    else setError('CPF não encontrado. Registre-se primeiro.');
-  };
-
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    const cleanCpf = cpf.replace(/\D/g, '');
-    if (!name.trim() || cleanCpf.length !== 11) { setError('Preencha nome e CPF completo.'); return; }
-    setLoading(true);
-    const result = await registerParceiro({ name, cpf: cleanCpf, phone, pixKey, credentialNumber });
-    setLoading(false);
-    if (result.success) setRegistered(true);
-    else setError('Erro ao registrar. Tente novamente.');
+    if (result.success) {
+      // Auto-login after register
+      await loginByCpf(name, cleanCpf);
+      navigate('/eventos');
+    } else {
+      setError('Erro ao registrar. Tente novamente.');
+    }
   };
 
   const resetForm = () => {
-    setEmail(''); setPassword(''); setName(''); setCpf(''); setPhone('');
+    setEmail(''); setPassword(''); setName(''); setCpf('');
     setPixKey(''); setCredentialNumber('');
     setError(''); setShowPassword(false); setRegistered(false);
   };
@@ -271,17 +268,18 @@ export function LoginPage() {
 
   // ═══ PARCEIRO / REGISTER — Stitch MD3 Form (pixel-perfect) ═══
   if (mode === 'register' || mode === 'parceiro') {
-    const isRegister = mode === 'register';
-    const handleSubmit = isRegister ? handleRegister : handleParceiroLogin;
-
     return (
-      <div className="min-h-screen bg-surface flex flex-col items-center justify-center p-4">
-        <main className="w-full max-w-md p-6 md:p-10 bg-white shadow-2xl rounded-3xl my-8 mx-auto">
+      <div className="bg-surface text-on-surface flex flex-col items-center justify-center min-h-screen">
+        <main className="relative w-full max-w-md p-6 md:p-10 bg-white shadow-2xl rounded-3xl my-8 mx-auto">
+          {/* Back button */}
+          <button onClick={goBack} className="absolute top-4 left-4 text-on-surface-variant hover:text-primary transition-colors">
+            <Icon name="arrow_back" className="text-2xl" />
+          </button>
+
           {/* Header */}
           <div className="flex flex-col items-center text-center mb-10">
             <div className="mb-6">
-              <img src="/images/logo-brigada.png" alt="Brigada Camarão"
-                className="h-32 w-32 object-contain" />
+              <img alt="Brigada Camarão Logo" className="h-32 w-32 object-contain" src="/images/logo-brigada.png" />
             </div>
             <h2 className="text-3xl font-black tracking-tight text-primary leading-tight mb-2 uppercase">
               Bem-vindo à Brigada Camarão
@@ -303,19 +301,21 @@ export function LoginPage() {
           )}
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleParceiroSubmit} className="space-y-5">
             {/* Nome Completo */}
             <div className="space-y-1.5">
               <label className="block text-[11px] font-black text-on-surface-variant uppercase tracking-widest px-1">
                 Nome Completo
               </label>
               <div className="relative">
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)}
-                  placeholder="Como no seu RG/CNH" required
-                  className="w-full px-4 py-3.5 bg-surface-container-low border-none rounded-2xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm" />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline/30 text-lg">
-                  person
-                </span>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Como no seu RG/CNH"
+                  required
+                  className="w-full px-4 py-3.5 bg-surface-container-low border-none rounded-2xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm"
+                />
               </div>
             </div>
 
@@ -325,48 +325,60 @@ export function LoginPage() {
                 CPF
               </label>
               <div className="relative">
-                <input type="text" value={cpf} onChange={(e) => setCpf(formatCpf(e.target.value))}
-                  placeholder="000.000.000-00" maxLength={14} required
-                  className="w-full px-4 py-3.5 bg-surface-container-low border-none rounded-2xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm" />
-                <Icon name="badge" filled className="absolute right-4 top-1/2 -translate-y-1/2 text-primary text-lg" />
+                <input
+                  type="text"
+                  value={cpf}
+                  onChange={(e) => setCpf(formatCpf(e.target.value))}
+                  placeholder="000.000.000-00"
+                  maxLength={14}
+                  required
+                  className="w-full px-4 py-3.5 bg-surface-container-low border-none rounded-2xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm"
+                />
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline/30 text-lg text-primary">
+                  badge
+                </span>
               </div>
             </div>
 
-            {/* Chave PIX (only on register) */}
-            {isRegister && (
-              <div className="space-y-1.5">
-                <label className="block text-[11px] font-black text-on-surface-variant uppercase tracking-widest px-1">
-                  Chave PIX
-                </label>
-                <div className="relative">
-                  <input type="text" value={pixKey} onChange={(e) => setPixKey(e.target.value)}
-                    placeholder="E-mail, CPF ou Celular"
-                    className="w-full px-4 py-3.5 bg-surface-container-low border-none rounded-2xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm" />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline/30 text-lg">
-                    account_balance_wallet
-                  </span>
-                </div>
+            {/* Chave PIX */}
+            <div className="space-y-1.5">
+              <label className="block text-[11px] font-black text-on-surface-variant uppercase tracking-widest px-1">
+                Chave PIX
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={pixKey}
+                  onChange={(e) => setPixKey(e.target.value)}
+                  placeholder="E-mail, CPF ou Celular"
+                  className="w-full px-4 py-3.5 bg-surface-container-low border-none rounded-2xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm"
+                />
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline/30 text-lg">
+                  account_balance_wallet
+                </span>
               </div>
-            )}
+            </div>
 
-            {/* Nº Credencial (only on register) */}
-            {isRegister && (
-              <div className="space-y-1.5">
-                <label className="block text-[11px] font-black text-on-surface-variant uppercase tracking-widest px-1">
-                  Nº Credencial
-                </label>
-                <div className="relative">
-                  <input type="text" value={credentialNumber} onChange={(e) => setCredentialNumber(e.target.value)}
-                    placeholder="Ex: BC-12345"
-                    className="w-full px-4 py-3.5 bg-surface-container-low border-none rounded-2xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm" />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline/30 text-lg">
-                    admin_panel_settings
-                  </span>
-                </div>
+            {/* Nº Credencial */}
+            <div className="space-y-1.5">
+              <label className="block text-[11px] font-black text-on-surface-variant uppercase tracking-widest px-1">
+                Nº Credencial
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={credentialNumber}
+                  onChange={(e) => setCredentialNumber(e.target.value)}
+                  placeholder="Ex: BC-12345"
+                  className="w-full px-4 py-3.5 bg-surface-container-low border-none rounded-2xl focus:ring-2 focus:ring-primary/20 text-on-surface font-medium placeholder:text-outline/40 transition-all text-sm"
+                />
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline/30 text-lg">
+                  admin_panel_settings
+                </span>
               </div>
-            )}
+            </div>
 
-            {/* Info Box — matches Stitch exactly */}
+            {/* Information Box */}
             <div className="p-4 rounded-2xl bg-surface-container border-l-[6px] border-secondary shadow-sm">
               <div className="flex gap-3">
                 <Icon name="info" filled className="text-secondary text-xl shrink-0" />
@@ -381,14 +393,17 @@ export function LoginPage() {
 
             {/* Action Button */}
             <div className="pt-4 space-y-4">
-              <button type="submit" disabled={loading}
-                className="w-full py-4 bg-primary text-on-primary font-black text-base rounded-2xl shadow-xl shadow-primary/30 hover:bg-primary-container transition-all active:scale-[0.98] flex items-center justify-center gap-2 uppercase tracking-tight disabled:opacity-50">
-                {loading ? 'Processando...' : (isRegister ? 'Cadastrar / Entrar' : 'Cadastrar / Entrar')}
-                <Icon name="arrow_forward" className="text-xl" />
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-4 bg-primary text-on-primary font-black text-base rounded-2xl shadow-xl shadow-primary/30 hover:bg-primary-container transition-all active:scale-[0.98] flex items-center justify-center gap-2 uppercase tracking-tight disabled:opacity-50"
+              >
+                {loading ? 'Processando...' : 'Cadastrar / Entrar'}
+                {!loading && <Icon name="arrow_forward" className="text-xl" />}
               </button>
               <p className="text-center text-[10px] font-black text-on-surface-variant uppercase tracking-widest">
                 Ao prosseguir, você aceita nossos{' '}
-                <span className="text-primary hover:underline cursor-pointer">Termos de Atuação</span>
+                <a className="text-primary hover:underline" href="#">Termos de Atuação</a>
               </p>
             </div>
           </form>
@@ -400,14 +415,12 @@ export function LoginPage() {
               Precisa de ajuda com o acesso?
             </div>
             <div className="flex justify-center gap-8">
-              <a href="https://wa.me/5531999999999" target="_blank" rel="noopener noreferrer"
-                className="text-primary font-black text-xs uppercase tracking-widest hover:opacity-80 transition-opacity">
+              <a className="text-primary font-black text-xs uppercase tracking-widest hover:opacity-80 transition-opacity" href="#">
                 WhatsApp Suporte
               </a>
-              <button type="button" onClick={goBack}
-                className="text-on-surface font-black text-xs uppercase tracking-widest hover:opacity-80 transition-opacity">
-                Voltar
-              </button>
+              <a className="text-on-surface font-black text-xs uppercase tracking-widest hover:opacity-80 transition-opacity" href="#">
+                FAQ
+              </a>
             </div>
           </div>
         </main>
@@ -418,7 +431,7 @@ export function LoginPage() {
     );
   }
 
-  // ═══ FORM VIEWS — Stitch Design (Image 2 Reference) ═══
+  // ═══ FORM VIEWS — Admin / CT Dark Glass UI ═══
   const cfgMap = {
     admin: {
       label: 'ADMINISTRADOR', sublabel: 'ACESSO ESTRATÉGICO', accent: '#ba100a',
@@ -434,15 +447,8 @@ export function LoginPage() {
       ph1: 'Usuário / Login', ph2: 'Senha',
       btnText: 'INICIAR OPERAÇÃO',
     },
-    parceiro: {
-      label: 'PARCEIRO', sublabel: 'ACESSO RÁPIDO', accent: '#16a34a',
-      accentLight: '#4ade80', glowShadow: '0 0 60px rgba(22,163,74,0.15)',
-      inputIcon1: 'person_outline', inputIcon2: 'badge',
-      ph1: 'Nome Completo', ph2: 'CPF (000.000.000-00)',
-      btnText: 'ACESSAR EVENTOS',
-    }, // parceiro form handled by Stitch MD3 section above
   };
-  const cfg = cfgMap[mode as 'admin' | 'ct' | 'parceiro'];
+  const cfg = cfgMap[mode as 'admin' | 'ct'];
 
   const styledInput = (
     icon: string,
@@ -569,9 +575,7 @@ export function LoginPage() {
               </form>
             )}
 
-            {/* ── Parceiro now uses Stitch MD3 form (handled above) ── */}
-
-            {/* ── Footer Links (Stitch style) ── */}
+            {/* ── Footer Links ── */}
             <div className="mt-6 space-y-2 text-center">
               <button className="flex items-center justify-center gap-2 text-xs text-white/30 hover:text-white/50 transition-colors mx-auto font-medium">
                 <Icon name="help_outline" className="text-base" />

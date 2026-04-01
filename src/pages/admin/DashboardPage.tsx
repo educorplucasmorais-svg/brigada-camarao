@@ -1,10 +1,10 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
-  Calendar, Users, DollarSign, Flame, MapPin,
+  Calendar, Users, DollarSign, MapPin,
   ArrowRight, CheckCircle, Clock,
-  UserPlus, FileCheck, AlertCircle,
   Telescope, TrendingUp,
-  Package, AlertTriangle, ChevronRight,
+  Package, AlertTriangle,
   MessageCircle
 } from 'lucide-react';
 import {
@@ -13,10 +13,9 @@ import {
   RadialBarChart, RadialBar, PolarAngleAxis, Cell
 } from 'recharts';
 import { StatsCard } from '../../components/StatsCard';
-import { InstagramIcon } from '../../components/InstagramIcon';
-import { StatusBadge } from '../../components/StatusBadge';
+
 import { useAuth } from '../../contexts/AuthContext';
-import { mockStats, mockEvents } from '../../data/mockData';
+import { mockStats } from '../../data/mockData';
 
 // ─── Estratégico Data ─────────────────────────────────────────────
 
@@ -106,11 +105,18 @@ const pipelineData = [
   { stage: 'Alocados', count: 24 },
 ];
 
+const pipelineColors: Record<string, { bg: string; hex: string }> = {
+  Inscritos: { bg: 'bg-primary', hex: '#900001' },
+  Triagem: { bg: 'bg-primary-container', hex: '#ba100a' },
+  Aprovados: { bg: 'bg-secondary-container', hex: '#fc9910' },
+  Alocados: { bg: 'bg-success', hex: '#2e7d32' },
+};
+
 const pipelineHistory = [
-  { stage: 'Inscritos', data: [30, 35, 42, 38, 45], color: '#ba100a' },
-  { stage: 'Triagem', data: [20, 25, 28, 30, 32], color: '#c0392b' },
-  { stage: 'Aprovados', data: [15, 18, 22, 25, 28], color: '#27ae60' },
-  { stage: 'Alocados', data: [10, 14, 18, 20, 24], color: '#16a34a' },
+  { stage: 'Inscritos', data: [30, 35, 42, 38, 45], color: '#900001' },
+  { stage: 'Triagem', data: [20, 25, 28, 30, 32], color: '#ba100a' },
+  { stage: 'Aprovados', data: [15, 18, 22, 25, 28], color: '#fc9910' },
+  { stage: 'Alocados', data: [10, 14, 18, 20, 24], color: '#2e7d32' },
 ];
 
 const upcomingEvents = [
@@ -118,14 +124,6 @@ const upcomingEvents = [
   { title: 'Show Sertanejo Arena', date: '20/04', location: 'Uberlândia', team: 40, total: 40, status: 'Aprovados', whatsappGroup: 'https://chat.whatsapp.com/SHOW-ARENA-2026' },
   { title: 'Feira Industrial FIEMG', date: '25/04', location: 'Contagem', team: 8, total: 15, status: 'Alocados', whatsappGroup: 'https://chat.whatsapp.com/FEIRA-FIEMG-2026' },
   { title: 'Casamento Villa Real', date: '02/05', location: 'Nova Lima', team: 6, total: 6, status: 'Aprovados', whatsappGroup: 'https://chat.whatsapp.com/VILLA-REAL-2026' },
-];
-
-const recentActivities = [
-  { icon: UserPlus, text: 'João Pedro Santos alocado para Festival BH', time: '2h atrás', color: 'bg-primary' },
-  { icon: FileCheck, text: 'Orçamento Arena Shows MG aprovado — R$ 72.000', time: '4h atrás', color: 'bg-success' },
-  { icon: AlertCircle, text: '3 novas inscrições para vaga de Socorrista', time: '5h atrás', color: 'bg-tertiary' },
-  { icon: CheckCircle, text: 'Evento Rock in BH finalizado com sucesso', time: '1 dia', color: 'bg-secondary' },
-  { icon: UserPlus, text: 'Fernanda Oliveira obteve certificação NR-35', time: '2 dias', color: 'bg-primary' },
 ];
 
 // ─── Operacional Data ─────────────────────────────────────────────
@@ -171,60 +169,458 @@ const sparkEquipe = [120, 128, 135, 140, 145, 148, 152, 156];
 const sparkReceita = [195, 210, 240, 260, 250, 280, 310, 285];
 const sparkOcupacao = [65, 70, 68, 72, 75, 73, 76, 78];
 
+// ─── Helpers ──────────────────────────────────────────────────────
+
+const getGreeting = () => {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Bom dia';
+  if (hour < 18) return 'Boa tarde';
+  return 'Boa noite';
+};
+
+const getFormattedDate = () => {
+  const now = new Date();
+  const weekday = now.toLocaleDateString('pt-BR', { weekday: 'long' });
+  const day = now.getDate();
+  const month = now.toLocaleDateString('pt-BR', { month: 'long' });
+  const year = now.getFullYear();
+  // Capitalize first letter of each word
+  const capitalize = (s: string) => s.replace(/\b\w/g, (c) => c.toUpperCase());
+  return `${capitalize(weekday)}, ${day} De ${capitalize(month)} De ${year}`;
+};
+
+// ─── Role-based tab system ─────────────────────────────────────────
+
+type TabId =
+  | 'estrategico' | 'tatico' | 'operacional'
+  | 'executivo' | 'pipeline' | 'financeiro'
+  | 'colaborador';
+
+const getTabsForRole = (role: string | undefined): { id: TabId; label: string }[] => {
+  if (role === 'parceiro') return [{ id: 'colaborador', label: 'MINHA ESCALA' }];
+  if (role === 'coo') return [
+    { id: 'executivo', label: 'VISÃO EXECUTIVA' },
+    { id: 'pipeline', label: 'PIPELINE RES' },
+    { id: 'financeiro', label: 'FINANCEIRO' },
+  ];
+  if (role === 'staff') return [
+    { id: 'tatico', label: 'TÁTICO' },
+    { id: 'operacional', label: 'OPERACIONAL' },
+  ];
+  return [
+    { id: 'estrategico', label: 'ESTRATÉGICO' },
+    { id: 'tatico', label: 'TÁTICO' },
+    { id: 'operacional', label: 'OPERACIONAL' },
+  ];
+};
+
+const getDefaultTab = (role: string | undefined): TabId => {
+  if (role === 'parceiro') return 'colaborador';
+  if (role === 'coo') return 'executivo';
+  return 'tatico';
+};
+
 // ─── Component ────────────────────────────────────────────────────
 
 export function DashboardPage() {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<'estrategico' | 'tatico' | 'operacional'>('tatico');
+  const tabs = getTabsForRole(user?.role);
+  const [activeTab, setActiveTab] = useState<TabId>(() => getDefaultTab(user?.role));
 
-  const activeEvents = mockEvents.filter((e) => e.status !== 'completed');
   const firstName = user?.name?.split(' ')[0] || 'Admin';
-  const today = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
-  const tabs = [
-    { id: 'estrategico' as const, label: 'Estratégico' },
-    { id: 'tatico' as const, label: 'Tático' },
-    { id: 'operacional' as const, label: 'Operacional' },
-  ];
+  // Parceiro view — completely different layout, no tabs header needed
+  if (user?.role === 'parceiro') {
+    return (
+      <div className="space-y-0">
+        {/* Greeting Hero */}
+        <div className="bg-gradient-to-r from-[#8b0000] to-[#ba100a] rounded-2xl p-6 text-white mb-6">
+          <p className="text-white/60 text-xs font-bold uppercase tracking-widest">{getGreeting()}</p>
+          <h2 className="text-2xl font-black mt-1">{firstName}!</h2>
+          <p className="text-white/70 text-sm mt-1">{getFormattedDate()}</p>
+          <div className="flex items-center gap-2 mt-4 bg-white/10 rounded-xl px-4 py-2 w-fit">
+            <span className="w-2 h-2 rounded-full bg-[#4caf50] animate-pulse" />
+            <span className="text-xs font-bold text-white/80">Credencial Ativa</span>
+            <span className="text-xs font-bold text-white ml-2">{(user as { credentialNumber?: string })?.credentialNumber || 'BC-00421'}</span>
+          </div>
+        </div>
+
+        {/* Próxima Escala */}
+        <div className="bg-surface-container-lowest rounded-2xl p-5 shadow-sm mb-4">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>event_available</span>
+            <span className="text-[11px] font-black uppercase tracking-widest text-on-surface-variant">PRÓXIMA ESCALA</span>
+          </div>
+          <p className="font-black text-lg text-on-surface mb-3">Festival Gastronômico BH</p>
+          <div className="space-y-2 mb-4">
+            {([
+              { icon: 'calendar_today', label: '15/04/2026' },
+              { icon: 'location_on', label: 'Belo Horizonte, MG' },
+              { icon: 'schedule', label: '08:00 às 20:00' },
+              { icon: 'payments', label: 'R$ 1.800,00' },
+            ] as const).map((row) => (
+              <div key={row.label} className="flex items-center gap-2 text-sm text-on-surface-variant">
+                <span className="material-symbols-outlined text-base text-primary/70">{row.icon}</span>
+                <span>{row.label}</span>
+              </div>
+            ))}
+          </div>
+          <div className="flex items-center justify-between mb-4">
+            <span className="bg-success/10 text-success border border-success/20 rounded-full px-3 py-1 text-xs font-black">
+              CONFIRMADO
+            </span>
+          </div>
+          <Link
+            to="/eventos"
+            className="block border-2 border-primary text-primary rounded-xl py-3 w-full text-center font-black uppercase text-sm hover:bg-primary/5 transition-colors"
+          >
+            Ver Todos os Eventos
+          </Link>
+        </div>
+
+        {/* Histórico de Escalas */}
+        <div className="bg-surface-container-lowest rounded-2xl p-5 shadow-sm mb-4">
+          <p className="text-[11px] font-black uppercase tracking-widest text-on-surface-variant mb-4">HISTÓRICO DE ESCALAS</p>
+          <div className="divide-y divide-outline-variant/10">
+            {([
+              { name: 'Rock in BH Festival', date: '28/03/2026', status: 'REALIZADO', amount: 'R$ 1.800,00' },
+              { name: 'Expo Construção 2026', date: '18/04/2026', status: 'CONFIRMADO', amount: 'R$ 1.440,00' },
+              { name: 'Show Sertanejo Arena', date: '20/04/2026', status: 'CONFIRMADO', amount: 'R$ 2.000,00' },
+              { name: 'Carnaval Ouro Preto', date: '14/02/2026', status: 'REALIZADO', amount: 'R$ 3.600,00' },
+            ] as const).map((ev) => (
+              <div key={ev.name} className="flex items-center justify-between py-3">
+                <div>
+                  <p className="font-bold text-sm text-on-surface">{ev.name}</p>
+                  <p className="text-xs text-on-surface-variant mt-0.5">{ev.date}</p>
+                </div>
+                <div className="flex flex-col items-end gap-1">
+                  <span className={`text-xs font-black rounded-full px-2.5 py-0.5 ${
+                    ev.status === 'REALIZADO'
+                      ? 'bg-success/10 text-success'
+                      : 'bg-primary/10 text-primary'
+                  }`}>
+                    {ev.status}
+                  </span>
+                  <span className="text-xs font-bold text-on-surface-variant">{ev.amount}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Pagamentos */}
+        <div className="bg-surface-container-lowest rounded-2xl p-5 shadow-sm mb-4">
+          <p className="text-[11px] font-black uppercase tracking-widest text-on-surface-variant mb-4">PAGAMENTOS</p>
+          <div className="flex items-center gap-6 mb-3">
+            <div>
+              <p className="text-xs text-on-surface-variant mb-1">Total Recebido</p>
+              <p className="text-2xl font-black text-success">R$ 5.400,00</p>
+            </div>
+            <div className="w-px h-10 bg-outline-variant/30" />
+            <div>
+              <p className="text-xs text-on-surface-variant mb-1">A Receber</p>
+              <p className="text-2xl font-black text-primary">R$ 3.440,00</p>
+            </div>
+          </div>
+          <p className="text-xs text-on-surface-variant">
+            Último pagamento: Rock in BH — R$ 1.800,00 em 02/04/2026
+          </p>
+        </div>
+
+        {/* Certificações */}
+        <div className="bg-surface-container-lowest rounded-2xl p-5 shadow-sm mb-4">
+          <p className="text-[11px] font-black uppercase tracking-widest text-on-surface-variant mb-4">CERTIFICAÇÕES & HABILITAÇÕES</p>
+          <div className="flex flex-wrap gap-2">
+            {['NR-23', 'APH', 'Primeiros Socorros', 'NR-35', 'Brigadista Civil'].map((cert) => (
+              <span key={cert} className="bg-primary/10 text-primary rounded-full px-3 py-1.5 text-xs font-bold border border-primary/20">
+                {cert}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="grid grid-cols-2 gap-3 mb-6">
+          <Link
+            to="/eventos"
+            className="bg-primary text-on-primary rounded-2xl py-4 font-black text-sm uppercase text-center flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+          >
+            <span className="material-symbols-outlined text-base">event</span>
+            Ver Eventos
+          </Link>
+          <Link
+            to="/admin/perfil"
+            className="bg-surface-container text-on-surface border border-outline-variant/30 rounded-2xl py-4 font-black text-sm uppercase text-center flex items-center justify-center gap-2 hover:bg-surface-container-high transition-colors"
+          >
+            <span className="material-symbols-outlined text-base">person</span>
+            Meu Perfil
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
-      {/* ═══ Header (Stitch prototype) ═══ */}
+      {/* ═══ Header ═══ */}
       <div>
-        <p className="text-[10px] font-bold text-primary-container uppercase tracking-[0.15em] mb-1">Pré-Comando</p>
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-on-surface">
-          Olá, {firstName}
+        <h1 className="text-3xl lg:text-4xl font-black tracking-tight text-on-surface">
+          {getGreeting()}, {firstName}
         </h1>
-        <div className="flex items-center gap-3 mt-1">
-          <p className="text-xs text-on-surface-variant capitalize">{today}</p>
-          <span className="flex items-center gap-1.5 text-xs text-success font-medium">
-            <span className="w-1.5 h-1.5 rounded-full bg-success inline-block" />
-            Online
+        <div className="flex items-center gap-2 mt-1.5">
+          <p className="text-sm text-on-surface-variant">{getFormattedDate()}</p>
+          <span className="text-on-surface-variant">●</span>
+          <span className="flex items-center gap-1.5 text-sm text-success font-medium">
+            <span className="w-2 h-2 rounded-full bg-success inline-block" />
+            Status
           </span>
         </div>
       </div>
 
-      {/* ═══ Tab Selector (Stitch) ═══ */}
+      {/* ═══ Tab Selector ═══ */}
       <div className="border-b border-surface-container-high">
-        <div className="flex gap-0 overflow-x-auto">
+        <div className="flex gap-0 overflow-x-auto justify-center">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`relative px-5 py-3 text-sm font-semibold transition-colors whitespace-nowrap ${
+              className={`relative px-8 py-3.5 text-xs font-bold tracking-[0.08em] transition-colors whitespace-nowrap ${
                 activeTab === tab.id
-                  ? 'text-on-surface'
+                  ? 'text-primary'
                   : 'text-on-surface-variant hover:text-on-surface'
               }`}
             >
               {tab.label}
               {activeTab === tab.id && (
-                <span className="absolute bottom-0 left-2 right-2 h-[3px] bg-primary-container rounded-full" />
+                <span className="absolute bottom-0 left-3 right-3 h-[3px] bg-primary rounded-full" />
               )}
             </button>
           ))}
         </div>
       </div>
+
+      {/* ═══════════════════════════════════════════════════════════
+           COO — VISÃO EXECUTIVA
+         ═══════════════════════════════════════════════════════════ */}
+      {activeTab === 'executivo' && (
+        <div className="space-y-6">
+          {/* Header */}
+          <div>
+            <h2 className="text-2xl font-black text-on-surface">Visão Executiva</h2>
+            <p className="text-sm text-on-surface-variant mt-1">Indicadores Estratégicos</p>
+          </div>
+
+          {/* KPI Cards */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <StatsCard title="Receita Mensal" value="R$ 285k" change="↑ 12% vs anterior" trend="up" sparkData={sparkReceita} />
+            <StatsCard title="Orçamentos Ativos" value="12" change="R$ 87k em aberto" sparkData={[8,9,10,12,11,13,12]} />
+            <StatsCard title="Taxa de Ocupação" value="78%" change="Meta: 85%" sparkData={[65,68,70,72,75,73,76,78]} />
+            <StatsCard title="Equipe Disponível" value="89" change="de 156 total" trend="up" sparkData={sparkEquipe} />
+          </div>
+
+          {/* Revenue Area Chart */}
+          <div className="bg-surface-container-lowest rounded-xl border border-surface-container-high shadow-sm p-6">
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest">
+                TENDÊNCIA DE RECEITA — 6 MESES
+              </h3>
+              <span className="flex items-center gap-1.5 text-xs font-bold text-success bg-success/10 px-2.5 py-1 rounded-md">
+                <span className="material-symbols-outlined text-sm">trending_up</span>
+                +58% semestre
+              </span>
+            </div>
+            <div className="h-48 sm:h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={revenueData}>
+                  <defs>
+                    <linearGradient id="cooRevenueGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#ba100a" stopOpacity={0.35} />
+                      <stop offset="100%" stopColor="#ba100a" stopOpacity={0.03} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
+                  <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#6b7280' }} axisLine={false} tickLine={false} />
+                  <YAxis
+                    tick={{ fontSize: 11, fill: '#6b7280' }}
+                    axisLine={false}
+                    tickLine={false}
+                    domain={[0, 320000]}
+                    ticks={[0, 80000, 160000, 240000, 320000]}
+                    tickFormatter={(v: number) => `${(v / 1000).toFixed(0)}k`}
+                  />
+                  <Tooltip
+                    formatter={(value) => [`R$ ${Number(value).toLocaleString('pt-BR')}`, 'Receita']}
+                    contentStyle={{ borderRadius: '8px', border: '1px solid #e5e5e5', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="receita"
+                    stroke="#ba100a"
+                    strokeWidth={2.5}
+                    fill="url(#cooRevenueGrad)"
+                    dot={{ r: 4, fill: '#ba100a', stroke: '#fff', strokeWidth: 2 }}
+                    activeDot={{ r: 6, fill: '#ba100a', stroke: '#fff', strokeWidth: 2 }}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Quote Pipeline */}
+          <div className="bg-surface-container rounded-2xl p-6">
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest">
+                PIPELINE DE ORÇAMENTOS
+              </h3>
+              <span className="text-xs font-bold text-on-surface-variant">R$ 328.500 em pipeline</span>
+            </div>
+            <div className="space-y-4">
+              {([
+                { label: 'Aprovados', amount: 'R$ 93.500', pct: 30, colorBar: 'bg-success', colorText: 'text-success' },
+                { label: 'Pendentes', amount: 'R$ 87.000', pct: 28, colorBar: 'bg-warning', colorText: 'text-warning' },
+                { label: 'Em Negociação', amount: 'R$ 28.000', pct: 9, colorBar: 'bg-tertiary', colorText: 'text-tertiary' },
+                { label: 'Rejeitados', amount: 'R$ 120.000', pct: 39, colorBar: 'bg-error', colorText: 'text-error' },
+              ] as const).map((row) => (
+                <div key={row.label}>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-sm font-bold text-on-surface">{row.label}</span>
+                    <span className={`text-sm font-black ${row.colorText}`}>{row.amount}</span>
+                  </div>
+                  <div className="h-2 bg-surface-container-high rounded-full overflow-hidden">
+                    <div className={`h-full rounded-full ${row.colorBar} transition-all`} style={{ width: `${row.pct}%` }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ═══════════════════════════════════════════════════════════
+           COO — PIPELINE RES (reuses same pipeline circles + charts)
+         ═══════════════════════════════════════════════════════════ */}
+      {activeTab === 'pipeline' && (
+        <div className="space-y-6">
+          <div className="bg-surface-container rounded-2xl p-6 lg:p-8">
+            <h3 className="text-sm font-black text-on-surface uppercase tracking-widest mb-8">
+              RES — RECRUTAMENTO & SELEÇÃO
+            </h3>
+
+            <div className="flex items-center justify-center gap-0 mb-10 overflow-x-auto">
+              {pipelineData.map((stage, i) => {
+                const colors = pipelineColors[stage.stage];
+                return (
+                  <div key={stage.stage} className="flex items-center">
+                    <div className="flex flex-col items-center min-w-[80px] sm:min-w-[100px]">
+                      <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-3">
+                        {stage.stage}
+                      </p>
+                      <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full ${colors.bg} flex items-center justify-center shadow-md`}>
+                        <span className="text-white font-black text-lg sm:text-xl">{stage.count}</span>
+                      </div>
+                    </div>
+                    {i < pipelineData.length - 1 && (
+                      <span className="text-on-surface-variant/40 text-xl mx-2 sm:mx-4 shrink-0 mt-5">▶</span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {pipelineHistory.map((stage) => (
+                <div key={stage.stage} className="bg-surface-container-lowest rounded-xl border border-surface-container-high p-3">
+                  <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-2 text-center">
+                    {stage.stage}
+                  </p>
+                  <div className="h-[120px] w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={stage.data.map((v, i) => ({ i: `S${i + 1}`, v }))} barSize={14}>
+                        <YAxis
+                          tick={{ fontSize: 9, fill: '#9ca3af' }}
+                          axisLine={false}
+                          tickLine={false}
+                          width={28}
+                          domain={[0, 60]}
+                          ticks={[0, 15, 30, 45, 60]}
+                        />
+                        <Bar dataKey="v" fill={stage.color} radius={[4, 4, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ═══════════════════════════════════════════════════════════
+           COO — FINANCEIRO
+         ═══════════════════════════════════════════════════════════ */}
+      {activeTab === 'financeiro' && (
+        <div className="space-y-6">
+          {/* Financial Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {([
+              { label: 'Folha Total (Abr)', value: 'R$ 42.180', style: 'bg-primary/10 border-l-4 border-primary' },
+              { label: 'Receita Bruta (Abr)', value: 'R$ 285.000', style: 'bg-success/10 border-l-4 border-success' },
+              { label: 'Margem Operacional', value: '38,2%', style: 'bg-secondary-container/20 border-l-4 border-secondary' },
+              { label: 'A Pagar (Pendente)', value: 'R$ 18.450', style: 'bg-error/10 border-l-4 border-error' },
+            ] as const).map((card) => (
+              <div key={card.label} className={`${card.style} rounded-xl p-5`}>
+                <p className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest">{card.label}</p>
+                <p className="text-2xl font-black text-on-surface mt-2">{card.value}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Events Table */}
+          <div className="bg-surface-container-lowest rounded-xl border border-surface-container-high shadow-sm p-6">
+            <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest mb-5">
+              Próximos Eventos
+            </h3>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-surface-container-high">
+                    {['Evento', 'Data', 'Local', 'Equipe', 'Status', 'WhatsApp'].map((h) => (
+                      <th key={h} className="text-left py-3 px-3 text-[11px] font-black text-on-surface-variant uppercase tracking-widest whitespace-nowrap">
+                        {h}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {upcomingEvents.map((evt) => (
+                    <tr key={evt.title} className="border-b border-[#f4f4f5] hover:bg-[#f9f9f9] transition-colors">
+                      <td className="py-3 px-3 font-bold text-on-surface whitespace-nowrap">{evt.title}</td>
+                      <td className="py-3 px-3 text-on-surface-variant whitespace-nowrap">{evt.date}</td>
+                      <td className="py-3 px-3 text-on-surface-variant whitespace-nowrap">{evt.location}</td>
+                      <td className="py-3 px-3 text-on-surface whitespace-nowrap">
+                        {evt.team}/{evt.total}
+                      </td>
+                      <td className="py-3 px-3 whitespace-nowrap">
+                        <span className="text-xs font-bold text-on-surface-variant">{evt.status}</span>
+                      </td>
+                      <td className="py-3 px-3">
+                        <a
+                          href={evt.whatsappGroup}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-xs font-black text-success bg-success/10 px-2.5 py-1 rounded-lg hover:bg-success/20 transition-colors"
+                        >
+                          <MessageCircle className="w-3 h-3" /> Abrir
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ═══════════════════════════════════════════════════════════
            TAB 1 — ESTRATÉGICO (Visão C-Level / Diretoria)
@@ -401,53 +797,70 @@ export function DashboardPage() {
         <div className="space-y-6">
           {/* Main Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <StatsCard title="Eventos Ativos" value={mockStats.activeEvents} change="+3 esta semana" trend="up" sparkData={sparkEvents} />
-            <StatsCard title="Equipe Total" value={mockStats.totalStaff} change={`${mockStats.availableStaff} disponíveis`} trend="up" sparkData={sparkEquipe} />
-            <StatsCard title="Receita Mensal" value={`R$ ${(mockStats.monthlyRevenue / 1000).toFixed(0)}k`} change="+12% vs anterior" trend="up" sparkData={sparkReceita} />
+            <StatsCard title="Eventos Ativos" value={mockStats.activeEvents} change="↑ 3 esta semana" trend="up" sparkData={sparkEvents} />
+            <StatsCard title="Equipe Total" value={mockStats.totalStaff} change={`↑ ${mockStats.availableStaff} disponíveis`} trend="up" sparkData={sparkEquipe} />
+            <StatsCard title="Receita Mensal" value={`R$ ${(mockStats.monthlyRevenue / 1000).toFixed(0)}k`} change="↑ 12% vs anterior" trend="up" sparkData={sparkReceita} />
             <StatsCard title="Ocupação" value={`${mockStats.occupancyRate}%`} change="Meta: 85%" sparkData={sparkOcupacao} />
           </div>
 
-          {/* ReS — Recrutamento & Seleção */}
-          <div className="bg-surface-container-lowest rounded-xl border border-surface-container-high shadow-sm p-6">
-            <h3 className="text-[11px] font-black text-on-surface uppercase tracking-widest mb-6">
+          {/* RES — Recrutamento & Seleção */}
+          <div className="bg-surface-container rounded-2xl p-6 lg:p-8">
+            <h3 className="text-sm font-black text-on-surface uppercase tracking-widest mb-8">
               RES — RECRUTAMENTO & SELEÇÃO
             </h3>
 
-            {/* Pipeline circles with arrows */}
-            <div className="flex items-center justify-between mb-8 overflow-x-auto">
-              {pipelineData.map((stage, i) => (
-                <div key={stage.stage} className="flex items-center flex-1 min-w-0">
-                  <div className="flex flex-col items-center flex-1">
-                    <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-2">{stage.stage}</p>
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-success flex items-center justify-center">
-                      <span className="text-white font-black text-sm sm:text-base">{stage.count}</span>
+            {/* Pipeline circles with arrow connectors */}
+            <div className="flex items-center justify-center gap-0 mb-10 overflow-x-auto">
+              {pipelineData.map((stage, i) => {
+                const colors = pipelineColors[stage.stage];
+                return (
+                  <div key={stage.stage} className="flex items-center">
+                    <div className="flex flex-col items-center min-w-[80px] sm:min-w-[100px]">
+                      <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-3">
+                        {stage.stage}
+                      </p>
+                      <div
+                        className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full ${colors.bg} flex items-center justify-center shadow-md`}
+                      >
+                        <span className="text-white font-black text-lg sm:text-xl">{stage.count}</span>
+                      </div>
                     </div>
+                    {i < pipelineData.length - 1 && (
+                      <span className="text-on-surface-variant/40 text-xl mx-2 sm:mx-4 shrink-0 mt-5">▶</span>
+                    )}
                   </div>
-                  {i < pipelineData.length - 1 && (
-                    <ChevronRight className="w-5 h-5 text-[#d1d5db] shrink-0 -mx-1" />
-                  )}
-                </div>
-              ))}
+                );
+              })}
             </div>
 
-            {/* Per-stage mini bar charts */}
+            {/* Per-stage bar charts with Y-axis */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {pipelineHistory.map((stage) => (
-                <div key={stage.stage} className="flex flex-col items-center">
-                  <div className="h-20 w-full">
+                <div key={stage.stage} className="bg-surface-container-lowest rounded-xl border border-surface-container-high p-3">
+                  <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-2 text-center">
+                    {stage.stage}
+                  </p>
+                  <div className="h-[120px] w-full">
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={stage.data.map((v, i) => ({ i, v }))} barSize={12}>
-                        <Bar dataKey="v" fill={stage.color} radius={[3, 3, 0, 0]} />
+                      <BarChart data={stage.data.map((v, i) => ({ i: `S${i + 1}`, v }))} barSize={14}>
+                        <YAxis
+                          tick={{ fontSize: 9, fill: '#9ca3af' }}
+                          axisLine={false}
+                          tickLine={false}
+                          width={28}
+                          domain={[0, 60]}
+                          ticks={[0, 15, 30, 45, 60]}
+                        />
+                        <Bar dataKey="v" fill={stage.color} radius={[4, 4, 0, 0]} />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
-                  <p className="text-[10px] font-bold text-on-surface-variant mt-1">{stage.stage}</p>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Charts + Events Grid */}
+          {/* Bottom Row: Revenue Chart + Upcoming Events */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Revenue Chart */}
             <div className="bg-surface-container-lowest rounded-xl border border-surface-container-high shadow-sm p-6">
@@ -455,15 +868,18 @@ export function DashboardPage() {
                 <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest">
                   Receita Mensal
                 </h3>
-                <span className="text-xs font-bold text-success bg-success/10 px-2 py-1 rounded-md">+58% 6 meses</span>
+                <span className="flex items-center gap-1.5 text-xs font-bold text-success bg-success/10 px-2.5 py-1 rounded-md">
+                  <span className="material-symbols-outlined text-sm">trending_up</span>
+                  +58% 6 meses
+                </span>
               </div>
               <div className="h-48 sm:h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={revenueData}>
                     <defs>
                       <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#ba100a" stopOpacity={0.3} />
-                        <stop offset="100%" stopColor="#ba100a" stopOpacity={0.02} />
+                        <stop offset="0%" stopColor="#ba100a" stopOpacity={0.35} />
+                        <stop offset="100%" stopColor="#ba100a" stopOpacity={0.03} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" />
@@ -472,19 +888,29 @@ export function DashboardPage() {
                       tick={{ fontSize: 11, fill: '#6b7280' }}
                       axisLine={false}
                       tickLine={false}
+                      domain={[0, 320000]}
+                      ticks={[0, 80000, 160000, 240000, 320000]}
                       tickFormatter={(v: number) => `${(v / 1000).toFixed(0)}k`}
                     />
                     <Tooltip
                       formatter={(value) => [`R$ ${Number(value).toLocaleString('pt-BR')}`, 'Receita']}
                       contentStyle={{ borderRadius: '8px', border: '1px solid #e5e5e5', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
                     />
-                    <Area type="monotone" dataKey="receita" stroke="#ba100a" strokeWidth={2.5} fill="url(#revenueGradient)" />
+                    <Area
+                      type="monotone"
+                      dataKey="receita"
+                      stroke="#ba100a"
+                      strokeWidth={2.5}
+                      fill="url(#revenueGradient)"
+                      dot={{ r: 4, fill: '#ba100a', stroke: '#fff', strokeWidth: 2 }}
+                      activeDot={{ r: 6, fill: '#ba100a', stroke: '#fff', strokeWidth: 2 }}
+                    />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
             </div>
 
-            {/* Upcoming Events */}
+            {/* Upcoming Events — 2x2 grid */}
             <div className="bg-surface-container-lowest rounded-xl border border-surface-container-high shadow-sm p-6">
               <div className="flex items-center justify-between mb-5">
                 <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest">
@@ -495,113 +921,40 @@ export function DashboardPage() {
                 </button>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {upcomingEvents.map((evt) => (
-                  <div key={evt.title} className="border border-surface-container-high rounded-lg p-3 hover:shadow-sm transition-shadow">
-                    <div className="flex items-start gap-3">
-                      <div className="w-11 h-11 rounded-lg bg-[#fef2f2] flex flex-col items-center justify-center shrink-0">
-                        <span className="text-sm font-black text-primary-container leading-none">{evt.date.split('/')[0]}</span>
-                        <span className="text-[9px] font-bold text-primary-container/60">/{evt.date.split('/')[1]}</span>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-bold text-on-surface text-sm truncate">{evt.title}</p>
-                        <p className="text-xs text-on-surface-variant flex items-center gap-1 mt-0.5">
-                          <MapPin className="w-3 h-3" /> {evt.location}
-                        </p>
-                        <div className="flex items-center justify-between mt-2">
-                          <span className="text-[10px] font-bold text-on-surface-variant">{evt.status}</span>
-                          <span className="text-xs font-black text-on-surface">{evt.team}/{evt.total} <span className="font-normal text-on-surface-variant">equipe</span></span>
+                {upcomingEvents.map((evt) => {
+                  const fillPct = Math.round((evt.team / evt.total) * 100);
+                  return (
+                    <div key={evt.title} className="border border-surface-container-high rounded-lg p-3 hover:shadow-sm transition-shadow">
+                      <div className="flex items-start gap-3">
+                        {/* Date badge */}
+                        <div className="w-12 h-12 rounded-lg bg-primary/10 flex flex-col items-center justify-center shrink-0 border border-primary/20">
+                          <span className="text-base font-black text-primary leading-none">{evt.date.split('/')[0]}</span>
+                          <span className="text-[9px] font-bold text-primary/60">/{evt.date.split('/')[1]}</span>
                         </div>
-                        {/* WhatsApp + Instagram quick links */}
-                        <div className="flex items-center gap-2 mt-2 pt-2 border-t border-[#f0f0f0]">
-                          <a
-                            href={evt.whatsappGroup}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-1 px-2 py-1 rounded-md bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366]/20 transition-colors text-[10px] font-bold"
-                            title={`Grupo WhatsApp — ${evt.title}`}
-                          >
-                            <MessageCircle className="w-3 h-3" />
-                            Grupo
-                          </a>
-                          <a
-                            href="https://www.instagram.com/brigadacamarao/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-1 px-2 py-1 rounded-md bg-[#E1306C]/10 text-[#E1306C] hover:bg-[#E1306C]/20 transition-colors text-[10px] font-bold"
-                            title="Instagram @brigadacamarao"
-                          >
-                            <InstagramIcon className="w-3 h-3" />
-                            Insta
-                          </a>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-bold text-on-surface text-sm truncate">{evt.title}</p>
+                          <p className="text-xs text-on-surface-variant flex items-center gap-1 mt-0.5">
+                            <MapPin className="w-3 h-3 shrink-0" /> {evt.location} • Camarão
+                          </p>
+                          <div className="flex items-center justify-between mt-1.5">
+                            <span className="text-[10px] font-bold text-on-surface-variant">{evt.status}</span>
+                            <span className="text-xs font-black text-on-surface">
+                              {evt.team}/{evt.total} <span className="font-normal text-on-surface-variant">equipe</span>
+                            </span>
+                          </div>
+                          {/* Progress bar */}
+                          <div className="mt-2 h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+                            <div
+                              className="h-full rounded-full bg-primary transition-all"
+                              style={{ width: `${fillPct}%` }}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
-            </div>
-          </div>
-
-          {/* Recent Activities */}
-          <div className="bg-surface-container-lowest rounded-xl border border-surface-container-high shadow-sm p-6">
-            <div className="flex items-center justify-between mb-5">
-              <h3 className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest">
-                Atividades Recentes
-              </h3>
-              <button className="text-[11px] font-black text-primary-container uppercase tracking-wider flex items-center gap-1 hover:underline">
-                Ver Todas <ArrowRight className="w-3 h-3" />
-              </button>
-            </div>
-            <div className="space-y-4">
-              {recentActivities.map((act, i) => (
-                <div key={i} className="flex items-start gap-4">
-                  <div className="relative">
-                    <div className={`w-9 h-9 rounded-full ${act.color} flex items-center justify-center shrink-0`}>
-                      <act.icon className="w-4 h-4 text-white" />
-                    </div>
-                    {i < recentActivities.length - 1 && (
-                      <div className="absolute top-9 left-1/2 -translate-x-1/2 w-px h-6 bg-[#e5e5e5]" />
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0 pt-1">
-                    <p className="text-sm text-on-surface">{act.text}</p>
-                    <p className="text-xs text-on-surface-variant mt-0.5 flex items-center gap-1">
-                      <Clock className="w-3 h-3" /> {act.time}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Active Events Table */}
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest">Eventos em Andamento</h2>
-            </div>
-            <div className="space-y-3">
-              {activeEvents.slice(0, 5).map((event) => (
-                <div key={event.id} className="bg-surface-container-lowest p-4 lg:p-5 rounded-xl border border-surface-container-high shadow-sm flex items-center gap-4 hover:shadow-md transition-shadow">
-                  <div className="w-10 h-10 rounded-lg bg-[#fef2f2] flex items-center justify-center shrink-0">
-                    <Flame className="w-5 h-5 text-primary-container" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-bold text-on-surface text-sm truncate">{event.title}</p>
-                    <div className="flex items-center gap-3 mt-1">
-                      <span className="text-xs text-on-surface-variant flex items-center gap-1">
-                        <Calendar className="w-3 h-3" /> {event.date}
-                      </span>
-                      <span className="text-xs text-on-surface-variant flex items-center gap-1">
-                        <MapPin className="w-3 h-3" /> {event.location}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 shrink-0">
-                    <span className="text-xs font-bold text-on-surface-variant">{event.filledVacancies}/{event.vacancies}</span>
-                    <StatusBadge status={event.status} />
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
         </div>

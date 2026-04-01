@@ -1,18 +1,27 @@
 import { FileText, ArrowRight } from 'lucide-react';
 import { mockQuotes } from '../../data/mockData';
 import { StatusBadge } from '../../components/StatusBadge';
+import { DataBadge } from '../../components/DataBadge';
+import { useApiData } from '../../hooks/useApiData';
+import { api } from '../../lib/api';
+import type { Quote } from '../../types';
 
 export function QuotesPage() {
+  const { data: quotes, isLive } = useApiData<Quote[]>(() => api.getQuotes(), mockQuotes);
+
   return (
     <div>
-      <div className="mb-8">
-        <p className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest mb-1">Pré-Comando</p>
-        <h1 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-on-surface">Orçamentos e Cotações</h1>
+      <div className="flex items-start justify-between mb-8">
+        <div>
+          <p className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest mb-1">Pré-Comando</p>
+          <h1 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-on-surface">Orçamentos e Cotações</h1>
+        </div>
+        <DataBadge isLive={isLive} />
       </div>
 
       {/* Quotes grid */}
       <div className="space-y-4">
-        {mockQuotes.map((quote) => (
+        {quotes.map((quote) => (
           <div key={quote.id} className="bg-surface-container-lowest shadow-sm">
             {/* Quote header */}
             <div className="flex items-center justify-between p-5 border-b border-outline-variant/20">

@@ -2,10 +2,15 @@ import { Search, Phone, Mail } from 'lucide-react';
 import { useState } from 'react';
 import { mockTeam } from '../../data/mockData';
 import { StatusBadge } from '../../components/StatusBadge';
+import { DataBadge } from '../../components/DataBadge';
+import { useApiData } from '../../hooks/useApiData';
+import { api } from '../../lib/api';
+import type { TeamMember } from '../../types';
 
 export function TeamDirectoryPage() {
   const [search, setSearch] = useState('');
-  const filtered = mockTeam.filter((m) =>
+  const { data: team, isLive } = useApiData<TeamMember[]>(() => api.getTeam(), mockTeam);
+  const filtered = team.filter((m) =>
     m.name.toLowerCase().includes(search.toLowerCase()) ||
     m.role.toLowerCase().includes(search.toLowerCase())
   );
@@ -15,7 +20,10 @@ export function TeamDirectoryPage() {
       <div className="mb-8">
         <p className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest mb-1">Recursos Humanos</p>
         <h1 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-on-surface">Diretório de Equipe</h1>
-        <p className="text-sm text-on-surface-variant font-medium mt-1">{mockTeam.length} membros cadastrados</p>
+        <div className="flex items-center gap-3 mt-1">
+          <p className="text-sm text-on-surface-variant font-medium">{team.length} membros cadastrados</p>
+          <DataBadge isLive={isLive} />
+        </div>
       </div>
 
       {/* Search */}

@@ -2,15 +2,20 @@ import { Calendar, MapPin, Search, Flame, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { mockEvents } from '../../data/mockData';
 import { StatusBadge } from '../../components/StatusBadge';
+import { DataBadge } from '../../components/DataBadge';
+import { useApiData } from '../../hooks/useApiData';
+import { api } from '../../lib/api';
+import type { Event } from '../../types';
 
 export function EventManagementPage() {
   const [search, setSearch] = useState('');
-  const filtered = mockEvents.filter((e) =>
+  const { data: events, isLive } = useApiData<Event[]>(() => api.getEvents(), mockEvents);
+  const filtered = events.filter((e) =>
     e.title.toLowerCase().includes(search.toLowerCase()) ||
     e.location.toLowerCase().includes(search.toLowerCase())
   );
 
-  const activeCount = mockEvents.filter(e => e.status === 'active').length;
+  const activeCount = events.filter(e => e.status === 'active').length;
 
   return (
     <div>
@@ -27,10 +32,13 @@ export function EventManagementPage() {
       {/* Hero stat */}
       <div className="bg-primary rounded-2xl p-6 mb-6 flex items-center justify-between text-on-primary">
         <div>
-          <p className="text-3xl font-black">{activeCount > 0 ? `${mockEvents.length} Unidades Ativas` : '0 Ativas'}</p>
+          <p className="text-3xl font-black">{activeCount > 0 ? `${events.length} Unidades Ativas` : '0 Ativas'}</p>
           <p className="text-on-primary/70 text-sm font-medium mt-1">Total de eventos cadastrados</p>
         </div>
-        <Flame className="w-12 h-12 text-on-primary/30" />
+        <div className="flex flex-col items-end gap-2">
+          <Flame className="w-12 h-12 text-on-primary/30" />
+          <DataBadge isLive={isLive} />
+        </div>
       </div>
 
       {/* Search */}
