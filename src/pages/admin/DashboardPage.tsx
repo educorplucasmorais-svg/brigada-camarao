@@ -361,9 +361,9 @@ export function DashboardPage() {
   }
 
   return (
-    <div className="-m-4 sm:-m-5 lg:-m-8"> {/* break out of AdminLayout padding */}
+    <div>
       {/* ═══ Header ═══ */}
-      <div className="px-6 pt-6 pb-4 lg:px-10 lg:pt-8">
+      <div className="pb-4 pt-3 lg:pt-5">
         <h1 className="text-2xl lg:text-3xl font-black tracking-tight text-[#111827]">
           {getGreeting()}, {firstName}
         </h1>
@@ -378,8 +378,8 @@ export function DashboardPage() {
       </div>
 
       {/* ═══ Tab Selector ═══ */}
-      <div className="border-b border-[#e5e7eb]">
-        <div className="flex gap-0 overflow-x-auto justify-center px-2">
+      <div className="border-b border-[#e5e7eb] -mx-4 sm:-mx-5 lg:-mx-8">
+        <div className="flex gap-0 overflow-x-auto justify-center px-4 sm:px-5 lg:px-8">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -400,7 +400,7 @@ export function DashboardPage() {
       </div>
 
       {/* ═══ Tab Content ═══ */}
-      <div className="p-6 lg:p-10 space-y-6">
+      <div className="py-6 space-y-6">
 
       {/* ═══════════════════════════════════════════════════════════
            COO — VISÃO EXECUTIVA

@@ -23,7 +23,7 @@ export function VacancyManagementPage() {
     <div>
       <div className="mb-8">
         <p className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest mb-1">Operação de Escala</p>
-        <h1 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-on-surface">Gestão de Vagas</h1>
+        <h1 className="text-xl lg:text-2xl font-extrabold tracking-tight text-on-surface">Gestão de Vagas</h1>
       </div>
 
       {/* Fill rate hero */}

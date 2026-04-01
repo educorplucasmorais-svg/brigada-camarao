@@ -19,7 +19,7 @@ export function TeamDirectoryPage() {
     <div>
       <div className="mb-8">
         <p className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest mb-1">Recursos Humanos</p>
-        <h1 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-on-surface">Diretório de Equipe</h1>
+        <h1 className="text-xl lg:text-2xl font-extrabold tracking-tight text-on-surface">Diretório de Equipe</h1>
         <div className="flex items-center gap-3 mt-1">
           <p className="text-sm text-on-surface-variant font-medium">{team.length} membros cadastrados</p>
           <DataBadge isLive={isLive} />

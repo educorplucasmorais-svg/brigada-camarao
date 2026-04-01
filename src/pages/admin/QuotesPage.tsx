@@ -14,7 +14,7 @@ export function QuotesPage() {
       <div className="flex items-start justify-between mb-8">
         <div>
           <p className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest mb-1">Pré-Comando</p>
-          <h1 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-on-surface">Orçamentos e Cotações</h1>
+          <h1 className="text-xl lg:text-2xl font-extrabold tracking-tight text-on-surface">Orçamentos e Cotações</h1>
         </div>
         <DataBadge isLive={isLive} />
       </div>
@@ -22,7 +22,7 @@ export function QuotesPage() {
       {/* Quotes grid */}
       <div className="space-y-4">
         {quotes.map((quote) => (
-          <div key={quote.id} className="bg-surface-container-lowest shadow-sm">
+          <div key={quote.id} className="bg-surface-container-lowest shadow-sm rounded-xl border border-surface-container-high overflow-hidden">
             {/* Quote header */}
             <div className="flex items-center justify-between p-5 border-b border-outline-variant/20">
               <div className="flex items-center gap-3">

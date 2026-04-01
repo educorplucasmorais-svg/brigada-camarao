@@ -22,7 +22,7 @@ export function EventManagementPage() {
       <div className="flex items-start justify-between mb-8">
         <div>
           <p className="text-[11px] font-black text-on-surface-variant uppercase tracking-widest mb-1">Console Sentinel</p>
-          <h1 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-on-surface">Gestão de Eventos</h1>
+          <h1 className="text-xl lg:text-2xl font-extrabold tracking-tight text-on-surface">Gestão de Eventos</h1>
         </div>
         <button className="py-3 px-5 bg-primary text-on-primary font-black text-sm rounded-2xl shadow-lg shadow-primary/20 flex items-center gap-2 uppercase tracking-tight">
           <Plus className="w-4 h-4" /> Novo
