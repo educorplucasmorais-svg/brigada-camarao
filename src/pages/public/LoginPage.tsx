@@ -59,6 +59,8 @@ export function LoginPage() {
   const [name, setName] = useState('');
   const [cpf, setCpf] = useState('');
   const [phone, setPhone] = useState('');
+  const [pixKey, setPixKey] = useState('');
+  const [credentialNumber, setCredentialNumber] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -116,7 +118,7 @@ export function LoginPage() {
     const cleanCpf = cpf.replace(/\D/g, '');
     if (!name.trim() || cleanCpf.length !== 11) { setError('Preencha nome e CPF completo.'); return; }
     setLoading(true);
-    const result = await registerParceiro({ name, cpf: cleanCpf, phone });
+    const result = await registerParceiro({ name, cpf: cleanCpf, phone, pixKey, credentialNumber });
     setLoading(false);
     if (result.success) setRegistered(true);
     else setError('Erro ao registrar. Tente novamente.');
@@ -124,6 +126,7 @@ export function LoginPage() {
 
   const resetForm = () => {
     setEmail(''); setPassword(''); setName(''); setCpf(''); setPhone('');
+    setPixKey(''); setCredentialNumber('');
     setError(''); setShowPassword(false); setRegistered(false);
   };
   const goBack = () => { resetForm(); setMode('select'); };
@@ -195,9 +198,17 @@ export function LoginPage() {
               <Icon name="check_circle" filled className="text-[#4ade80] text-3xl" />
             </div>
             <h2 className="text-xl font-bold text-white mb-2">Cadastro Enviado</h2>
-            <p className="text-sm text-white/40 mb-6 leading-relaxed">
+            <p className="text-sm text-white/40 mb-4 leading-relaxed">
               Aguardando aprovação do administrador. Você será notificado.
             </p>
+            <div className="bg-[#15803d]/10 border border-[#4ade80]/15 rounded-xl p-3.5 mb-4">
+              <div className="flex items-center justify-center gap-2">
+                <Icon name="qr_code" filled className="text-[#4ade80] text-lg" />
+                <p className="text-[11px] text-[#4ade80]/80 font-bold uppercase tracking-wider">
+                  QR Code gerado automaticamente
+                </p>
+              </div>
+            </div>
             <div className="bg-[#15803d]/10 border border-[#4ade80]/15 rounded-xl p-3.5 mb-6">
               <div className="flex items-center justify-center gap-2">
                 <Icon name="hourglass_top" filled className="text-[#4ade80] text-lg" />
@@ -210,6 +221,142 @@ export function LoginPage() {
               className="w-full py-3.5 bg-white/[0.06] text-white font-bold rounded-xl text-sm hover:bg-white/[0.1] transition-all border border-white/[0.08]">
               Voltar ao Início
             </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ═══ REGISTRATION FORM — Stitch Light Design (Recrutamento) ═══
+  if (mode === 'register') {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-[#f8f5f2] to-[#f0ebe6] flex items-center justify-center p-4 sm:p-6">
+        <div className="w-full max-w-md">
+          <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
+            {/* Header */}
+            <div className="pt-10 pb-6 px-8 text-center">
+              <img src="/images/logo-brigada.png" alt="Brigada Camarão"
+                className="w-24 h-24 rounded-full object-contain mx-auto mb-5" />
+              <h1 className="text-2xl sm:text-[28px] font-black text-[#2c1810] tracking-tight leading-tight mb-2">
+                BEM-VINDO À BRIGADA<br />CAMARÃO
+              </h1>
+              <p className="text-[11px] font-bold text-[#8a7060] tracking-[0.2em] uppercase mb-1.5">
+                Recrutamento de Bombeiro Civil
+              </p>
+              <p className="text-xs text-[#a09080]">
+                Informe seus dados para prosseguir com a inscrição.
+              </p>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleRegister} className="px-8 pb-8 space-y-5">
+              {error && (
+                <div className="bg-red-50 border border-red-200 rounded-xl p-3 flex items-center gap-2.5">
+                  <Icon name="error" filled className="text-red-500 text-lg shrink-0" />
+                  <p className="text-xs font-medium text-red-600">{error}</p>
+                </div>
+              )}
+
+              {/* Nome Completo */}
+              <div>
+                <label className="block text-[10px] font-black text-[#3a2e26] uppercase tracking-[0.15em] mb-2">
+                  Nome Completo
+                </label>
+                <div className="relative">
+                  <input type="text" value={name} onChange={(e) => setName(e.target.value)}
+                    placeholder="Como no seu RG/CNH" required
+                    className="w-full px-4 py-3.5 bg-[#faf8f6] border border-[#e8e0d8] rounded-xl text-sm text-[#2c1810] font-medium placeholder:text-[#c0b0a0] outline-none focus:border-[#ba100a]/50 focus:ring-2 focus:ring-[#ba100a]/10 transition-all" />
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    <Icon name="person" className="text-lg text-[#c0b0a0]" />
+                  </div>
+                </div>
+              </div>
+
+              {/* CPF */}
+              <div>
+                <label className="block text-[10px] font-black text-[#3a2e26] uppercase tracking-[0.15em] mb-2">
+                  CPF
+                </label>
+                <div className="relative">
+                  <input type="text" value={cpf} onChange={(e) => setCpf(formatCpf(e.target.value))}
+                    placeholder="000.000.000-00" maxLength={14} required
+                    className="w-full px-4 py-3.5 bg-[#faf8f6] border border-[#e8e0d8] rounded-xl text-sm text-[#2c1810] font-medium placeholder:text-[#c0b0a0] outline-none focus:border-[#ba100a]/50 focus:ring-2 focus:ring-[#ba100a]/10 transition-all" />
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    <Icon name="badge" filled className="text-lg text-[#ba100a]/40" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Chave PIX */}
+              <div>
+                <label className="block text-[10px] font-black text-[#3a2e26] uppercase tracking-[0.15em] mb-2">
+                  Chave PIX
+                </label>
+                <div className="relative">
+                  <input type="text" value={pixKey} onChange={(e) => setPixKey(e.target.value)}
+                    placeholder="E-mail, CPF ou Celular"
+                    className="w-full px-4 py-3.5 bg-[#faf8f6] border border-[#e8e0d8] rounded-xl text-sm text-[#2c1810] font-medium placeholder:text-[#c0b0a0] outline-none focus:border-[#ba100a]/50 focus:ring-2 focus:ring-[#ba100a]/10 transition-all" />
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    <Icon name="pix" filled className="text-lg text-[#ba100a]/40" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Nº Credencial */}
+              <div>
+                <label className="block text-[10px] font-black text-[#3a2e26] uppercase tracking-[0.15em] mb-2">
+                  Nº Credencial
+                </label>
+                <div className="relative">
+                  <input type="text" value={credentialNumber} onChange={(e) => setCredentialNumber(e.target.value)}
+                    placeholder="Ex: BC-12345"
+                    className="w-full px-4 py-3.5 bg-[#faf8f6] border border-[#e8e0d8] rounded-xl text-sm text-[#2c1810] font-medium placeholder:text-[#c0b0a0] outline-none focus:border-[#ba100a]/50 focus:ring-2 focus:ring-[#ba100a]/10 transition-all" />
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    <Icon name="verified" filled className="text-lg text-[#ba100a]/40" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Telefone */}
+              <div>
+                <label className="block text-[10px] font-black text-[#3a2e26] uppercase tracking-[0.15em] mb-2">
+                  Telefone <span className="text-[#c0b0a0] font-medium normal-case">(opcional)</span>
+                </label>
+                <div className="relative">
+                  <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)}
+                    placeholder="(31) 99999-9999"
+                    className="w-full px-4 py-3.5 bg-[#faf8f6] border border-[#e8e0d8] rounded-xl text-sm text-[#2c1810] font-medium placeholder:text-[#c0b0a0] outline-none focus:border-[#ba100a]/50 focus:ring-2 focus:ring-[#ba100a]/10 transition-all" />
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    <Icon name="phone" className="text-lg text-[#c0b0a0]" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Info Box (Stitch) */}
+              <div className="bg-[#fef9f0] border border-[#f5e0c0] rounded-xl p-4 flex items-start gap-3">
+                <Icon name="info" filled className="text-[#d4a050] text-lg shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-xs font-extrabold text-[#7a5c30] mb-1">Por que pedimos isso?</p>
+                  <p className="text-[11px] text-[#8a7060] leading-relaxed">
+                    O <strong className="text-[#5a4030]">CPF</strong> é necessário para o seguro de acidentes pessoais durante os eventos, e a <strong className="text-[#5a4030]">Chave PIX</strong> garante o recebimento ágil de suas diárias e reembolsos após a conclusão do serviço.
+                  </p>
+                </div>
+              </div>
+
+              {/* Submit */}
+              <button type="submit" disabled={loading}
+                className="w-full py-4 bg-gradient-to-r from-[#900001] to-[#ba100a] text-white font-extrabold rounded-xl text-sm tracking-wider uppercase flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg hover:shadow-xl hover:brightness-110">
+                <Icon name="how_to_reg" className="text-lg" />
+                {loading ? 'Enviando...' : 'Enviar para Aprovação'}
+              </button>
+
+              {/* Back link */}
+              <button type="button" onClick={goBack}
+                className="w-full py-2.5 text-xs font-bold text-[#8a7060] hover:text-[#5a4030] transition-colors flex items-center justify-center gap-2">
+                <Icon name="arrow_back" className="text-base" />
+                Voltar para seleção
+              </button>
+            </form>
           </div>
         </div>
       </div>
@@ -239,15 +386,8 @@ export function LoginPage() {
       ph1: 'Nome Completo', ph2: 'CPF (000.000.000-00)',
       btnText: 'ACESSAR EVENTOS',
     },
-    register: {
-      label: 'NOVO CADASTRO', sublabel: 'PRÉ-APROVAÇÃO', accent: '#16a34a',
-      accentLight: '#4ade80', glowShadow: '0 0 60px rgba(22,163,74,0.15)',
-      inputIcon1: 'person_outline', inputIcon2: 'badge',
-      ph1: 'Nome Completo', ph2: 'CPF (000.000.000-00)',
-      btnText: 'ENVIAR PARA APROVAÇÃO',
-    },
   };
-  const cfg = cfgMap[mode];
+  const cfg = cfgMap[mode as 'admin' | 'ct' | 'parceiro'];
 
   const styledInput = (
     icon: string,
@@ -397,38 +537,6 @@ export function LoginPage() {
                     style={{ color: `${cfg.accentLight}99` }}>
                     <Icon name="person_add" className="text-base" />
                     Primeiro acesso? Registre-se
-                  </button>
-                </div>
-              </form>
-            )}
-
-            {/* ── Register Form ── */}
-            {mode === 'register' && (
-              <form onSubmit={handleRegister} className="space-y-4">
-                <div className="bg-[#15803d]/10 border border-[#4ade80]/10 rounded-xl p-3 flex items-start gap-2.5">
-                  <Icon name="info" filled className="text-[#4ade80] text-base shrink-0 mt-0.5" />
-                  <p className="text-[11px] text-[#4ade80]/70 font-medium leading-relaxed">
-                    Cadastro sujeito a <strong className="text-[#4ade80]/90">aprovação do administrador</strong>.
-                  </p>
-                </div>
-                {styledInput('person_outline', {
-                  type: 'text', value: name, onChange: (e) => setName(e.target.value),
-                  placeholder: 'Nome Completo', required: true,
-                }, cfg.accent)}
-                {styledInput('badge', {
-                  type: 'text', value: cpf,
-                  onChange: (e) => setCpf(formatCpf(e.target.value)),
-                  placeholder: 'CPF (000.000.000-00)', maxLength: 14, required: true,
-                }, cfg.accent)}
-                {styledInput('phone', {
-                  type: 'tel', value: phone, onChange: (e) => setPhone(e.target.value),
-                  placeholder: 'Telefone (opcional)',
-                }, cfg.accent)}
-                <div className="pt-2">
-                  <button type="submit" disabled={loading}
-                    className="w-full py-4 font-extrabold text-white rounded-xl text-sm tracking-widest uppercase flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg hover:brightness-110"
-                    style={{ background: cfg.accent }}>
-                    {loading ? 'Enviando...' : cfg.btnText}
                   </button>
                 </div>
               </form>

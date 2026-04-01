@@ -7,7 +7,7 @@ const MOCK_USERS: (User & { password: string; cpf?: string })[] = [
   { id: '1', name: 'Lucas Morais', email: 'admin@brigadacamarao.com', role: 'admin', phone: '31999999999', password: '123456' },
   { id: '2', name: 'Diretoria COO', email: 'coo@brigadacamarao.com', role: 'coo', phone: '31988888888', password: '123456' },
   { id: '3', name: 'Equipe Staff', email: 'staff@brigadacamarao.com', role: 'staff', phone: '31977777777', password: '123456' },
-  { id: '4', name: 'João Pedro Santos', email: 'joao@parceiro.com', role: 'parceiro', phone: '31966666666', password: '123456', cpf: '12345678900' },
+  { id: '4', name: 'João Pedro Santos', email: 'joao@parceiro.com', role: 'parceiro', phone: '31966666666', password: '123456', cpf: '12345678900', pixKey: '31966666666', credentialNumber: 'BC-00421' },
 ];
 
 interface AuthContextType {
@@ -16,7 +16,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<boolean>;
   loginByCpf: (name: string, cpf: string) => Promise<boolean>;
   register: (data: { name: string; email: string; password: string; phone?: string; cpf?: string; pixKey?: string }) => Promise<{ success: boolean; verified?: boolean; verificationHash?: string }>;
-  registerParceiro: (data: { name: string; cpf: string; phone?: string }) => Promise<{ success: boolean; pending?: boolean }>;
+  registerParceiro: (data: { name: string; cpf: string; phone?: string; pixKey?: string; credentialNumber?: string }) => Promise<{ success: boolean; pending?: boolean }>;
   logout: () => void;
   loading: boolean;
 }
@@ -79,7 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Mock fallback: any CPF with 11 digits logs in as parceiro
       const mockUser = MOCK_USERS.find(u => u.cpf === cleanCpf);
       if (mockUser) {
-        const { password: _pw, cpf: _cpf, ...userData } = mockUser;
+        const { password: _pw, ...userData } = mockUser;
         setUser(userData);
         localStorage.setItem('bc_token', 'mock-token');
         localStorage.setItem('bc_user', JSON.stringify(userData));
@@ -93,6 +93,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           email: cleanCpf + '@parceiro.brigadacamarao.com',
           role: 'parceiro',
           phone: '',
+          cpf: cleanCpf,
+          credentialNumber: 'BC-' + cleanCpf.slice(-5),
         };
         setUser(tempUser);
         localStorage.setItem('bc_token', 'mock-token');
@@ -114,7 +116,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const registerParceiro = async (data: { name: string; cpf: string; phone?: string }): Promise<{ success: boolean; pending?: boolean }> => {
+  const registerParceiro = async (data: { name: string; cpf: string; phone?: string; pixKey?: string; credentialNumber?: string }): Promise<{ success: boolean; pending?: boolean }> => {
     try {
       await api.register({
         name: data.name,
@@ -122,6 +124,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         password: data.cpf.replace(/\D/g, ''),
         phone: data.phone,
         cpf: data.cpf,
+        pixKey: data.pixKey,
       });
       return { success: true, pending: true };
     } catch {

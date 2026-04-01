@@ -12,6 +12,7 @@ import { EventManagementPage } from './pages/admin/EventManagementPage';
 import { VacancyManagementPage } from './pages/admin/VacancyManagementPage';
 import { QuotesPage } from './pages/admin/QuotesPage';
 import { TeamDirectoryPage } from './pages/admin/TeamDirectoryPage';
+import { ProfilePage } from './pages/admin/ProfilePage';
 
 export default function App() {
   return (
@@ -31,6 +32,7 @@ export default function App() {
             <Route path="vagas" element={<VacancyManagementPage />} />
             <Route path="orcamentos" element={<QuotesPage />} />
             <Route path="equipe" element={<TeamDirectoryPage />} />
+            <Route path="perfil" element={<ProfilePage />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

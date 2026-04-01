@@ -5,6 +5,18 @@ export interface User {
   role: 'admin' | 'coo' | 'staff' | 'parceiro';
   phone?: string;
   avatar?: string;
+  cpf?: string;
+  pixKey?: string;
+  credentialNumber?: string;
+}
+
+export interface QRProfileData {
+  id: string;
+  name: string;
+  cpf: string;
+  credentialNumber: string;
+  role: string;
+  hash: string;
 }
 
 export interface Event {

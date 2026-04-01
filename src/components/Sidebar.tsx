@@ -18,6 +18,7 @@ const navItems = [
   { to: '/admin/vagas', icon: 'work', label: 'Vagas' },
   { to: '/admin/orcamentos', icon: 'request_quote', label: 'Orçamentos' },
   { to: '/admin/equipe', icon: 'groups', label: 'Equipe' },
+  { to: '/admin/perfil', icon: 'qr_code', label: 'Perfil & QR' },
 ];
 
 export function Sidebar() {
