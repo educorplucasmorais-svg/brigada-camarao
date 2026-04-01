@@ -38,6 +38,8 @@ export function Sidebar() {
     }
   };
 
+  const userInitials = user?.name?.split(' ').map(n => n[0]).slice(0, 2).join('') || 'BC';
+
   const sidebarContent = (
     <div className="flex flex-col h-full">
       {/* Brand Block */}
@@ -117,9 +119,7 @@ export function Sidebar() {
         {user && (
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 rounded-full bg-[#ba100a] flex items-center justify-center shrink-0">
-              <span className="text-sm font-black text-white">
-                {user.name.split(' ').map(n => n[0]).slice(0, 2).join('')}
-              </span>
+              <span className="text-sm font-black text-white">{userInitials}</span>
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-sm font-bold text-white truncate">{user.name}</p>
@@ -142,20 +142,35 @@ export function Sidebar() {
 
   return (
     <>
-      {/* Mobile toggle */}
-      <button
-        onClick={() => setMobileOpen(!mobileOpen)}
-        className="lg:hidden fixed top-3 left-3 z-50 p-3 bg-[#1a1a2e] rounded-xl text-white shadow-xl active:scale-95 transition-transform"
-      >
-        <Icon name={mobileOpen ? 'close' : 'menu'} className="text-xl" />
-      </button>
+      {/* ── Mobile Top Bar (Stitch prototype) ── */}
+      <header className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-surface-container-high">
+        <div className="flex items-center justify-between px-4 py-2.5">
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="p-1.5 -ml-1.5 rounded-lg hover:bg-surface-container-low transition-colors"
+            >
+              <Icon name={mobileOpen ? 'close' : 'menu'} className="text-xl text-on-surface" />
+            </button>
+            <img src="/images/logo-brigada.png" alt="Brigada Camarão"
+              className="w-8 h-8 rounded-full object-cover" />
+            <div className="leading-tight">
+              <p className="text-xs font-black text-on-surface tracking-tight">Brigada Camarão</p>
+              <p className="text-[9px] font-medium text-on-surface-variant">Sentinel Command</p>
+            </div>
+          </div>
+          <div className="w-9 h-9 rounded-full bg-[#ba100a] flex items-center justify-center shadow-sm">
+            <span className="text-xs font-black text-white">{userInitials}</span>
+          </div>
+        </div>
+      </header>
 
       {/* Mobile overlay */}
       {mobileOpen && (
         <div className="lg:hidden fixed inset-0 bg-black/50 z-40" onClick={() => setMobileOpen(false)} />
       )}
 
-      {/* Mobile sidebar */}
+      {/* Mobile sidebar drawer */}
       <aside
         className={`lg:hidden fixed top-0 left-0 h-full w-[280px] sm:w-72 bg-[#1a1a2e] z-40 transform transition-transform duration-300 shadow-2xl ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'

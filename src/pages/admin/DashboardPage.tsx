@@ -178,39 +178,40 @@ export function DashboardPage() {
   const [activeTab, setActiveTab] = useState<'estrategico' | 'tatico' | 'operacional'>('tatico');
 
   const activeEvents = mockEvents.filter((e) => e.status !== 'completed');
-  const greeting = new Date().getHours() < 12 ? 'Bom dia' : new Date().getHours() < 18 ? 'Boa tarde' : 'Boa noite';
+  const firstName = user?.name?.split(' ')[0] || 'Admin';
   const today = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
   const tabs = [
-    { id: 'estrategico' as const, label: 'ESTRATÉGICO' },
-    { id: 'tatico' as const, label: 'TÁTICO' },
-    { id: 'operacional' as const, label: 'OPERACIONAL' },
+    { id: 'estrategico' as const, label: 'Estratégico' },
+    { id: 'tatico' as const, label: 'Tático' },
+    { id: 'operacional' as const, label: 'Operacional' },
   ];
 
   return (
     <div className="space-y-6">
-      {/* ═══ Header ═══ */}
+      {/* ═══ Header (Stitch prototype) ═══ */}
       <div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-on-surface">
-          {greeting}, {user?.name?.split(' ')[0] || 'Admin'}
+        <p className="text-[10px] font-bold text-primary-container uppercase tracking-[0.15em] mb-1">Pré-Comando</p>
+        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-on-surface">
+          Olá, {firstName}
         </h1>
-        <div className="flex items-center gap-3 mt-1.5">
-          <p className="text-sm text-on-surface-variant capitalize">{today}</p>
-          <span className="flex items-center gap-1.5 text-sm text-success font-medium">
-            <span className="w-2 h-2 rounded-full bg-success inline-block" />
+        <div className="flex items-center gap-3 mt-1">
+          <p className="text-xs text-on-surface-variant capitalize">{today}</p>
+          <span className="flex items-center gap-1.5 text-xs text-success font-medium">
+            <span className="w-1.5 h-1.5 rounded-full bg-success inline-block" />
             Online
           </span>
         </div>
       </div>
 
-      {/* ═══ Tab Selector ═══ */}
+      {/* ═══ Tab Selector (Stitch) ═══ */}
       <div className="border-b border-surface-container-high">
-        <div className="flex gap-6 sm:gap-8 overflow-x-auto">
+        <div className="flex gap-0 overflow-x-auto">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`relative pb-3 text-xs sm:text-sm font-bold uppercase tracking-widest transition-colors whitespace-nowrap ${
+              className={`relative px-5 py-3 text-sm font-semibold transition-colors whitespace-nowrap ${
                 activeTab === tab.id
                   ? 'text-on-surface'
                   : 'text-on-surface-variant hover:text-on-surface'
@@ -218,7 +219,7 @@ export function DashboardPage() {
             >
               {tab.label}
               {activeTab === tab.id && (
-                <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-primary-container rounded-t-sm" />
+                <span className="absolute bottom-0 left-2 right-2 h-[3px] bg-primary-container rounded-full" />
               )}
             </button>
           ))}
