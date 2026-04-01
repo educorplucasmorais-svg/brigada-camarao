@@ -12,6 +12,7 @@ import vacancyRoutes from './routes/vacancies.js';
 import quoteRoutes from './routes/quotes.js';
 import teamRoutes from './routes/team.js';
 import registrationRoutes from './routes/registrations.js';
+import exportRoutes from './routes/export.js';
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3333;
@@ -32,6 +33,7 @@ app.use('/api/vacancies', vacancyRoutes);
 app.use('/api/quotes', quoteRoutes);
 app.use('/api/team', teamRoutes);
 app.use('/api/registrations', registrationRoutes);
+app.use('/api/export', exportRoutes);
 
 // Dashboard stats endpoint
 app.get('/api/stats', async (_req, res) => {
