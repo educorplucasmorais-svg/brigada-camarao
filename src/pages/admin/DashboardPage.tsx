@@ -361,43 +361,46 @@ export function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="-m-4 sm:-m-5 lg:-m-8"> {/* break out of AdminLayout padding */}
       {/* ═══ Header ═══ */}
-      <div>
-        <h1 className="text-3xl lg:text-4xl font-black tracking-tight text-on-surface">
+      <div className="px-6 pt-6 pb-4 lg:px-10 lg:pt-8">
+        <h1 className="text-2xl lg:text-3xl font-black tracking-tight text-[#111827]">
           {getGreeting()}, {firstName}
         </h1>
-        <div className="flex items-center gap-2 mt-1.5">
-          <p className="text-sm text-on-surface-variant">{getFormattedDate()}</p>
-          <span className="text-on-surface-variant">●</span>
-          <span className="flex items-center gap-1.5 text-sm text-success font-medium">
-            <span className="w-2 h-2 rounded-full bg-success inline-block" />
+        <div className="flex items-center gap-2 mt-1">
+          <p className="text-sm text-[#6b7280]">{getFormattedDate()}</p>
+          <span className="text-[#6b7280]">•</span>
+          <span className="flex items-center gap-1.5 text-sm text-[#2e7d32] font-medium">
+            <span className="w-2 h-2 rounded-full bg-[#2e7d32] inline-block animate-pulse" />
             Status
           </span>
         </div>
       </div>
 
       {/* ═══ Tab Selector ═══ */}
-      <div className="border-b border-surface-container-high">
-        <div className="flex gap-0 overflow-x-auto justify-center">
+      <div className="border-b border-[#e5e7eb]">
+        <div className="flex gap-0 overflow-x-auto justify-center px-2">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`relative px-8 py-3.5 text-xs font-bold tracking-[0.08em] transition-colors whitespace-nowrap ${
+              className={`relative px-8 py-3 text-[11px] font-black tracking-[0.12em] transition-colors whitespace-nowrap ${
                 activeTab === tab.id
-                  ? 'text-primary'
-                  : 'text-on-surface-variant hover:text-on-surface'
+                  ? 'text-[#ba100a]'
+                  : 'text-[#9ca3af] hover:text-[#374151]'
               }`}
             >
               {tab.label}
               {activeTab === tab.id && (
-                <span className="absolute bottom-0 left-3 right-3 h-[3px] bg-primary rounded-full" />
+                <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#ba100a]" />
               )}
             </button>
           ))}
         </div>
       </div>
+
+      {/* ═══ Tab Content ═══ */}
+      <div className="p-6 lg:p-10 space-y-6">
 
       {/* ═══════════════════════════════════════════════════════════
            COO — VISÃO EXECUTIVA
@@ -501,55 +504,38 @@ export function DashboardPage() {
          ═══════════════════════════════════════════════════════════ */}
       {activeTab === 'pipeline' && (
         <div className="space-y-6">
-          <div className="bg-surface-container rounded-2xl p-6 lg:p-8">
-            <h3 className="text-sm font-black text-on-surface uppercase tracking-widest mb-8">
-              RES — RECRUTAMENTO & SELEÇÃO
-            </h3>
-
-            <div className="flex items-center justify-center gap-0 mb-10 overflow-x-auto">
-              {pipelineData.map((stage, i) => {
+          <div className="bg-white rounded-xl border border-[#e5e7eb] shadow-sm overflow-hidden">
+            <div className="px-6 pt-5 pb-2">
+              <h3 className="text-[11px] font-black text-[#6b7280] uppercase tracking-[0.15em]">
+                RES — RECRUTAMENTO & SELEÇÃO
+              </h3>
+            </div>
+            <div className="grid grid-cols-4 divide-x divide-[#f3f4f6]">
+              {pipelineData.map((stage) => {
                 const colors = pipelineColors[stage.stage];
+                const hist = pipelineHistory.find((h) => h.stage === stage.stage)!;
+                const chartData = hist.data.map((v, idx) => ({ idx, v }));
+                const maxY = Math.max(...hist.data);
+                const yTicks = [0, Math.round(maxY * 0.25), Math.round(maxY * 0.5), Math.round(maxY * 0.75), maxY];
                 return (
-                  <div key={stage.stage} className="flex items-center">
-                    <div className="flex flex-col items-center min-w-[80px] sm:min-w-[100px]">
-                      <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-3">
-                        {stage.stage}
-                      </p>
-                      <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full ${colors.bg} flex items-center justify-center shadow-md`}>
-                        <span className="text-white font-black text-lg sm:text-xl">{stage.count}</span>
+                  <div key={stage.stage} className="flex flex-col">
+                    <div className="px-4 pt-4 pb-3 bg-[#fafafa] border-b border-[#f3f4f6]">
+                      <p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#6b7280] mb-3">{stage.stage}</p>
+                      <div className={`w-10 h-10 rounded-full ${colors.bg} flex items-center justify-center shadow-sm`}>
+                        <span className="text-white font-black text-sm">{stage.count}</span>
                       </div>
                     </div>
-                    {i < pipelineData.length - 1 && (
-                      <span className="text-on-surface-variant/40 text-xl mx-2 sm:mx-4 shrink-0 mt-5">▶</span>
-                    )}
+                    <div className="px-2 pt-3 pb-2 flex-1" style={{ minHeight: 120 }}>
+                      <ResponsiveContainer width="100%" height={110}>
+                        <BarChart data={chartData} barSize={10} margin={{ top: 2, right: 4, bottom: 0, left: 0 }}>
+                          <YAxis tick={{ fontSize: 8, fill: '#9ca3af' }} axisLine={false} tickLine={false} width={22} domain={[0, maxY + 5]} ticks={yTicks} />
+                          <Bar dataKey="v" fill={hist.color} radius={[3, 3, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
                   </div>
                 );
               })}
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {pipelineHistory.map((stage) => (
-                <div key={stage.stage} className="bg-surface-container-lowest rounded-xl border border-surface-container-high p-3">
-                  <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-2 text-center">
-                    {stage.stage}
-                  </p>
-                  <div className="h-[120px] w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={stage.data.map((v, i) => ({ i: `S${i + 1}`, v }))} barSize={14}>
-                        <YAxis
-                          tick={{ fontSize: 9, fill: '#9ca3af' }}
-                          axisLine={false}
-                          tickLine={false}
-                          width={28}
-                          domain={[0, 60]}
-                          ticks={[0, 15, 30, 45, 60]}
-                        />
-                        <Bar dataKey="v" fill={stage.color} radius={[4, 4, 0, 0]} />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
         </div>
@@ -803,60 +789,52 @@ export function DashboardPage() {
             <StatsCard title="Ocupação" value={`${mockStats.occupancyRate}%`} change="Meta: 85%" sparkData={sparkOcupacao} />
           </div>
 
-          {/* RES — Recrutamento & Seleção */}
-          <div className="bg-surface-container rounded-2xl p-6 lg:p-8">
-            <h3 className="text-sm font-black text-on-surface uppercase tracking-widest mb-8">
-              RES — RECRUTAMENTO & SELEÇÃO
-            </h3>
+          {/* RES — Recrutamento & Seleção — Stitch unified column layout */}
+          <div className="bg-white rounded-xl border border-[#e5e7eb] shadow-sm overflow-hidden">
+            <div className="px-6 pt-5 pb-2">
+              <h3 className="text-[11px] font-black text-[#6b7280] uppercase tracking-[0.15em]">
+                RES — RECRUTAMENTO & SELEÇÃO
+              </h3>
+            </div>
 
-            {/* Pipeline circles with arrow connectors */}
-            <div className="flex items-center justify-center gap-0 mb-10 overflow-x-auto">
-              {pipelineData.map((stage, i) => {
+            {/* 4-column unified section with chevron dividers */}
+            <div className="grid grid-cols-4 divide-x divide-[#f3f4f6]">
+              {pipelineData.map((stage, _i) => {
                 const colors = pipelineColors[stage.stage];
+                const hist = pipelineHistory.find((h) => h.stage === stage.stage)!;
+                const chartData = hist.data.map((v, idx) => ({ idx, v }));
+                const maxY = Math.max(...hist.data);
+                const yTicks = [0, Math.round(maxY * 0.25), Math.round(maxY * 0.5), Math.round(maxY * 0.75), maxY];
                 return (
-                  <div key={stage.stage} className="flex items-center">
-                    <div className="flex flex-col items-center min-w-[80px] sm:min-w-[100px]">
-                      <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-3">
+                  <div key={stage.stage} className="flex flex-col">
+                    {/* Stage header */}
+                    <div className="px-4 pt-4 pb-3 bg-[#fafafa] border-b border-[#f3f4f6]">
+                      <p className="text-[10px] font-black uppercase tracking-[0.15em] text-[#6b7280] mb-3">
                         {stage.stage}
                       </p>
-                      <div
-                        className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full ${colors.bg} flex items-center justify-center shadow-md`}
-                      >
-                        <span className="text-white font-black text-lg sm:text-xl">{stage.count}</span>
+                      <div className={`w-10 h-10 rounded-full ${colors.bg} flex items-center justify-center shadow-sm`}>
+                        <span className="text-white font-black text-sm">{stage.count}</span>
                       </div>
                     </div>
-                    {i < pipelineData.length - 1 && (
-                      <span className="text-on-surface-variant/40 text-xl mx-2 sm:mx-4 shrink-0 mt-5">▶</span>
-                    )}
+                    {/* Mini bar chart */}
+                    <div className="px-2 pt-3 pb-2 flex-1" style={{ minHeight: 120 }}>
+                      <ResponsiveContainer width="100%" height={110}>
+                        <BarChart data={chartData} barSize={10} margin={{ top: 2, right: 4, bottom: 0, left: 0 }}>
+                          <YAxis
+                            tick={{ fontSize: 8, fill: '#9ca3af' }}
+                            axisLine={false}
+                            tickLine={false}
+                            width={22}
+                            domain={[0, maxY + 5]}
+                            ticks={yTicks}
+                          />
+                          <Bar dataKey="v" fill={hist.color} radius={[3, 3, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
                   </div>
                 );
               })}
-            </div>
-
-            {/* Per-stage bar charts with Y-axis */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {pipelineHistory.map((stage) => (
-                <div key={stage.stage} className="bg-surface-container-lowest rounded-xl border border-surface-container-high p-3">
-                  <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-2 text-center">
-                    {stage.stage}
-                  </p>
-                  <div className="h-[120px] w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={stage.data.map((v, i) => ({ i: `S${i + 1}`, v }))} barSize={14}>
-                        <YAxis
-                          tick={{ fontSize: 9, fill: '#9ca3af' }}
-                          axisLine={false}
-                          tickLine={false}
-                          width={28}
-                          domain={[0, 60]}
-                          ticks={[0, 15, 30, 45, 60]}
-                        />
-                        <Bar dataKey="v" fill={stage.color} radius={[4, 4, 0, 0]} />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
 
@@ -1111,6 +1089,7 @@ export function DashboardPage() {
           </div>
         </div>
       )}
+    </div>
     </div>
   );
 }
