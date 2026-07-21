@@ -1,0 +1,44 @@
+{
+  "skill_name": "site-analysis",
+  "notes": "Test prompts for the site-analysis skill. Runs need a real page as input (saved HTML or screenshots). eval 1 ships with sample.html so it can run offline; evals 2-3 expect the user to attach the target page. Assertions are drafted but the benchmark loop is run once real page content is available.",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Analisa essa landing page pra mim e me diz o que mudar e por quê. Segue o HTML da página (arquivo sample.html).",
+      "expected_output": "A scored 12-dimension audit + a client-ready PDF. Must correctly flag: weak/generic value prop ('Excelência em cada detalhe'), missing meta description, missing schema/OG, 33% alt coverage, a 6-field form with CPF as friction, generic 'Enviar' CTA, no social proof. Each finding tagged Measured/Benchmarked/Judgment. Should run extract_signals.py.",
+      "files": ["assets/../evals/sample.html"],
+      "assertions": [
+        {"text": "Ran extract_signals.py and cites concrete numbers (alt coverage %, form field count, title length)", "type": "qualitative"},
+        {"text": "Scores all 12 dimensions and reports a weighted overall 0-100 + letter band", "type": "qualitative"},
+        {"text": "Flags the generic value proposition as a Critical/High finding", "type": "qualitative"},
+        {"text": "Flags the high-friction form (CPF + 4 required fields) with a conversion-impact rationale", "type": "qualitative"},
+        {"text": "Every finding tagged with an evidence tier (Measured/Benchmarked/Judgment)", "type": "qualitative"},
+        {"text": "Produces a PDF file as the deliverable", "type": "file_exists"},
+        {"text": "Recommendations cite a market standard (why-now), not just taste", "type": "qualitative"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Preciso justificar pro meu cliente por que a home dele precisa ser refeita. Ele acha que está boa. Me monta um relatório em PDF com dados e comparação de mercado. Vou te mandar o print da página e o HTML.",
+      "expected_output": "A defensible PDF whose spine is the market benchmark (category standards + competitor comparison), leading with the overall score and biggest point-losers, framed to convince a skeptical owner. Findings are evidence-first.",
+      "files": [],
+      "assertions": [
+        {"text": "Classifies the service category and applies the matching market standards", "type": "qualitative"},
+        {"text": "Leads the executive summary with overall score + top point-losers", "type": "qualitative"},
+        {"text": "Produces a prioritized roadmap ranked by impact/effort", "type": "qualitative"},
+        {"text": "Separates Measured vs Benchmarked vs Judgment claims", "type": "qualitative"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Da uma olhada nesse site https://exemplo.com e melhora. (fetch pode estar bloqueado no ambiente)",
+      "expected_output": "Attempts to fetch; if blocked by egress policy, clearly reports it was the environment (not the site) and asks for pasted HTML/screenshots/analytics before analyzing. Does NOT fabricate findings about a page it never saw.",
+      "files": [],
+      "assertions": [
+        {"text": "Attempts a fetch first (WebFetch/curl/browser)", "type": "qualitative"},
+        {"text": "On block, states it was the environment policy and requests page content instead of inventing findings", "type": "qualitative"},
+        {"text": "Does not produce fabricated scores for an unseen page", "type": "qualitative"}
+      ]
+    }
+  ]
+}

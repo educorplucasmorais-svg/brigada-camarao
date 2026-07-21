@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>{{PAGE_NAME}} — Auditoria de Landing Page</title>
+<!--
+  Self-contained, print-optimized report template for the site-analysis skill.
+  Fill the {{PLACEHOLDERS}} and the repeatable blocks, then render to PDF
+  (see references/report-and-pdf.md). No external CSS/JS/fonts — must render
+  offline. Scorecard bars are inline width styles so they survive print.
+  Colors also carry a number/label so meaning is never color-only.
+-->
+<style>
+  :root{
+    --ink:#14161a; --muted:#5b6472; --line:#e4e7ec; --bg:#ffffff;
+    --brand:#1f6feb; --a:#1a9d5a; --b:#3a8dde; --c:#e0a800; --d:#e8730c; --f:#d64545;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-print-color-adjust:exact; print-color-adjust:exact}
+  body{margin:0; font:15px/1.55 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+       color:var(--ink); background:var(--bg)}
+  .page{max-width:820px; margin:0 auto; padding:32px 40px}
+  h1{font-size:30px; line-height:1.15; margin:0 0 6px}
+  h2{font-size:20px; margin:34px 0 12px; padding-bottom:6px; border-bottom:2px solid var(--line)}
+  h3{font-size:16px; margin:20px 0 6px}
+  p{margin:8px 0} small,.muted{color:var(--muted)}
+  .cover{border:1px solid var(--line); border-radius:14px; padding:28px 30px; background:#fafbfc}
+  .scorebig{display:flex; align-items:baseline; gap:14px; margin-top:10px}
+  .scorebig .n{font-size:54px; font-weight:800; line-height:1}
+  .band{display:inline-block; padding:3px 12px; border-radius:999px; color:#fff; font-weight:700; font-size:14px}
+  .A{background:var(--a)} .B{background:var(--b)} .C{background:var(--c)} .D{background:var(--d)} .F{background:var(--f)}
+  table{width:100%; border-collapse:collapse; margin:10px 0; font-size:14px}
+  th,td{text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top}
+  th{background:#f5f7fa; font-weight:600}
+  .bar{height:10px; border-radius:6px; background:#eef1f5; overflow:hidden; min-width:90px}
+  .bar > span{display:block; height:100%}
+  .sev{font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:.03em}
+  .sev-Critical{color:var(--f)} .sev-High{color:var(--d)} .sev-Medium{color:var(--c)} .sev-Low{color:var(--muted)}
+  .finding{border:1px solid var(--line); border-left:4px solid var(--line); border-radius:8px;
+           padding:12px 14px; margin:12px 0; break-inside:avoid}
+  .finding.Critical{border-left-color:var(--f)} .finding.High{border-left-color:var(--d)}
+  .finding.Medium{border-left-color:var(--c)} .finding.Low{border-left-color:var(--muted)}
+  .finding dt{font-weight:700; color:var(--muted); font-size:12px; text-transform:uppercase; margin-top:6px}
+  .finding dd{margin:0 0 2px}
+  .tier{font-size:11px; font-weight:700; padding:1px 6px; border-radius:4px; background:#eef1f5; color:var(--muted)}
+  .appendix pre{background:#0f1218; color:#e6edf3; padding:14px; border-radius:8px;
+                overflow:auto; font-size:12px; line-height:1.45}
+  footer{margin-top:36px; padding-top:12px; border-top:1px solid var(--line); color:var(--muted); font-size:12px}
+  @page{size:A4; margin:16mm 0}
+  @media print{ .page{padding:0 16mm} h2{break-after:avoid} tr,.finding{break-inside:avoid} }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- COVER -->
+  <section class="cover">
+    <small class="muted">Auditoria de Landing Page · {{DATE}}</small>
+    <h1>{{PAGE_NAME}}</h1>
+    <p class="muted">{{PAGE_URL}} · Analista: {{ANALYST}} · Método: {{METHOD}}</p>
+    <div class="scorebig">
+      <span class="n">{{OVERALL_SCORE}}</span>
+      <span class="muted">/100</span>
+      <span class="band {{BAND_CLASS}}">Nota {{BAND_LETTER}}</span>
+    </div>
+  </section>
+
+  <!-- EXECUTIVE SUMMARY -->
+  <h2>Resumo executivo</h2>
+  <p>{{EXECUTIVE_SUMMARY}}</p>
+
+  <!-- SCORECARD -->
+  <h2>Placar por dimensão</h2>
+  <table>
+    <thead><tr><th>Dimensão</th><th>Nota</th><th style="width:170px">Barra</th><th>Peso</th><th>Pontos</th><th>Observação</th></tr></thead>
+    <tbody>
+      <!-- Repeat one row per dimension. Bar width = score%. Color class by band. -->
+      <tr>
+        <td>{{DIM_NAME}}</td>
+        <td><strong>{{DIM_SCORE}}</strong></td>
+        <td><div class="bar"><span class="{{DIM_BAND_CLASS}}" style="width:{{DIM_SCORE}}%"></span></div></td>
+        <td>{{DIM_WEIGHT}}%</td>
+        <td>{{DIM_WEIGHTED}}</td>
+        <td class="muted">{{DIM_NOTE}}</td>
+      </tr>
+      <!-- /repeat -->
+    </tbody>
+  </table>
+
+  <!-- FINDINGS -->
+  <h2>Diagnóstico e recomendações</h2>
+  <!-- Repeat one block per finding, ordered Critical -> Low. -->
+  <div class="finding {{SEVERITY}}">
+    <span class="sev sev-{{SEVERITY}}">{{SEVERITY}}</span> · <strong>{{DIMENSION}}</strong>
+    <dl>
+      <dt>Problema</dt><dd>{{FINDING}}</dd>
+      <dt>Evidência</dt><dd><span class="tier">{{TIER}}</span> {{EVIDENCE}}</dd>
+      <dt>Impacto</dt><dd>{{IMPACT}}</dd>
+      <dt>Recomendação</dt><dd>{{RECOMMENDATION}}</dd>
+      <dt>Por que agora (mercado)</dt><dd>{{WHY_NOW}}</dd>
+      <dt>Esforço</dt><dd>{{EFFORT}}</dd>
+    </dl>
+  </div>
+  <!-- /repeat -->
+
+  <!-- MARKET BENCHMARK -->
+  <h2>Benchmark de mercado</h2>
+  <p><strong>Categoria:</strong> {{CATEGORY}}</p>
+  <p>{{MARKET_BENCHMARK}}</p>
+
+  <!-- ROADMAP -->
+  <h2>Roadmap priorizado (impacto ÷ esforço)</h2>
+  <table>
+    <thead><tr><th>#</th><th>Ação</th><th>Impacto</th><th>Esforço</th><th>Prioridade</th></tr></thead>
+    <tbody>
+      <!-- Repeat, already sorted best-first -->
+      <tr><td>{{RANK}}</td><td>{{ACTION}}</td><td>{{IMPACT_SHORT}}</td><td>{{EFFORT_SHORT}}</td><td>{{PRIORITY}}</td></tr>
+      <!-- /repeat -->
+    </tbody>
+  </table>
+
+  <!-- APPENDIX -->
+  <h2>Apêndice — sinais extraídos (auditável)</h2>
+  <p class="muted">Notas de método: {{METHOD_NOTES}}</p>
+  <div class="appendix"><pre>{{SIGNALS_JSON}}</pre></div>
+
+  <footer>Gerado pela skill <strong>site-analysis</strong>. Cada afirmação é marcada como
+  Medido, Comparado (benchmark) ou Julgamento. Números no apêndice para verificação.</footer>
+</div>
+</body>
+</html>
