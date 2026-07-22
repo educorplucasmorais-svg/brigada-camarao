@@ -14,8 +14,8 @@ Repositório do novo projeto. Dois objetivos:
 ```
 .
 ├── .claude/skills/site-analysis/   → a skill (o produto). Ver o README dela.
-├── apps-script/                    → (a criar) a nova landing page em Apps Script
-├── analysis/                       → (a criar) auditoria + PDF do Academy Zaya
+├── apps-script/                    → nova landing em Apps Script (rebuild)
+├── analysis/                       → auditoria + PDF do Academy Zaya
 └── legacy-brigada-camarao/         → app anterior (Brigada Camarão) arquivado
 ```
 
@@ -26,10 +26,12 @@ Repositório do novo projeto. Dois objetivos:
   `.claude/skills/site-analysis/README.md`.
 - ✅ Repositório limpo para o novo projeto (app antigo arquivado em
   `legacy-brigada-camarao/`, recuperável pelo histórico do git).
-- ⏳ **Auditoria real do Academy Zaya:** bloqueada — este ambiente não acessa
-  `academyzaya.com.br` (política de rede/egress, HTTP 403). Precisa do conteúdo
-  da página (HTML colado, página salva ou screenshots) para rodar a skill.
-- ⏳ **Redesign em Apps Script:** depende da auditoria.
+- ✅ **Auditoria real do Academy Zaya:** nota **64/100 (C)**. Relatório e PDF
+  em `analysis/` (`Auditoria-Academy-by-Zaya.pdf`).
+- ✅ **Redesign em Apps Script:** nova landing leve e indexável em
+  `apps-script/` (~25 KB vs 1,35 MB do Wix). Ver `apps-script/README.md`.
+- ⏳ **Pendências para publicar:** URLs de checkout, depoimentos reais, fotos
+  das mentoras, IDs de GA4/Meta Pixel e embed do VSL (tudo em `Code.gs`).
 
 ## Como rodar a skill
 
