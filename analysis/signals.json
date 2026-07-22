@@ -1,0 +1,185 @@
+{
+  "seo": {
+    "title": "Zaya Academy",
+    "title_length": 12,
+    "title_ok": false,
+    "meta_description": null,
+    "description_length": 0,
+    "description_ok": false,
+    "canonical": "https://www.academyzaya.com.br/",
+    "robots": "noindex",
+    "lang": "pt",
+    "viewport": "width=device-width, initial-scale=1",
+    "open_graph": {
+      "title": "Zaya Academy",
+      "url": "https://www.academyzaya.com.br",
+      "site_name": "Zaya Academy",
+      "type": "website"
+    },
+    "twitter_card": {
+      "card": "summary_large_image",
+      "title": "Zaya Academy"
+    },
+    "jsonld_types": [
+      "WebSite"
+    ]
+  },
+  "structure": {
+    "h1_count": 9,
+    "h1_text": [
+      "Aprenda a se comunicar com clareza e sem travar",
+      "Você vai desenvolver uma comunicação clara, objetiva e impossível de ser ignorada",
+      "🔒 7 dias de garantia · Cancele quando quiser",
+      "🟢 52 pessoas assistindo agora",
+      "Não sabe organizar os pensamentos na hora de se comunicar",
+      "Insegurança na hora de falar",
+      "Tem dificuldade pra criar conteúdos ou falar em público",
+      "Precisa ser visto como líder ou autoridade em um assunto, mas sua comunicação trava",
+      "🔒 7 dias de garantia · Cancele quando quiser - risco zero"
+    ],
+    "heading_outline": [
+      {
+        "level": 1,
+        "text": "Aprenda a se comunicar com clareza e sem travar"
+      },
+      {
+        "level": 1,
+        "text": "Você vai desenvolver uma comunicação clara, objetiva e impossível de ser ignorada"
+      },
+      {
+        "level": 1,
+        "text": "🔒 7 dias de garantia · Cancele quando quiser"
+      },
+      {
+        "level": 1,
+        "text": "🟢 52 pessoas assistindo agora"
+      },
+      {
+        "level": 1,
+        "text": "Não sabe organizar os pensamentos na hora de se comunicar"
+      },
+      {
+        "level": 1,
+        "text": "Insegurança na hora de falar"
+      },
+      {
+        "level": 1,
+        "text": "Tem dificuldade pra criar conteúdos ou falar em público"
+      },
+      {
+        "level": 1,
+        "text": "Precisa ser visto como líder ou autoridade em um assunto, mas sua comunicação trava"
+      },
+      {
+        "level": 6,
+        "text": "Como funciona"
+      },
+      {
+        "level": 6,
+        "text": "24h de acesso ao programa"
+      },
+      {
+        "level": 6,
+        "text": "Pra você treinar QUANDO quiser!"
+      },
+      {
+        "level": 6,
+        "text": "E logo no primeiro mês você já percebe MUITA diferença na forma de se comunicar!"
+      },
+      {
+        "level": 6,
+        "text": "O que você vai desenvolver"
+      },
+      {
+        "level": 1,
+        "text": "🔒 7 dias de garantia · Cancele quando quiser - risco zero"
+      },
+      {
+        "level": 3,
+        "text": "Precisa ter experiência com comunicação?"
+      },
+      {
+        "level": 3,
+        "text": "Quanto tempo preciso por dia?"
+      },
+      {
+        "level": 3,
+        "text": "Posso cancelar quando quiser?"
+      },
+      {
+        "level": 3,
+        "text": "Os encontros ao vivo ficam gravados?"
+      }
+    ],
+    "heading_total": 18,
+    "word_count": 858
+  },
+  "images": {
+    "total": 20,
+    "with_alt": 18,
+    "alt_coverage_pct": 90,
+    "missing_dimensions": 0,
+    "lazy_loaded": 9
+  },
+  "links": {
+    "total": 13,
+    "internal": 3,
+    "external": 10,
+    "cta_candidates": [
+      {
+        "text": "Minhas assinaturas",
+        "href": "https://www.academyzaya.com.br/my-subscriptions"
+      },
+      {
+        "text": "Quero entrar agora",
+        "href": "https://www.academyzaya.com.br/"
+      },
+      {
+        "text": "Quero entrar no programa",
+        "href": "https://www.academyzaya.com.br/"
+      },
+      {
+        "text": "Quero entrar no programa",
+        "href": "https://www.academyzaya.com.br/"
+      },
+      {
+        "text": "Começar agora",
+        "href": ""
+      },
+      {
+        "text": "Quero entrar no programa",
+        "href": ""
+      },
+      {
+        "text": "Quero o plano completo",
+        "href": ""
+      },
+      {
+        "text": "Quero entrar e destravar minha comunicação",
+        "href": "https://www.academyzaya.com.br/"
+      },
+      {
+        "text": "Fale com a equipe Ficou alguma dúvida?",
+        "href": "https://wa.me/5511926884424"
+      }
+    ],
+    "cta_count": 9
+  },
+  "forms": [],
+  "tech_detected": [
+    "Google Analytics 4 (gtag)",
+    "Meta/Facebook Pixel",
+    "WhatsApp link",
+    "React",
+    "Vue",
+    "Wix",
+    "Elementor"
+  ],
+  "resources": {
+    "external_scripts": 32,
+    "iframes": [
+      "./Zaya Academy_files/51db18_dea8c33033b83c9d06adbf0efd8e688f.html"
+    ],
+    "html_bytes": 1378947
+  }
+}

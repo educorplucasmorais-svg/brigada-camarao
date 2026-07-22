@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Auditoria — Academy by Zaya (academyzaya.com.br)</title>
+<style>
+  :root{
+    --ink:#14161a; --muted:#5b6472; --line:#e4e7ec; --bg:#ffffff;
+    --brand:#1f6feb; --a:#1a9d5a; --b:#3a8dde; --c:#e0a800; --d:#e8730c; --f:#d64545;
+    --zgreen:#1e3d2f; --zgold:#b98a3e;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-print-color-adjust:exact; print-color-adjust:exact}
+  body{margin:0; font:15px/1.55 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+       color:var(--ink); background:var(--bg)}
+  .page{max-width:820px; margin:0 auto; padding:32px 40px}
+  h1{font-size:29px; line-height:1.15; margin:0 0 6px}
+  h2{font-size:20px; margin:34px 0 12px; padding-bottom:6px; border-bottom:2px solid var(--line)}
+  h3{font-size:16px; margin:20px 0 6px}
+  p{margin:8px 0} small,.muted{color:var(--muted)}
+  .cover{border:1px solid var(--line); border-radius:14px; padding:26px 30px;
+         background:linear-gradient(135deg,#1e3d2f,#2a5541); color:#f4efe4}
+  .cover .muted{color:#cdd8ce}
+  .cover a{color:#e7cfa0}
+  .scorebig{display:flex; align-items:baseline; gap:14px; margin-top:12px}
+  .scorebig .n{font-size:56px; font-weight:800; line-height:1; color:#fff}
+  .band{display:inline-block; padding:3px 12px; border-radius:999px; color:#fff; font-weight:700; font-size:14px}
+  .A{background:var(--a)} .B{background:var(--b)} .C{background:var(--c)} .D{background:var(--d)} .F{background:var(--f)}
+  table{width:100%; border-collapse:collapse; margin:10px 0; font-size:13.5px}
+  th,td{text-align:left; padding:7px 9px; border-bottom:1px solid var(--line); vertical-align:top}
+  th{background:#f5f7fa; font-weight:600}
+  .bar{height:10px; border-radius:6px; background:#eef1f5; overflow:hidden; min-width:80px}
+  .bar > span{display:block; height:100%}
+  .sev{font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:.03em}
+  .sev-Critical{color:var(--f)} .sev-High{color:var(--d)} .sev-Medium{color:var(--c)} .sev-Low{color:var(--muted)}
+  .finding{border:1px solid var(--line); border-left:4px solid var(--line); border-radius:8px;
+           padding:11px 14px; margin:11px 0; break-inside:avoid}
+  .finding.Critical{border-left-color:var(--f)} .finding.High{border-left-color:var(--d)}
+  .finding.Medium{border-left-color:var(--c)} .finding.Low{border-left-color:var(--muted)}
+  .finding dl{margin:6px 0 0} .finding dt{font-weight:700; color:var(--muted); font-size:11.5px; text-transform:uppercase; margin-top:6px}
+  .finding dd{margin:0 0 2px}
+  .tier{font-size:11px; font-weight:700; padding:1px 6px; border-radius:4px; background:#eef1f5; color:var(--muted)}
+  .tier.M{background:#e3f2e9; color:#1a7d46} .tier.B{background:#e6effc; color:#245bbf} .tier.J{background:#fdf1e0; color:#a5670a}
+  .appendix pre{background:#0f1218; color:#e6edf3; padding:14px; border-radius:8px; overflow:auto; font-size:11.5px; line-height:1.45}
+  .kpi{display:flex; gap:10px; flex-wrap:wrap; margin:12px 0}
+  .kpi div{flex:1 1 130px; border:1px solid var(--line); border-radius:10px; padding:10px 12px}
+  .kpi b{display:block; font-size:20px}
+  footer{margin-top:36px; padding-top:12px; border-top:1px solid var(--line); color:var(--muted); font-size:12px}
+  @page{size:A4; margin:15mm 0}
+  @media print{ .page{padding:0 15mm} h2{break-after:avoid} tr,.finding{break-inside:avoid} }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <section class="cover">
+    <small class="muted">Auditoria de Landing Page · 22/07/2026 · skill site-analysis</small>
+    <h1>Academy by Zaya</h1>
+    <p class="muted">academyzaya.com.br · Categoria: infoproduto / assinatura (treinamento de comunicação)<br>
+    Método: HTML real + screenshots desktop fornecidos pelo cliente · Performance estimada por proxies (não medida)</p>
+    <div class="scorebig">
+      <span class="n">64</span>
+      <span class="muted">/100</span>
+      <span class="band C">Nota C</span>
+    </div>
+  </section>
+
+  <h2>Resumo executivo</h2>
+  <p>A página <strong>não é ruim</strong> — tem um arco de VSL bem montado (gancho →
+  problema → método → prova → oferta → garantia → FAQ), CTA repetido, WhatsApp,
+  garantia de 7 dias e preços com ancoragem. Isso a coloca em <strong>64/100
+  (C)</strong>, acima da média de páginas improvisadas. O ganho está em quatro
+  frentes, que concentram a maior perda de pontos:</p>
+  <ol>
+    <li><strong>Conversão:</strong> vários botões de compra ("Começar agora",
+    "Quero o plano completo", "Quero entrar no programa") saem com
+    <code>href</code> vazio e o CTA do topo aponta para a própria home — o
+    caminho até o checkout precisa ser verificado botão a botão; se algum estiver
+    quebrado, derruba tudo.</li>
+    <li><strong>Prova social:</strong> a prova é genérica e não verificável
+    ("52 pessoas assistindo agora", "Caio garantiu seu acesso", "+10.000
+    pessoas", depoimentos sem nome/resultado) — para compra considerada, isso
+    reduz credibilidade em vez de aumentar.</li>
+    <li><strong>Performance:</strong> 1,35 MB de HTML e 32 scripts externos
+    (stack Wix + widgets de checkout) tendem a prejudicar o carregamento no
+    mobile — onde está a maior parte do tráfego pago.</li>
+    <li><strong>SEO:</strong> a página está com <code>noindex</code> (fora do
+    Google), sem meta description e com 9 &lt;H1&gt; — hierarquia quebrada.</li>
+  </ol>
+
+  <div class="kpi">
+    <div><b>64/100</b><small>Nota global (C)</small></div>
+    <div><b>9</b><small>&lt;H1&gt; (deveria ser 1)</small></div>
+    <div><b>noindex</b><small>fora da busca do Google</small></div>
+    <div><b>1,35 MB</b><small>HTML · 32 scripts</small></div>
+    <div><b>90%</b><small>cobertura de alt (bom)</small></div>
+  </div>
+
+  <h2>Placar por dimensão</h2>
+  <table>
+    <thead><tr><th>Dimensão</th><th>Nota</th><th style="width:130px">Barra</th><th>Peso</th><th>Perda*</th><th>Observação</th></tr></thead>
+    <tbody>
+      <tr><td>1. Proposta de valor</td><td><b>74</b></td><td><div class="bar"><span class="B" style="width:74%"></span></div></td><td>15%</td><td>3,9</td><td class="muted">Bom outcome + CTA + garantia; público e diferencial vagos.</td></tr>
+      <tr><td>2. Mensagem & copy</td><td><b>66</b></td><td><div class="bar"><span class="C" style="width:66%"></span></div></td><td>12%</td><td>4,1</td><td class="muted">Estrutura PAS boa; "magnético" repetido, promessas sem prova.</td></tr>
+      <tr><td>3. Conversão & CTAs</td><td><b>70</b></td><td><div class="bar"><span class="B" style="width:70%"></span></div></td><td>15%</td><td>4,5</td><td class="muted">CTA repetido + WhatsApp + preço; hrefs vazios = risco.</td></tr>
+      <tr><td>4. Prova social & confiança</td><td><b>55</b></td><td><div class="bar"><span class="C" style="width:55%"></span></div></td><td>10%</td><td>4,5</td><td class="muted">Rostos reais e mentoras; prova genérica e urgência falsa.</td></tr>
+      <tr><td>5. Arquitetura & fluxo</td><td><b>78</b></td><td><div class="bar"><span class="B" style="width:78%"></span></div></td><td>7%</td><td>1,5</td><td class="muted">Arco de VSL completo e bem ordenado. Ponto forte.</td></tr>
+      <tr><td>6. Design & marca</td><td><b>72</b></td><td><div class="bar"><span class="B" style="width:72%"></span></div></td><td>8%</td><td>2,2</td><td class="muted">Estética premium coesa (verde+dourado); contraste arriscado no mármore.</td></tr>
+      <tr><td>7. Mobile & responsivo</td><td><b>62</b></td><td><div class="bar"><span class="C" style="width:62%"></span></div></td><td>8%</td><td>3,0</td><td class="muted">Julgamento: responsivo + WhatsApp fixo, mas não verificado e pesado.</td></tr>
+      <tr><td>8. Performance & CWV</td><td><b>45</b></td><td><div class="bar"><span class="D" style="width:45%"></span></div></td><td>8%</td><td>4,4</td><td class="muted">Não medido; 1,35 MB + 32 scripts (Wix) → LCP mobile provável ruim.</td></tr>
+      <tr><td>9. SEO & descoberta</td><td><b>30</b></td><td><div class="bar"><span class="F" style="width:30%"></span></div></td><td>6%</td><td>4,2</td><td class="muted">noindex, sem description, 9 H1, schema só WebSite.</td></tr>
+      <tr><td>10. Acessibilidade</td><td><b>58</b></td><td><div class="bar"><span class="C" style="width:58%"></span></div></td><td>4%</td><td>1,7</td><td class="muted">lang + 90% alt bons; contraste e múltiplos H1 atrapalham.</td></tr>
+      <tr><td>11. Analytics & medição</td><td><b>72</b></td><td><div class="bar"><span class="B" style="width:72%"></span></div></td><td>3%</td><td>0,8</td><td class="muted">GA4 + Meta Pixel presentes. Confirmar evento de conversão.</td></tr>
+      <tr><td>12. Fit de mercado</td><td><b>62</b></td><td><div class="bar"><span class="C" style="width:62%"></span></div></td><td>4%</td><td>1,5</td><td class="muted">Cumpre normas de infoproduto; pouco diferenciado, marca inconsistente.</td></tr>
+      <tr><td><b>GLOBAL</b></td><td><b>64</b></td><td><div class="bar"><span class="C" style="width:64%"></span></div></td><td>100%</td><td><b>—</b></td><td class="muted">Nota C (55–69)</td></tr>
+    </tbody>
+  </table>
+  <p class="muted"><small>*Perda = peso × (100 − nota)/100, em pontos da nota global. Quanto maior, maior o ganho ao corrigir. Legenda de evidência: <span class="tier M">Medido</span> extraído/observado · <span class="tier B">Comparado</span> vs. padrão de mercado · <span class="tier J">Julgamento</span> inferência especialista.</small></p>
+
+  <h2>Diagnóstico e recomendações</h2>
+
+  <div class="finding Critical">
+    <span class="sev sev-Critical">Critical</span> · <strong>Conversão & CTAs</strong>
+    <dl>
+      <dt>Problema</dt><dd>Botões de compra saem com destino vazio e o CTA principal aponta para a própria home, tornando o caminho até o checkout ambíguo/quebrável.</dd>
+      <dt>Evidência</dt><dd><span class="tier M">Medido</span> No inventário de links, "Começar agora", "Quero o plano completo" e parte dos "Quero entrar no programa" têm <code>href=""</code>; o "Quero entrar agora" do topo aponta para <code>/</code> (a própria página).</dd>
+      <dt>Impacto</dt><dd>Se qualquer botão de plano não abrir o checkout (Wix pricing-plans), a conversão vai a zero silenciosamente — e ninguém percebe sem teste.</dd>
+      <dt>Recomendação</dt><dd>Testar clique a clique cada botão até o pagamento; garantir que todo CTA leve direto ao checkout do plano (ou rolagem até os planos com destaque). Padronizar 1 ação primária por seção.</dd>
+      <dt>Por que agora (mercado)</dt><dd>Infoproduto converte com caminho único e sem atrito até o checkout; botão "morto" é a falha mais cara e mais comum.</dd>
+      <dt>Esforço</dt><dd>S</dd>
+    </dl>
+  </div>
+
+  <div class="finding Critical">
+    <span class="sev sev-Critical">Critical</span> · <strong>Prova social & confiança</strong>
+    <dl>
+      <dt>Problema</dt><dd>A prova social é genérica e não verificável, e há urgência artificial que soa "engenharia de marketing".</dd>
+      <dt>Evidência</dt><dd><span class="tier M">Medido</span> "🟢 52 pessoas assistindo agora", pop-up "Caio garantiu seu acesso", "+10.000 pessoas" sem fonte, e depoimentos em vídeo sem nome/resultado em texto. <span class="tier B">Comparado</span> padrão de infoproduto pede prova específica e atribuível.</dd>
+      <dt>Impacto</dt><dd>Em compra considerada, prova redonda/falsa reduz credibilidade e aumenta desconfiança — efeito contrário ao pretendido.</dd>
+      <dt>Recomendação</dt><dd>Depoimentos com nome, foto e resultado concreto ("saí do travamento e gravei meu 1º vídeo em X dias"); substituir contadores fake por prova real (nº de alunas, nota média, prints reais com permissão); manter urgência só se verdadeira.</dd>
+      <dt>Por que agora (mercado)</dt><dd>Prova atribuível e quantificada é o padrão atual; público está saturado de "X pessoas assistindo agora".</dd>
+      <dt>Esforço</dt><dd>M</dd>
+    </dl>
+  </div>
+
+  <div class="finding High">
+    <span class="sev sev-High">High</span> · <strong>SEO & descoberta</strong>
+    <dl>
+      <dt>Problema</dt><dd>A página está marcada como <code>noindex</code> (excluída do Google), sem meta description, com título de 12 caracteres e 9 &lt;H1&gt;.</dd>
+      <dt>Evidência</dt><dd><span class="tier M">Medido</span> <code>&lt;meta name="robots" content="noindex"&gt;</code>; title "Zaya Academy" (12); meta description ausente; h1_count = 9; schema só "WebSite".</dd>
+      <dt>Impacto</dt><dd>Zero descoberta orgânica e preview fraco no compartilhamento. Se a estratégia é 100% tráfego pago, o noindex pode ser intencional — mas precisa ser uma <em>decisão</em>, não um acidente.</dd>
+      <dt>Recomendação</dt><dd>Confirmar a intenção do noindex. Se orgânico importa: remover, escrever title (~50–60) e description (~150) com a proposta, corrigir para 1 &lt;H1&gt;, e adicionar JSON-LD Course + FAQPage (já existe FAQ na página) + Organization.</dd>
+      <dt>Por que agora (mercado)</dt><dd>Title/description/schema e H1 único são higiene básica; FAQPage schema ganha destaque na busca.</dd>
+      <dt>Esforço</dt><dd>S</dd>
+    </dl>
+  </div>
+
+  <div class="finding High">
+    <span class="sev sev-High">High</span> · <strong>Performance & Core Web Vitals</strong>
+    <dl>
+      <dt>Problema</dt><dd>Página pesada com stack Wix cheio de widgets — risco alto de LCP/INP ruins no mobile.</dd>
+      <dt>Evidência</dt><dd><span class="tier M">Medido</span> HTML 1,35 MB, 32 scripts externos, bundles de checkout/pricing/forms, 1 iframe de vídeo. <span class="tier J">Julgamento</span> CWV não medidos — padrão típico de VSL no Wix é LCP alto no 4G. Positivo: imagens com dimensões (sem CLS) e 9 lazy-loaded.</dd>
+      <dt>Impacto</dt><dd>Cada segundo a mais derruba conversão e queima verba de anúncio; mobile é onde dói mais.</dd>
+      <dt>Recomendação</dt><dd>Rodar PageSpeed Insights (medir LCP/CLS/INP reais) como 1º passo. Estrategicamente, é o argumento mais forte para o <strong>rebuild em Apps Script/HTML enxuto</strong>: uma landing estática leve pode cortar boa parte do peso e do JS do Wix.</dd>
+      <dt>Por que agora (mercado)</dt><dd>CWV "bom" do Google: LCP ≤ 2,5s, CLS ≤ 0,1, INP ≤ 200ms.</dd>
+      <dt>Esforço</dt><dd>M</dd>
+    </dl>
+  </div>
+
+  <div class="finding High">
+    <span class="sev sev-High">High</span> · <strong>Mensagem & proposta de valor</strong>
+    <dl>
+      <dt>Problema</dt><dd>Copy forte em estrutura, mas apoiada em superlativos repetidos e sem prova; público-alvo e diferencial ficam implícitos.</dd>
+      <dt>Evidência</dt><dd><span class="tier M">Medido</span> "comunicação magnética", "posicionamento magnético", "magnetismo pessoal" repetem o mesmo gancho; "impossível de ser ignorada", "+10.000" sem substanciar; H1 do topo não diz para quem é.</dd>
+      <dt>Impacto</dt><dd>Sem público e mecanismo únicos, a página vira "mais um curso de comunicação" e compete só por preço.</dd>
+      <dt>Recomendação</dt><dd>No topo, deixar claro <em>para quem</em> (ex.: profissionais/criadores que travam ao falar) e nomear o <em>método</em> (um framework com nome próprio). Trocar adjetivos por resultados concretos e prova ao lado da promessa.</dd>
+      <dt>Por que agora (mercado)</dt><dd>Diferenciação por mecanismo nomeado + público específico é o que separa infoprodutos que escalam.</dd>
+      <dt>Esforço</dt><dd>M</dd>
+    </dl>
+  </div>
+
+  <div class="finding Medium">
+    <span class="sev sev-Medium">Medium</span> · <strong>Design & acessibilidade</strong>
+    <dl>
+      <dt>Problema</dt><dd>Texto dourado/branco sobre mármore verde movimentado gera baixo contraste e legibilidade em alguns blocos.</dd>
+      <dt>Evidência</dt><dd><span class="tier J">Julgamento</span> (screenshots) seções "24h de acesso" e trilha em verde com dourado; <span class="tier M">Medido</span> múltiplos H1 também prejudicam leitores de tela.</dd>
+      <dt>Impacto</dt><dd>Leitura cansativa reduz absorção da oferta; falha provável em WCAG AA (4,5:1).</dd>
+      <dt>Recomendação</dt><dd>Aumentar contraste (overlay sólido atrás de texto sobre mármore), reduzir a "movimentação" do fundo nas áreas de leitura, manter dourado só para destaques curtos.</dd>
+      <dt>Por que agora (mercado)</dt><dd>Contraste AA é padrão e amplia o público que consegue ler.</dd>
+      <dt>Esforço</dt><dd>S</dd>
+    </dl>
+  </div>
+
+  <div class="finding Medium">
+    <span class="sev sev-Medium">Medium</span> · <strong>Clareza de preço & planos</strong>
+    <dl>
+      <dt>Problema</dt><dd>A tabela de planos tem números que podem confundir e uma conta que não fecha.</dd>
+      <dt>Evidência</dt><dd><span class="tier M">Medido</span> Mensal R$ 79,00; Semestral "R$ 66,41/mês ou R$ 354 à vista" (66,41 × 6 = R$ 398, não R$ 354); Anual "R$ 60,81/mês ou R$ 588 à vista".</dd>
+      <dt>Impacto</dt><dd>Inconsistência de preço gera dúvida na hora da decisão e tickets de suporte.</dd>
+      <dt>Recomendação</dt><dd>Revisar os valores/mês vs. à vista, deixar explícito o desconto (%) do plano anual e destacar 1 plano recomendado com âncora clara.</dd>
+      <dt>Por que agora (mercado)</dt><dd>Transparência e ancoragem de preço aumentam conversão e reduzem atrito.</dd>
+      <dt>Esforço</dt><dd>S</dd>
+    </dl>
+  </div>
+
+  <div class="finding Low">
+    <span class="sev sev-Low">Low</span> · <strong>Consistência de marca</strong>
+    <dl>
+      <dt>Problema</dt><dd>O nome aparece como "Zaya Academy", "Academy by Zaya" e só "Academy" em pontos diferentes.</dd>
+      <dt>Evidência</dt><dd><span class="tier M">Medido</span> title/OG "Zaya Academy"; logo "ACADEMY by ZAYA"; texto "o Academy".</dd>
+      <dt>Impacto</dt><dd>Marca difusa enfraquece memória e busca direta.</dd>
+      <dt>Recomendação</dt><dd>Padronizar um nome/wordmark e usar igual em logo, title, OG e copy.</dd>
+      <dt>Por que agora (mercado)</dt><dd>Consistência de marca é base de recall e de tráfego direto.</dd>
+      <dt>Esforço</dt><dd>S</dd>
+    </dl>
+  </div>
+
+  <h2>Benchmark de mercado</h2>
+  <p><strong>Categoria:</strong> infoproduto / assinatura de curso (treinamento de comunicação e desenvolvimento pessoal).</p>
+  <p>Contra o padrão atual da categoria, a página <strong>acerta</strong> vários
+  pilares: VSL no topo, promessa de transformação, garantia com reversão de
+  risco, planos com ancoragem, FAQ tratando objeções, comunidade e WhatsApp para
+  atendimento. É por isso que a nota é C, e não F.</p>
+  <p>Onde fica <strong>atrás</strong> do que o mercado já pratica: (1) prova
+  <em>específica e atribuível</em> — os melhores infoprodutos mostram resultados
+  reais com nome e número, não contadores fake; (2) <em>diferenciação</em> — falta
+  um mecanismo/método nomeado que separe de dezenas de "cursos de comunicação";
+  (3) <em>performance mobile</em> — concorrentes que rodam tráfego pago cuidam de
+  LCP porque isso é custo de mídia; (4) <em>higiene técnica</em> (noindex, H1,
+  schema). O maior salto competitivo vem de trocar hype por prova real e de uma
+  landing leve e rápida.</p>
+
+  <h2>Roadmap priorizado (impacto ÷ esforço)</h2>
+  <table>
+    <thead><tr><th>#</th><th>Ação</th><th>Impacto</th><th>Esforço</th><th>Prioridade</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Testar e consertar todos os CTAs até o checkout (nada de href vazio)</td><td>Alto</td><td>S</td><td>Quick win</td></tr>
+      <tr><td>2</td><td>Corrigir SEO técnico: decidir noindex, title+description, 1 &lt;H1&gt;, schema Course/FAQ</td><td>Médio-Alto</td><td>S</td><td>Quick win</td></tr>
+      <tr><td>3</td><td>Revisar preços/planos (conta do semestral, % de desconto, plano recomendado)</td><td>Médio-Alto</td><td>S</td><td>Quick win</td></tr>
+      <tr><td>4</td><td>Aumentar contraste nas seções sobre mármore</td><td>Médio</td><td>S</td><td>Quick win</td></tr>
+      <tr><td>5</td><td>Rodar PageSpeed e medir CWV reais (base para o rebuild)</td><td>Médio</td><td>S</td><td>Quick win</td></tr>
+      <tr><td>6</td><td>Trocar prova social fake por depoimentos reais com nome/resultado</td><td>Alto</td><td>M</td><td>Estrutural</td></tr>
+      <tr><td>7</td><td>Reposicionar topo: público específico + método nomeado</td><td>Alto</td><td>M</td><td>Estrutural</td></tr>
+      <tr><td>8</td><td>Rebuild em landing enxuta (Apps Script/HTML) para cortar peso do Wix</td><td>Alto</td><td>L</td><td>Estratégico</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Apêndice — sinais extraídos (auditável)</h2>
+  <p class="muted">Método: HTML real da página (1,35 MB) + screenshots desktop
+  fornecidos pelo cliente. Performance/CWV não medidos (exigem PageSpeed/Lighthouse);
+  layout mobile não verificado (sem screenshot mobile). Preços lidos do HTML
+  estático.</p>
+  <div class="appendix"><pre>{
+  "seo": { "title": "Zaya Academy", "title_length": 12,
+    "meta_description": null, "robots": "noindex",
+    "canonical": "https://www.academyzaya.com.br/", "lang": "pt",
+    "open_graph": "present (og:title=Zaya Academy, sem description)",
+    "twitter_card": "present", "jsonld_types": ["WebSite"] },
+  "structure": { "h1_count": 9, "heading_total": 18, "word_count": 858 },
+  "images": { "total": 20, "with_alt": 18, "alt_coverage_pct": 90,
+    "missing_dimensions": 0, "lazy_loaded": 9 },
+  "links": { "total": 13, "internal": 3, "external": 10, "cta_count": 9,
+    "cta_examples": ["Quero entrar agora -> /", "Quero entrar no programa -> (vazio)",
+      "Comecar agora -> (vazio)", "Quero o plano completo -> (vazio)",
+      "Fale com a equipe -> wa.me/5511926884424"] },
+  "forms": [],
+  "offer": { "produto": "assinatura de curso de comunicacao",
+    "planos": { "mensal": "R$ 79,00/mes", "semestral": "R$ 66,41/mes ou R$ 354 a vista",
+      "anual": "R$ 60,81/mes ou R$ 588 a vista" },
+    "garantia": "7 dias, reembolso 100%", "mentoras": ["Vitoria Stecca","Tati Bresciani"] },
+  "tech_detected": ["Google Analytics 4","Meta/Facebook Pixel","WhatsApp","Wix (Stores + pricing-plans + checkout)","Stripe"],
+  "resources": { "external_scripts": 32, "iframes": 1, "html_bytes": 1378947 }
+}</pre></div>
+
+  <footer>Gerado pela skill <strong>site-analysis</strong> · auditoria real de
+  academyzaya.com.br. Cada afirmação marcada como Medido, Comparado (benchmark)
+  ou Julgamento. Números no apêndice para verificação.</footer>
+</div>
+</body>
+</html>
