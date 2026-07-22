@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>DEMO — Auditoria de Landing Page</title>
+<style>
+  :root{
+    --ink:#14161a; --muted:#5b6472; --line:#e4e7ec; --bg:#ffffff;
+    --brand:#1f6feb; --a:#1a9d5a; --b:#3a8dde; --c:#e0a800; --d:#e8730c; --f:#d64545;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-print-color-adjust:exact; print-color-adjust:exact}
+  body{margin:0; font:15px/1.55 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+       color:var(--ink); background:var(--bg)}
+  .page{max-width:820px; margin:0 auto; padding:32px 40px}
+  h1{font-size:30px; line-height:1.15; margin:0 0 6px}
+  h2{font-size:20px; margin:34px 0 12px; padding-bottom:6px; border-bottom:2px solid var(--line)}
+  h3{font-size:16px; margin:20px 0 6px}
+  p{margin:8px 0} small,.muted{color:var(--muted)}
+  .demo-banner{background:#fff7e6; border:1px solid #e0a800; color:#7a5b00; border-radius:10px;
+               padding:10px 14px; font-size:13px; margin-bottom:16px}
+  .cover{border:1px solid var(--line); border-radius:14px; padding:28px 30px; background:#fafbfc}
+  .scorebig{display:flex; align-items:baseline; gap:14px; margin-top:10px}
+  .scorebig .n{font-size:54px; font-weight:800; line-height:1}
+  .band{display:inline-block; padding:3px 12px; border-radius:999px; color:#fff; font-weight:700; font-size:14px}
+  .A{background:var(--a)} .B{background:var(--b)} .C{background:var(--c)} .D{background:var(--d)} .F{background:var(--f)}
+  table{width:100%; border-collapse:collapse; margin:10px 0; font-size:14px}
+  th,td{text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top}
+  th{background:#f5f7fa; font-weight:600}
+  .bar{height:10px; border-radius:6px; background:#eef1f5; overflow:hidden; min-width:90px}
+  .bar > span{display:block; height:100%}
+  .sev{font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:.03em}
+  .sev-Critical{color:var(--f)} .sev-High{color:var(--d)} .sev-Medium{color:var(--c)} .sev-Low{color:var(--muted)}
+  .finding{border:1px solid var(--line); border-left:4px solid var(--line); border-radius:8px;
+           padding:12px 14px; margin:12px 0; break-inside:avoid}
+  .finding.Critical{border-left-color:var(--f)} .finding.High{border-left-color:var(--d)}
+  .finding.Medium{border-left-color:var(--c)} .finding.Low{border-left-color:var(--muted)}
+  .finding dl{margin:6px 0 0} .finding dt{font-weight:700; color:var(--muted); font-size:12px; text-transform:uppercase; margin-top:6px}
+  .finding dd{margin:0 0 2px}
+  .tier{font-size:11px; font-weight:700; padding:1px 6px; border-radius:4px; background:#eef1f5; color:var(--muted)}
+  .appendix pre{background:#0f1218; color:#e6edf3; padding:14px; border-radius:8px;
+                overflow:auto; font-size:12px; line-height:1.45}
+  footer{margin-top:36px; padding-top:12px; border-top:1px solid var(--line); color:var(--muted); font-size:12px}
+  @page{size:A4; margin:16mm 0}
+  @media print{ .page{padding:0 16mm} h2{break-after:avoid} tr,.finding{break-inside:avoid} }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="demo-banner">
+    <strong>DEMONSTRAÇÃO.</strong> Este relatório foi gerado sobre uma
+    <em>página sintética de exemplo</em> criada só para validar a skill
+    <code>site-analysis</code> de ponta a ponta. <strong>Não é</strong> o site
+    academyzaya.com.br (que este ambiente não conseguiu acessar por bloqueio de
+    rede). Serve para você ver exatamente o formato e a profundidade do produto.
+  </div>
+
+  <section class="cover">
+    <small class="muted">Auditoria de Landing Page · 22/07/2026</small>
+    <h1>Academy (página de exemplo)</h1>
+    <p class="muted">arquivo: sample.html · Analista: skill site-analysis · Método: HTML estático (extração de sinais)</p>
+    <div class="scorebig">
+      <span class="n">36</span>
+      <span class="muted">/100</span>
+      <span class="band F">Nota F</span>
+    </div>
+  </section>
+
+  <h2>Resumo executivo</h2>
+  <p>A página tem nota global <strong>36/100 (F)</strong> — abaixo do padrão de
+  mercado atual para uma academia. As três maiores perdas de pontos, na ordem de
+  impacto, são: <strong>Proposta de valor</strong> (headline genérico
+  "Excelência em cada detalhe", que fala do vendedor e não do resultado do
+  aluno), <strong>Caminho de conversão</strong> (único CTA é um "Enviar"
+  genérico num formulário de 6 campos, sendo 4 obrigatórios incluindo CPF — atrito
+  altíssimo, sem oferta de baixo compromisso como aula experimental) e
+  <strong>Prova social</strong> (zero depoimentos, avaliação, fotos reais ou
+  resultados; rodapé "© 2020" reforça abandono). Corrigir esses três itens é
+  onde está a maior parte do ganho de conversão. Sinais medidos confirmam o
+  diagnóstico: título de 12 caracteres, sem meta description, sem dados
+  estruturados, 33% de cobertura de alt em imagens e nenhum CTA reconhecível.</p>
+
+  <h2>Placar por dimensão</h2>
+  <table>
+    <thead><tr><th>Dimensão</th><th>Nota</th><th style="width:150px">Barra</th><th>Peso</th><th>Pontos</th><th>Observação</th></tr></thead>
+    <tbody>
+      <tr><td>1. Proposta de valor</td><td><strong>30</strong></td><td><div class="bar"><span class="F" style="width:30%"></span></div></td><td>15%</td><td>4,5</td><td class="muted">Headline genérico; sem público/resultado/diferencial.</td></tr>
+      <tr><td>2. Mensagem & copy</td><td><strong>30</strong></td><td><div class="bar"><span class="F" style="width:30%"></span></div></td><td>12%</td><td>3,6</td><td class="muted">Foco na empresa ("somos..."), vago, sem prova.</td></tr>
+      <tr><td>3. Conversão & CTAs</td><td><strong>28</strong></td><td><div class="bar"><span class="F" style="width:28%"></span></div></td><td>15%</td><td>4,2</td><td class="muted">CTA "Enviar"; form 6 campos/4 obrig. c/ CPF; sem WhatsApp.</td></tr>
+      <tr><td>4. Prova social & confiança</td><td><strong>15</strong></td><td><div class="bar"><span class="F" style="width:15%"></span></div></td><td>10%</td><td>1,5</td><td class="muted">Nenhum depoimento, avaliação ou foto real.</td></tr>
+      <tr><td>5. Arquitetura & fluxo</td><td><strong>40</strong></td><td><div class="bar"><span class="D" style="width:40%"></span></div></td><td>7%</td><td>2,8</td><td class="muted">Só hero→sobre→contato; sem arco de persuasão.</td></tr>
+      <tr><td>6. Design & marca</td><td><strong>40</strong></td><td><div class="bar"><span class="D" style="width:40%"></span></div></td><td>8%</td><td>3,2</td><td class="muted">Julgamento: aparência datada; "© 2020".</td></tr>
+      <tr><td>7. Mobile & responsivo</td><td><strong>55</strong></td><td><div class="bar"><span class="C" style="width:55%"></span></div></td><td>8%</td><td>4,4</td><td class="muted">Tem viewport, mas sem CTA fixo/click-to-call.</td></tr>
+      <tr><td>8. Performance & CWV</td><td><strong>55</strong></td><td><div class="bar"><span class="C" style="width:55%"></span></div></td><td>8%</td><td>4,4</td><td class="muted">Não medido; imagens sem dimensões (risco de CLS).</td></tr>
+      <tr><td>9. SEO & descoberta</td><td><strong>35</strong></td><td><div class="bar"><span class="F" style="width:35%"></span></div></td><td>6%</td><td>2,1</td><td class="muted">Título curto, sem meta desc, sem OG/schema.</td></tr>
+      <tr><td>10. Acessibilidade</td><td><strong>45</strong></td><td><div class="bar"><span class="D" style="width:45%"></span></div></td><td>4%</td><td>1,8</td><td class="muted">lang ok; 33% alt; inputs sem &lt;label&gt;.</td></tr>
+      <tr><td>11. Analytics & medição</td><td><strong>65</strong></td><td><div class="bar"><span class="C" style="width:65%"></span></div></td><td>3%</td><td>1,95</td><td class="muted">GA4+GTM presentes; sem evento de conversão claro.</td></tr>
+      <tr><td>12. Fit de mercado</td><td><strong>30</strong></td><td><div class="bar"><span class="F" style="width:30%"></span></div></td><td>4%</td><td>1,2</td><td class="muted">Sem agendamento/WhatsApp/trial/preço: atrás da categoria.</td></tr>
+      <tr><td><strong>GLOBAL</strong></td><td><strong>36</strong></td><td><div class="bar"><span class="F" style="width:36%"></span></div></td><td>100%</td><td><strong>35,65</strong></td><td class="muted">Nota F</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Diagnóstico e recomendações</h2>
+
+  <div class="finding Critical">
+    <span class="sev sev-Critical">Critical</span> · <strong>Proposta de valor</strong>
+    <dl>
+      <dt>Problema</dt><dd>O headline "Excelência em cada detalhe" não diz o que é, pra quem é, nem o resultado — descreve o vendedor, não o aluno.</dd>
+      <dt>Evidência</dt><dd><span class="tier">Medido</span> H1 = "Excelência em cada detalhe"; subtítulo "Bem-vindo à nossa academia"; nenhum CTA reconhecível (cta_count = 0).</dd>
+      <dt>Impacto</dt><dd>Visitante não entende a oferta em 5s → bounce alto, conversão baixa.</dd>
+      <dt>Recomendação</dt><dd>Headline com resultado + público + diferencial, ex.: "Treine com acompanhamento profissional e veja resultado em 90 dias — sua 1ª aula é grátis". CTA único e claro no topo.</dd>
+      <dt>Por que agora (mercado)</dt><dd>Padrão de landing de academia: headline orientado a resultado + oferta de aula experimental como ação primária.</dd>
+      <dt>Esforço</dt><dd>S</dd>
+    </dl>
+  </div>
+
+  <div class="finding Critical">
+    <span class="sev sev-Critical">Critical</span> · <strong>Conversão & CTAs</strong>
+    <dl>
+      <dt>Problema</dt><dd>Única ação é um formulário de 6 campos (4 obrigatórios, incluindo CPF) com botão genérico "Enviar"; sem oferta de baixo compromisso e sem WhatsApp/click-to-call.</dd>
+      <dt>Evidência</dt><dd><span class="tier">Medido</span> forms[0]: 6 campos, 4 obrigatórios (nome, email, telefone, cpf); tech: sem link de WhatsApp detectado.</dd>
+      <dt>Impacto</dt><dd>Cada campo obrigatório extra derruba conversão; pedir CPF de cara gera desistência e desconfiança.</dd>
+      <dt>Recomendação</dt><dd>Reduzir para nome + WhatsApp; CTA "Agendar aula grátis"; botão fixo de WhatsApp no mobile; remover CPF desta etapa.</dd>
+      <dt>Por que agora (mercado)</dt><dd>Serviços locais convertem com WhatsApp-first, formulário mínimo e primeiro passo de baixo risco.</dd>
+      <dt>Esforço</dt><dd>S</dd>
+    </dl>
+  </div>
+
+  <div class="finding Critical">
+    <span class="sev sev-Critical">Critical</span> · <strong>Prova social & confiança</strong>
+    <dl>
+      <dt>Problema</dt><dd>Nenhum depoimento, avaliação, foto real, resultado de aluno ou credencial de instrutor. Rodapé "© 2020" sugere página abandonada.</dd>
+      <dt>Evidência</dt><dd><span class="tier">Medido</span> nenhuma seção de prova; <span class="tier">Julgamento</span> ausência total de sinais de confiança.</dd>
+      <dt>Impacto</dt><dd>Sem prova perto do pedido, a conversão despenca — especialmente em compra considerada e local.</dd>
+      <dt>Recomendação</dt><dd>Depoimentos com nome/foto/resultado, nota do Google, fotos reais do espaço e das aulas, bios dos professores. Atualizar o ano do rodapé.</dd>
+      <dt>Por que agora (mercado)</dt><dd>Prova específica e atribuível é padrão da categoria; foto real supera banco de imagens.</dd>
+      <dt>Esforço</dt><dd>M</dd>
+    </dl>
+  </div>
+
+  <div class="finding High">
+    <span class="sev sev-High">High</span> · <strong>SEO & descoberta</strong>
+    <dl>
+      <dt>Problema</dt><dd>Título de 12 caracteres, sem meta description, sem Open Graph e sem dados estruturados (schema).</dd>
+      <dt>Evidência</dt><dd><span class="tier">Medido</span> title_length = 12 (alvo 30–60); meta_description = ausente; open_graph = ausente; jsonld_types = ausente.</dd>
+      <dt>Impacto</dt><dd>Menos cliques na busca, compartilhamento sem preview, e nenhum LocalBusiness pro Google entender que é uma academia local.</dd>
+      <dt>Recomendação</dt><dd>Título e meta description com palavra-chave + cidade; OG para compartilhamento; JSON-LD LocalBusiness com endereço, horário e telefone.</dd>
+      <dt>Por que agora (mercado)</dt><dd>Schema LocalBusiness + OG são padrão para serviço local descoberto por busca.</dd>
+      <dt>Esforço</dt><dd>S</dd>
+    </dl>
+  </div>
+
+  <div class="finding High">
+    <span class="sev sev-High">High</span> · <strong>Fit de mercado</strong>
+    <dl>
+      <dt>Problema</dt><dd>Falta o que a categoria academia já trata como básico hoje: agendamento/WhatsApp, aula experimental, planos/preço ancorado, grade de aulas, localização com mapa.</dd>
+      <dt>Evidência</dt><dd><span class="tier">Comparado</span> vs. padrão de mercado da categoria (references/market-standards.md → academia/gym).</dd>
+      <dt>Impacto</dt><dd>Perde toda comparação direta com concorrentes locais mais modernos.</dd>
+      <dt>Recomendação</dt><dd>Adicionar bloco de planos, grade de aulas, mapa/horário e agendamento; posicionar um diferencial claro.</dd>
+      <dt>Por que agora (mercado)</dt><dd>É a "atualização de mercado" da categoria — booking, WhatsApp-first, transparência de preço.</dd>
+      <dt>Esforço</dt><dd>M</dd>
+    </dl>
+  </div>
+
+  <div class="finding Medium">
+    <span class="sev sev-Medium">Medium</span> · <strong>Performance / Acessibilidade</strong>
+    <dl>
+      <dt>Problema</dt><dd>3 de 3 imagens sem width/height (risco de CLS) e cobertura de alt em 33%. Core Web Vitals não medidos.</dd>
+      <dt>Evidência</dt><dd><span class="tier">Medido</span> images.missing_dimensions = 3; alt_coverage_pct = 33%. <span class="tier">Julgamento</span> CWV pendente de medição.</dd>
+      <dt>Impacto</dt><dd>Layout que "pula" ao carregar (CLS) e imagens sem alt prejudicam UX, SEO e acessibilidade.</dd>
+      <dt>Recomendação</dt><dd>Definir width/height, lazy-load, alt descritivo em todas as imagens; rodar um Lighthouse/PSI para medir LCP/CLS/INP.</dd>
+      <dt>Por que agora (mercado)</dt><dd>CWV "bom" (LCP≤2,5s, CLS≤0,1, INP≤200ms) é o critério aceito do Google.</dd>
+      <dt>Esforço</dt><dd>S</dd>
+    </dl>
+  </div>
+
+  <h2>Benchmark de mercado</h2>
+  <p><strong>Categoria:</strong> Academia / fitness (serviço local).</p>
+  <p>Contra o padrão atual da categoria, a página fica atrás nos itens que mais
+  pesam: falta ação primária de agendamento/WhatsApp, aula experimental como
+  primeiro passo de baixo risco, prova social específica (nota do Google, fotos
+  reais, resultados), transparência de planos/preço e schema LocalBusiness.
+  Concorrentes modernos de academia tratam mobile como tela principal, com
+  barra de ação fixa para chamar no WhatsApp — exatamente o que falta aqui.</p>
+
+  <h2>Roadmap priorizado (impacto ÷ esforço)</h2>
+  <table>
+    <thead><tr><th>#</th><th>Ação</th><th>Impacto</th><th>Esforço</th><th>Prioridade</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Novo headline orientado a resultado + CTA único no topo</td><td>Alto</td><td>S</td><td>Quick win</td></tr>
+      <tr><td>2</td><td>Formulário mínimo (nome + WhatsApp) + botão fixo de WhatsApp; tirar CPF</td><td>Alto</td><td>S</td><td>Quick win</td></tr>
+      <tr><td>3</td><td>Meta title/description + OG + JSON-LD LocalBusiness</td><td>Médio-Alto</td><td>S</td><td>Quick win</td></tr>
+      <tr><td>4</td><td>width/height + alt em todas as imagens; rodar Lighthouse/PSI</td><td>Médio</td><td>S</td><td>Quick win</td></tr>
+      <tr><td>5</td><td>Bloco de prova social (depoimentos c/ foto, nota Google, fotos reais)</td><td>Alto</td><td>M</td><td>Estrutural</td></tr>
+      <tr><td>6</td><td>Planos/preço + grade de aulas + mapa/horário + agendamento</td><td>Alto</td><td>M</td><td>Estrutural</td></tr>
+      <tr><td>7</td><td>Reestruturar o fluxo da página (arco: gancho→problema→solução→prova→oferta)</td><td>Médio</td><td>M</td><td>Estrutural</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Apêndice — sinais extraídos (auditável)</h2>
+  <p class="muted">Notas de método: página obtida como HTML estático de exemplo;
+  performance/CWV não medidos (exigem Lighthouse/PSI ou navegador); design
+  avaliado parcialmente por julgamento por falta de CSS/render.</p>
+  <div class="appendix"><pre>{
+  "seo": { "title": "Academy Zaya", "title_length": 12, "title_ok": false,
+    "meta_description": null, "description_length": 0, "description_ok": false,
+    "canonical": null, "robots": null, "lang": "pt-BR",
+    "viewport": "width=device-width, initial-scale=1",
+    "open_graph": null, "twitter_card": null, "jsonld_types": null },
+  "structure": { "h1_count": 1, "h1_text": ["Excelência em cada detalhe"],
+    "heading_total": 4, "word_count": 34 },
+  "images": { "total": 3, "with_alt": 1, "alt_coverage_pct": 33,
+    "missing_dimensions": 3, "lazy_loaded": 0 },
+  "links": { "total": 4, "internal": 4, "external": 0, "cta_count": 0 },
+  "forms": [ { "action": "/enviar", "method": "post", "field_count": 6,
+    "required_count": 4, "fields": ["nome","email","telefone","cpf","mensagem","submit"] } ],
+  "tech_detected": ["Google Analytics 4 (gtag)", "Google Tag Manager"],
+  "resources": { "external_scripts": 1, "iframes": [], "html_bytes": 1390 }
+}</pre></div>
+
+  <footer>Gerado pela skill <strong>site-analysis</strong> · relatório de
+  DEMONSTRAÇÃO sobre página sintética. Cada afirmação é marcada como Medido,
+  Comparado (benchmark) ou Julgamento. Números no apêndice para verificação.</footer>
+</div>
+</body>
+</html>
