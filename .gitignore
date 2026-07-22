@@ -7,3 +7,8 @@ dist/
 server/node_modules/
 server/dist/
 .vercel/
+
+# preview artifacts (apps-script)
+apps-script/preview.html
+apps-script/preview*.png
+apps-script/preview*.pdf

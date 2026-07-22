@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Academy by Zaya — destrave sua comunicação</title>
+<meta name="description" content="Treino diário de comunicação para quem trava na hora de falar. Aprenda a se comunicar com clareza, segurança e presença em 5 a 15 minutos por dia. 7 dias de garantia.">
+<link rel="canonical" href="<?= cfg.canonical ?>">
+<meta name="robots" content="index, follow">
+<!-- Open Graph / Twitter -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Academy by Zaya — destrave sua comunicação">
+<meta property="og:description" content="O treino diário de comunicação para você falar com clareza e sem travar. 7 dias de garantia.">
+<meta property="og:url" content="<?= cfg.canonical ?>">
+<meta name="twitter:card" content="summary_large_image">
+<!-- Fontes (1 requisição, com preconnect — muito mais leve que o Wix) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#1e3d2f; --green-2:#274d3c; --green-deep:#152a20;
+    --gold:#b98a3e; --gold-2:#cda35a; --cream:#f4efe4; --cream-2:#efe7d6;
+    --ink:#1a1a17; --muted:#5c6157; --white:#ffffff;
+    --shadow:0 10px 30px rgba(21,42,32,.15);
+    --radius:16px; --maxw:1080px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+       color:var(--ink); background:var(--cream); line-height:1.6; -webkit-font-smoothing:antialiased}
+  h1,h2,h3,.display{font-family:'Playfair Display',Georgia,serif; line-height:1.12; font-weight:700}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 22px}
+  .gold{color:var(--gold)}
+  section{padding:74px 0}
+  /* Botões */
+  .btn{display:inline-block; background:linear-gradient(180deg,var(--gold-2),var(--gold));
+       color:#2a1e08; font-weight:700; font-size:1.05rem; padding:16px 34px; border-radius:999px;
+       text-decoration:none; box-shadow:var(--shadow); transition:transform .15s ease, filter .15s ease;
+       border:0; cursor:pointer}
+  .btn:hover{transform:translateY(-2px); filter:brightness(1.05)}
+  .btn-lg{font-size:1.15rem; padding:18px 42px}
+  .guarantee{display:inline-flex; align-items:center; gap:8px; font-size:.92rem; color:var(--muted); margin-top:16px}
+  .on-dark .guarantee{color:#d7e0d5}
+  /* Header */
+  header{position:sticky; top:0; z-index:50; background:rgba(30,61,47,.94); backdrop-filter:blur(8px)}
+  header .wrap{display:flex; align-items:center; justify-content:space-between; padding-top:14px; padding-bottom:14px}
+  .brand{font-family:'Playfair Display',serif; font-weight:800; letter-spacing:.5px; color:var(--cream); font-size:1.25rem}
+  .brand small{display:block; font-family:Inter,sans-serif; font-weight:500; letter-spacing:2px;
+               font-size:.55rem; color:var(--gold-2); text-transform:uppercase; margin-top:2px}
+  header a.login{color:var(--cream); text-decoration:none; font-size:.92rem; opacity:.9}
+  header a.login:hover{opacity:1}
+  /* Hero */
+  .hero{background:radial-gradient(120% 120% at 50% 0%, var(--green-2), var(--green-deep));
+        color:var(--cream); text-align:center; padding:88px 0 96px}
+  .hero h1{font-size:clamp(2.2rem,6vw,3.9rem); font-weight:800; max-width:16ch; margin:0 auto}
+  .hero .sub{font-size:clamp(1.05rem,2.4vw,1.3rem); max-width:44ch; margin:22px auto 30px; color:#e7ecdf}
+  .eyebrow{display:inline-block; letter-spacing:3px; text-transform:uppercase; font-size:.72rem;
+           color:var(--gold-2); font-weight:600; margin-bottom:22px}
+  /* Blocos claros/escuros */
+  .on-dark{background:var(--green); color:var(--cream)}
+  .on-dark h2, .on-dark h3{color:var(--white)}
+  .center{text-align:center}
+  h2.sec-title{font-size:clamp(1.8rem,4vw,2.6rem); margin-bottom:12px; text-align:center}
+  .lead{max-width:60ch; margin:0 auto 8px; text-align:center; font-size:1.12rem}
+  .on-dark .lead{color:#dfe6da}
+  /* VSL */
+  .vsl{max-width:820px; margin:34px auto 0; aspect-ratio:16/9; border-radius:var(--radius);
+       overflow:hidden; box-shadow:var(--shadow); background:#0c1a13; position:relative}
+  .vsl iframe{width:100%; height:100%; border:0}
+  .vsl .placeholder{position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+       flex-direction:column; gap:10px; color:#cdd8ce; text-align:center; padding:20px; font-size:.95rem}
+  /* Grid utilitário */
+  .grid{display:grid; gap:20px}
+  .g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)}
+  .card{background:var(--white); border-radius:var(--radius); padding:26px; box-shadow:0 6px 20px rgba(21,42,32,.07)}
+  .on-dark .card{background:rgba(255,255,255,.06); border:1px solid rgba(205,163,90,.25)}
+  .card h3{font-size:1.2rem; margin-bottom:8px}
+  .step-n{font-family:'Playfair Display',serif; font-size:1.6rem; color:var(--gold-2); font-weight:800}
+  .tag{display:inline-block; font-size:.68rem; letter-spacing:2px; text-transform:uppercase;
+       color:var(--gold); font-weight:700; margin-bottom:8px}
+  /* Pains */
+  .pains{max-width:900px; margin:26px auto 0}
+  .pain{display:flex; gap:14px; align-items:flex-start; padding:16px 0; border-bottom:1px solid rgba(0,0,0,.08)}
+  .pain .ico{font-size:1.4rem; line-height:1.4}
+  /* Prova / stats */
+  .stat{font-family:'Playfair Display',serif; font-size:clamp(2.6rem,7vw,4rem); font-weight:800; color:var(--gold-2)}
+  .testi{display:grid; gap:18px; grid-template-columns:repeat(3,1fr); margin-top:34px}
+  .testi .card{display:flex; flex-direction:column; gap:10px}
+  .testi .who{display:flex; align-items:center; gap:12px; margin-top:auto}
+  .testi .avatar{width:44px; height:44px; border-radius:50%; background:var(--cream-2); flex:0 0 auto;
+       display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--green)}
+  .testi .name{font-weight:700; font-size:.95rem} .testi .role{font-size:.82rem; color:var(--muted)}
+  .on-dark .testi .role{color:#c3ccbe}
+  .stars{color:var(--gold-2); letter-spacing:2px}
+  /* Planos */
+  .plans{display:grid; gap:22px; grid-template-columns:repeat(3,1fr); margin-top:36px; align-items:stretch}
+  .plan{background:var(--white); color:var(--ink); border-radius:var(--radius); padding:30px 26px;
+        box-shadow:var(--shadow); display:flex; flex-direction:column; position:relative; border:2px solid transparent}
+  .plan.featured{border-color:var(--gold); transform:translateY(-6px)}
+  .plan .ribbon{position:absolute; top:-13px; left:50%; transform:translateX(-50%); background:var(--gold);
+       color:#2a1e08; font-weight:700; font-size:.72rem; letter-spacing:1px; padding:5px 14px; border-radius:999px; text-transform:uppercase}
+  .plan .pname{font-size:.8rem; letter-spacing:2px; text-transform:uppercase; color:var(--muted); font-weight:700}
+  .plan .price{font-family:'Playfair Display',serif; font-size:2.6rem; font-weight:800; margin:10px 0 2px}
+  .plan .price small{font-size:1rem; color:var(--muted); font-weight:600}
+  .plan .avista{font-size:.9rem; color:var(--muted)}
+  .plan .save{display:inline-block; margin-top:8px; background:#e3f2e9; color:#1a7d46; font-weight:700;
+       font-size:.8rem; padding:3px 10px; border-radius:999px}
+  .plan ul{list-style:none; margin:18px 0 22px; display:grid; gap:9px}
+  .plan li{font-size:.95rem; padding-left:26px; position:relative}
+  .plan li::before{content:"✓"; position:absolute; left:0; color:var(--gold); font-weight:800}
+  .plan .btn{margin-top:auto; text-align:center; width:100%}
+  .price-note{max-width:60ch; margin:20px auto 0; text-align:center; font-size:.82rem; color:#c3ccbe}
+  /* Garantia */
+  .guarantee-box{max-width:720px; margin:0 auto; text-align:center; background:var(--white);
+       border-radius:var(--radius); padding:38px 30px; box-shadow:var(--shadow)}
+  .guarantee-box .seal{font-size:2.4rem}
+  /* Mentoras */
+  .mentor{display:grid; grid-template-columns:120px 1fr; gap:22px; align-items:start; margin-top:24px}
+  .mentor .photo{width:120px; height:120px; border-radius:16px; background:var(--cream-2);
+       display:flex; align-items:center; justify-content:center; color:var(--green); font-weight:700; font-family:'Playfair Display',serif; font-size:1.6rem}
+  /* FAQ */
+  .faq{max-width:760px; margin:26px auto 0}
+  details{background:var(--white); border-radius:12px; padding:2px 20px; margin-bottom:12px; box-shadow:0 4px 14px rgba(21,42,32,.06)}
+  summary{cursor:pointer; font-weight:700; padding:16px 0; list-style:none; display:flex; justify-content:space-between; gap:12px}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+"; color:var(--gold); font-weight:800; font-size:1.3rem}
+  details[open] summary::after{content:"–"}
+  details p{padding:0 0 16px; color:var(--muted)}
+  /* CTA final */
+  .final{background:radial-gradient(120% 120% at 50% 100%, var(--green-2), var(--green-deep)); text-align:center}
+  .final h2{font-size:clamp(1.9rem,5vw,3rem); max-width:18ch; margin:0 auto 16px}
+  /* Footer */
+  footer{background:var(--green-deep); color:#aebaa8; text-align:center; padding:34px 0; font-size:.85rem}
+  /* WhatsApp flutuante */
+  .wa{position:fixed; left:18px; bottom:18px; z-index:60; background:#25D366; color:#fff; text-decoration:none;
+      font-weight:700; padding:12px 18px; border-radius:999px; box-shadow:0 8px 24px rgba(0,0,0,.25);
+      display:inline-flex; align-items:center; gap:8px; font-size:.9rem}
+  /* Responsivo */
+  @media (max-width:820px){
+    section{padding:52px 0}
+    .g2,.g3,.testi,.plans{grid-template-columns:1fr}
+    .plan.featured{transform:none}
+    .mentor{grid-template-columns:1fr; text-align:center}
+    .mentor .photo{margin:0 auto}
+    .wa{left:12px; bottom:12px; padding:11px 15px}
+  }
+</style>
+</head>
+<body>
+
+<!-- Config exposta ao front (preenchida pelo Apps Script) -->
+<script>
+  var CFG = {
+    checkoutMensal:    "<?= cfg.checkoutMensal ?>",
+    checkoutSemestral: "<?= cfg.checkoutSemestral ?>",
+    checkoutAnual:     "<?= cfg.checkoutAnual ?>",
+    ctaPrimario:       "<?= cfg.ctaPrimario ?>",
+    whatsapp:          "<?= cfg.whatsapp ?>",
+    vslEmbedUrl:       "<?= cfg.vslEmbedUrl ?>",
+    ga4Id:             "<?= cfg.ga4Id ?>",
+    metaPixelId:       "<?= cfg.metaPixelId ?>"
+  };
+</script>
+
+<header>
+  <div class="wrap">
+    <div class="brand">ACADEMY<small>by Zaya · comunicação & desenvolvimento</small></div>
+    <a class="login" href="https://www.academyzaya.com.br/my-subscriptions">Entrar</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Programa de comunicação e desenvolvimento</span>
+    <h1>Aprenda a se comunicar com clareza e <span class="gold">sem travar</span></h1>
+    <p class="sub">O treino diário de comunicação para profissionais, criadores e
+      líderes que travam na hora de falar — clareza, presença e segurança em
+      <strong>5 a 15 minutos por dia</strong>.</p>
+    <a class="btn btn-lg" data-cta="primary" href="#planos">Quero destravar minha comunicação</a>
+    <div class="guarantee">🔒 7 dias de garantia · cancele quando quiser</div>
+  </div>
+</section>
+
+<!-- VSL -->
+<section class="center">
+  <div class="wrap">
+    <h2 class="sec-title">Entenda como <span class="gold">destravar</span> sua comunicação</h2>
+    <div class="vsl" id="vsl">
+      <div class="placeholder">▶ Vídeo de apresentação<br><small>Configure <code>vslEmbedUrl</code> no Code.gs para exibir o VSL aqui.</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- O QUE É -->
+<section>
+  <div class="wrap">
+    <h2 class="sec-title">O que é o Academy</h2>
+    <p class="lead">Um programa <strong>prático</strong> de comunicação e desenvolvimento
+      pessoal para quem quer <span class="gold">parar de travar</span> na hora de falar
+      e começar a se posicionar com mais clareza, presença e confiança.</p>
+    <p class="lead">Aqui você desenvolve uma comunicação que prende a atenção, perde a
+      timidez e se torna referência no que faz — mesmo com pouco tempo na rotina.</p>
+  </div>
+</section>
+
+<!-- PROVA REAL -->
+<section class="on-dark center">
+  <div class="wrap">
+    <div class="stat">+10.000</div>
+    <p class="lead">alunas e alunos treinando a comunicação com o método da Zaya Academy.</p>
+    <!-- Substitua pelos depoimentos reais: nome, contexto e resultado concreto. -->
+    <div class="testi">
+      <div class="card">
+        <div class="stars">★★★★★</div>
+        <p>"[Depoimento real — o resultado concreto que a pessoa teve, ex.: 'gravei meu primeiro vídeo em 2 semanas']."</p>
+        <div class="who"><div class="avatar">M</div><div><div class="name">[Nome real]</div><div class="role">[profissão / contexto]</div></div></div>
+      </div>
+      <div class="card">
+        <div class="stars">★★★★★</div>
+        <p>"[Depoimento real com resultado mensurável — evite frases genéricas]."</p>
+        <div class="who"><div class="avatar">J</div><div><div class="name">[Nome real]</div><div class="role">[profissão / contexto]</div></div></div>
+      </div>
+      <div class="card">
+        <div class="stars">★★★★★</div>
+        <p>"[Depoimento real — de preferência com print/vídeo autorizado na versão final]."</p>
+        <div class="who"><div class="avatar">A</div><div><div class="name">[Nome real]</div><div class="role">[profissão / contexto]</div></div></div>
+      </div>
+    </div>
+    <a class="btn btn-lg" data-cta="primary" href="#planos" style="margin-top:34px">Quero entrar no programa</a>
+  </div>
+</section>
+
+<!-- PAINS -->
+<section>
+  <div class="wrap">
+    <h2 class="sec-title">Se você se reconhece aqui…</h2>
+    <div class="pains grid g2">
+      <div class="pain"><span class="ico">💬</span><span>Não sabe organizar os pensamentos na hora de se comunicar.</span></div>
+      <div class="pain"><span class="ico">📢</span><span>Sente insegurança na hora de falar.</span></div>
+      <div class="pain"><span class="ico">🎤</span><span>Tem dificuldade para criar conteúdo ou falar em público.</span></div>
+      <div class="pain"><span class="ico">👑</span><span>Precisa ser visto como autoridade, mas sua comunicação trava.</span></div>
+    </div>
+    <p class="lead" style="margin-top:26px"><strong>Esse espaço é pra você.</strong></p>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section class="on-dark">
+  <div class="wrap">
+    <h2 class="sec-title">Como funciona</h2>
+    <p class="lead">Um programa completo, prático e flexível para você evoluir no seu ritmo — e treinar quando quiser.</p>
+    <div class="grid g2" style="margin-top:34px">
+      <div class="card"><span class="tag">Todo dia</span><div class="step-n">01</div><h3>Treinamento diário gravado</h3><p>Treinos curtos de expressão, fala e mentalidade para você praticar todos os dias.</p></div>
+      <div class="card"><span class="tag">Mensal</span><div class="step-n">02</div><h3>Encontros mensais ao vivo</h3><p>Tire dúvidas e treine ao vivo com Vitória Stecca e Tati Bresciani; tudo fica gravado.</p></div>
+      <div class="card"><span class="tag">Trilha completa</span><div class="step-n">03</div><h3>Da teoria ao treino prático</h3><p>Bases de comunicação, voz e mentalidade + exercícios para câmera, reuniões e apresentações.</p></div>
+      <div class="card"><span class="tag">Comunidade</span><div class="step-n">04</div><h3>Grupo da comunidade</h3><p>Networking, apoio e acesso privilegiado às mentoras para manter você em movimento.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- O QUE VAI DESENVOLVER -->
+<section>
+  <div class="wrap">
+    <span class="tag center" style="display:block; text-align:center">O método em prática</span>
+    <h2 class="sec-title">O que você vai desenvolver</h2>
+    <div class="grid g3" style="margin-top:30px">
+      <div class="card"><h3>Comunicação clara</h3><p>Fale com precisão e impacto em qualquer situação.</p></div>
+      <div class="card"><h3>Segurança ao falar</h3><p>Confiança para se expor, se expressar e aparecer.</p></div>
+      <div class="card"><h3>Desenvolvimento pessoal</h3><p>Mente focada, menos ansiedade e mais clareza.</p></div>
+      <div class="card"><h3>Posicionamento</h3><p>Presença marcante e autoridade no digital.</p></div>
+      <div class="card"><h3>Resultado no 1º mês</h3><p>Sem depender de motivação — com método e hábito.</p></div>
+      <div class="card"><h3>Presença pessoal</h3><p>Corpo, voz e intenção alinhados ao falar.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PLANOS -->
+<section class="on-dark" id="planos">
+  <div class="wrap">
+    <h2 class="sec-title">Escolha seu plano e comece hoje</h2>
+    <p class="lead">Acesso imediato ao treino, comunidade e trilha completa. Cancele quando quiser.</p>
+    <div class="plans">
+      <div class="plan">
+        <div class="pname">Mensal</div>
+        <div class="price">R$ 79<small>/mês</small></div>
+        <div class="avista">cobrança mensal · sem fidelidade</div>
+        <ul><li>Acesso imediato ao treino</li><li>Comunidade do Academy</li><li>Trilha de treinos e guia de aula</li><li>Bonificações por desempenho</li></ul>
+        <a class="btn" data-cta="mensal" href="#">Começar agora</a>
+      </div>
+      <div class="plan featured">
+        <span class="ribbon">Mais escolhido</span>
+        <div class="pname">Anual</div>
+        <div class="price">R$ 49<small>/mês</small></div>
+        <div class="avista">R$ 588 à vista</div>
+        <span class="save">economize ~38%</span>
+        <ul><li>Tudo do plano mensal</li><li>Melhor custo-benefício</li><li>12 meses de evolução contínua</li><li>Acesso privilegiado às mentoras</li></ul>
+        <a class="btn" data-cta="anual" href="#">Quero o plano completo</a>
+      </div>
+      <div class="plan">
+        <div class="pname">Semestral</div>
+        <div class="price">R$ 59<small>/mês</small></div>
+        <div class="avista">R$ 354 à vista</div>
+        <span class="save">economize ~25%</span>
+        <ul><li>Tudo do plano mensal</li><li>6 meses de acesso</li><li>Ótimo para criar o hábito</li><li>Bonificações por desempenho</li></ul>
+        <a class="btn" data-cta="semestral" href="#">Escolher semestral</a>
+      </div>
+    </div>
+    <p class="price-note">⚠️ Confirme os valores: no site atual o "por mês" do semestral/anual não batia com o à vista.
+      Aqui usamos o valor à vista (R$ 354 e R$ 588) e o /mês equivalente. Ajuste em <code>Code.gs</code> se necessário.</p>
+    <div class="center"><div class="guarantee">🔒 7 dias de garantia · cancele quando quiser · risco zero</div></div>
+  </div>
+</section>
+
+<!-- GARANTIA -->
+<section>
+  <div class="wrap">
+    <div class="guarantee-box">
+      <div class="seal">🛡️</div>
+      <h2 style="font-size:1.8rem; margin:10px 0">7 dias de garantia e reembolso</h2>
+      <p class="lead">Você entra, começa e, se achar que o programa não é pra você, tem 7 dias
+        para cancelar e receber <strong>100% do valor de volta</strong>. Risco zero.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MENTORAS -->
+<section class="on-dark">
+  <div class="wrap">
+    <span class="tag center" style="display:block; text-align:center">Idealizadoras</span>
+    <h2 class="sec-title">Quem serão as suas mentoras</h2>
+    <div class="mentor">
+      <div class="photo">VS</div>
+      <div><h3>Vitória Stecca</h3><p>Formada em Direito, Artes Cênicas e Desenvolvimento Pessoal.
+        Participou do treinamento de atores, músicos, palestrantes e criadores de conteúdo. Seu método
+        é reconhecido por ser efetivo, fácil e sem enrolação.</p></div>
+    </div>
+    <div class="mentor">
+      <div class="photo">TB</div>
+      <div><h3>Tati Bresciani</h3><p>Formada em comunicação e marketing, com especialização em
+        reprogramação mental e neuropersuasão. Mais de 12 anos em grandes corporações e, desde 2020,
+        à frente da própria empresa desenvolvendo pessoas e negócios.</p></div>
+    </div>
+    <p class="lead" style="margin-top:24px">Juntas, sócias da Zaya Academy, já ajudaram mais de 10.000 pessoas com o método.</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section>
+  <div class="wrap">
+    <span class="tag center" style="display:block; text-align:center">Dúvidas</span>
+    <h2 class="sec-title">Perguntas frequentes</h2>
+    <div class="faq">
+      <details><summary>Precisa ter experiência com comunicação?</summary><p>Não. O programa foi feito para todas as fases — de quem está começando do zero a quem já se comunica e quer evoluir.</p></details>
+      <details><summary>Quanto tempo preciso por dia?</summary><p>Os treinos diários são curtos, entre 5 e 15 minutos. O objetivo é criar hábito, não sobrecarregar sua rotina.</p></details>
+      <details><summary>Posso cancelar quando quiser?</summary><p>Sim. Não há fidelidade obrigatória. Mas quanto mais você fica, mais benefícios exclusivos ganha.</p></details>
+      <details><summary>Os encontros ao vivo ficam gravados?</summary><p>Sim. Você recebe o calendário mensal com antecedência e os encontros ficam disponíveis na plataforma.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="final on-dark">
+  <div class="wrap">
+    <h2 class="display">Agora é a sua decisão</h2>
+    <p class="lead">Você pode continuar travando e adiando — ou começar agora e destravar sua
+      comunicação de vez. Se chegou até aqui, você já sabe que precisa disso.</p>
+    <a class="btn btn-lg" data-cta="primary" href="#planos" style="margin-top:22px">Quero entrar e destravar minha comunicação</a>
+    <div class="guarantee">🔒 7 dias de garantia · risco zero</div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">© <span id="yr"></span> Zaya Academy · Academy by Zaya — comunicação & desenvolvimento</div>
+</footer>
+
+<a class="wa" data-cta="whatsapp" href="#" aria-label="Falar com a equipe no WhatsApp">💬 Fale com a equipe</a>
+
+<!-- JSON-LD: Course + FAQPage + Organization -->
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+ {"@type":"Course","name":"Academy by Zaya — Treino de Comunicação","description":"Programa prático e diário de comunicação e desenvolvimento pessoal.","provider":{"@type":"Organization","name":"Zaya Academy","url":"https://www.academyzaya.com.br/"}},
+ {"@type":"Organization","name":"Zaya Academy","url":"https://www.academyzaya.com.br/","founder":[{"@type":"Person","name":"Vitória Stecca"},{"@type":"Person","name":"Tati Bresciani"}]},
+ {"@type":"FAQPage","mainEntity":[
+   {"@type":"Question","name":"Precisa ter experiência com comunicação?","acceptedAnswer":{"@type":"Answer","text":"Não. O programa foi feito para todas as fases, do zero ao avançado."}},
+   {"@type":"Question","name":"Quanto tempo preciso por dia?","acceptedAnswer":{"@type":"Answer","text":"Entre 5 e 15 minutos por dia. O objetivo é criar hábito."}},
+   {"@type":"Question","name":"Posso cancelar quando quiser?","acceptedAnswer":{"@type":"Answer","text":"Sim, não há fidelidade obrigatória."}},
+   {"@type":"Question","name":"Os encontros ao vivo ficam gravados?","acceptedAnswer":{"@type":"Answer","text":"Sim, ficam disponíveis na plataforma."}}
+ ]}
+]}
+</script>
+
+<!-- Comportamento dinâmico: liga CTAs ao checkout, injeta VSL, GA4 e Pixel -->
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // Liga cada CTA ao destino certo (nada de href vazio).
+  var map = { mensal:CFG.checkoutMensal, semestral:CFG.checkoutSemestral, anual:CFG.checkoutAnual,
+              primary:CFG.ctaPrimario, whatsapp:CFG.whatsapp };
+  document.querySelectorAll('[data-cta]').forEach(function(a){
+    var dest = map[a.getAttribute('data-cta')];
+    if(dest){ a.setAttribute('href', dest); if(/^https?:/.test(dest)){ a.setAttribute('target','_blank'); a.setAttribute('rel','noopener'); } }
+  });
+
+  // VSL: injeta o iframe só se houver URL configurada.
+  if(CFG.vslEmbedUrl){
+    var v = document.getElementById('vsl');
+    v.innerHTML = '<iframe src="'+CFG.vslEmbedUrl+'" title="Vídeo de apresentação" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>';
+  }
+
+  // GA4
+  if(CFG.ga4Id){
+    var s=document.createElement('script'); s.async=true; s.src='https://www.googletagmanager.com/gtag/js?id='+CFG.ga4Id; document.head.appendChild(s);
+    window.dataLayer=window.dataLayer||[]; function gtag(){dataLayer.push(arguments);} window.gtag=gtag;
+    gtag('js', new Date()); gtag('config', CFG.ga4Id);
+    document.querySelectorAll('[data-cta]').forEach(function(a){ a.addEventListener('click', function(){ gtag('event','cta_click',{cta:a.getAttribute('data-cta')}); }); });
+  }
+  // Meta Pixel
+  if(CFG.metaPixelId){
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', CFG.metaPixelId); fbq('track','PageView');
+  }
+</script>
+</body>
+</html>
